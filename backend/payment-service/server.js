@@ -1,12 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 require("dotenv").config();
 const connectToDatabase = require("./config/database");
 
 const app = express();
 const PORT = process.env.PORT || 5009;
-const MONGO_URI = process.env.MONGO_URI;
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(express.json());
@@ -19,6 +17,9 @@ const corsOptions = {
   };
   
 app.use(cors(corsOptions));
+
+
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const calculateTotalOrderAmount = (items) => {
     return items.reduce((total, item) => total + item.amount * 100, 0);
@@ -43,6 +44,9 @@ const calculateTotalOrderAmount = (items) => {
         res.status(500).send({ error: error.message });
     }
   });
+
+
+app.use('/api/payments', paymentRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
