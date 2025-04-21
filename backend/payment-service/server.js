@@ -4,7 +4,7 @@ require("dotenv").config();
 const connectToDatabase = require("./config/database");
 
 const app = express();
-const PORT = process.env.PORT || 5009;
+const PORT = process.env.PORT || 8001;
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(express.json());

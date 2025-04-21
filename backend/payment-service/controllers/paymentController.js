@@ -1,11 +1,14 @@
 const Payment = require('../models/Payment');
-const User = require('../models/User');
+// const User = require('../models/User');
 const { sendEmail, sendSMS } = require('../utils/notification');
+
 
 exports.savePaymentDetails = async (req, res) => {
   try {
     const {
       userId,
+      restaurantId,
+      orderId,
       stripePaymentId,
       stripeCustomerId,
       amount,
@@ -14,6 +17,8 @@ exports.savePaymentDetails = async (req, res) => {
 
     const payment = new Payment({
       userId,
+      restaurantId,
+      orderId,
       stripePaymentId,
       stripeCustomerId,
       amount,
@@ -22,23 +27,21 @@ exports.savePaymentDetails = async (req, res) => {
 
     await payment.save();
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    // const user = await User.findById(userId);
+    // if (!user) {
+    //   return res.status(404).json({ error: 'User not found' });
+    // }
 
-    // Send email
-    await sendEmail(
-      user.email,
-      'Payment Confirmation',
-      `Hi ${user.name}, your payment of ${amount / 100}`
-    );
+    // await sendEmail(
+    //   user.email,
+    //   'Payment Confirmation',
+    //   `Hi ${user.name}, your payment of ${amount / 100}`
+    // );
 
-    // Send SMS
-    await sendSMS(
-      user.phone,
-      `Hi ${user.name}, your payment of ${amount / 100}`
-    );
+    // await sendSMS(
+    //   user.phone,
+    //   `Hi ${user.name}, your payment of ${amount / 100}`
+    // );
 
     res.status(201).json(payment);
 
@@ -48,8 +51,6 @@ exports.savePaymentDetails = async (req, res) => {
 };
 
 
-
-// controllers/paymentController.js
 
 // Get all payments (for admin or internal dashboard)
 exports.getAllPayments = async (req, res) => {
@@ -73,3 +74,17 @@ exports.getAllPayments = async (req, res) => {
     }
   };
   
+  // Get all payments for a specific restaurant
+exports.getRestaurantPayments = async (req, res) => {
+  try {
+    const restaurantId = req.params.restaurantId;
+
+    const payments = await Payment.find({ restaurantId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'name email');
+
+    res.status(200).json(payments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
