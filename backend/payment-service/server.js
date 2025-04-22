@@ -34,7 +34,7 @@ const calculateTotalOrderAmount = (items) => {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: calculateTotalOrderAmount(items),
             currency: "cad",
-            description: "QR Life Time Payment",
+            description: "food payment",
             automatic_payment_methods: { enabled: true },
         });
   
