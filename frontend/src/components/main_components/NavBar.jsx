@@ -84,19 +84,20 @@ const NavBar = () => {
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
+            {/*user role*/}
+            {auth.token && auth.role === "customer" && (
+              <button
+                className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
+                onClick={handleCartClick}
+              >
+                <FaShoppingCart className="text-lg" />
+                <span className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              </button>
+            )}
 
-            <button
-              className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
-              onClick={handleCartClick}
-            >
-              <FaShoppingCart className="text-lg" />
-
-              <span className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                {cartItemCount}
-              </span>
-            </button>
-
-            {/* user role */}
+            {/*user role*/}
             {auth.token && auth.role === "customer" ? (
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
@@ -105,15 +106,13 @@ const NavBar = () => {
                 Logout
               </button>
             ) : (
-              <>
-
+                <>
                 <button
                   className="bg-white text-black px-4 py-2 rounded-4xl hover:bg-gray-100 shadow-lg cursor-pointer"
                   onClick={handleLoginClick}
                 >
                   Login
                 </button>
-
 
                 <button
                   className="bg-black px-4 py-2 rounded-4xl hover:bg-gray-800 text-white shadow-lg cursor-pointer"
