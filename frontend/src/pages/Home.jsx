@@ -1,7 +1,7 @@
 import React from 'react';
-import NavBar from '../component/NavBar';
+import NavBar from '../components/main_components/NavBar';
 import bgimg from '../assets/bgimage.jpg';
-import Footer from '../component/Footer';
+import Footer from '../components/main_components/Footer';
 
 const Home = () => {
   return (

@@ -19,3 +19,12 @@ exports.updateAvailability = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAllRestaurants = async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
