@@ -7,4 +7,6 @@ router.post('/', auth.verifyToken, controller.addMenuItem);
 router.put('/:id', auth.verifyToken, controller.updateMenuItem);
 router.delete('/:id', auth.verifyToken, controller.deleteMenuItem);
 
+
+router.get('/', controller.getAllMenuItem);
 module.exports = router;

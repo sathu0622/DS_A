@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectToDatabase = require("./config/database");
 const errorHandler = require("./middleware/errorHandler");
 const orderRoutes = require("./routes/orderRoutes");
+const addToCartRoutes = require("./routes/addToCartRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -20,6 +21,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use("/api/orders", orderRoutes);
+app.use("/api/addtocart", addToCartRoutes);
 
 app.use(errorHandler);
 
