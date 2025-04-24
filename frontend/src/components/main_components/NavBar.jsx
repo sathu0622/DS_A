@@ -139,18 +139,22 @@ const NavBar = () => {
           ✕
         </button>
         <div className="p-4">
-          <button
-            className="w-full bg-black text-white py-2 mb-4 rounded hover:bg-gray-800 cursor-pointer"
-            onClick={handleSignupClick}
-          >
-            Sign up
-          </button>
-          <button
-            className="w-full bg-gray-200 text-black py-2 mb-4 rounded hover:bg-gray-300 cursor-pointer"
-            onClick={handleLoginClick}
-          >
-            Log in
-          </button>
+          {!auth.token && ( // Show these buttons only if the user is not logged in
+            <>
+              <button
+                className="w-full bg-black text-white py-2 mb-4 rounded hover:bg-gray-800 cursor-pointer"
+                onClick={handleSignupClick}
+              >
+                Sign up
+              </button>
+              <button
+                className="w-full bg-gray-200 text-black py-2 mb-4 rounded hover:bg-gray-300 cursor-pointer"
+                onClick={handleLoginClick}
+              >
+                Log in
+              </button>
+            </>
+          )}
           <ul className="space-y-4">
             <li>
               <a
