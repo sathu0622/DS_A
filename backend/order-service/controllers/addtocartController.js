@@ -91,3 +91,66 @@ exports.getCartDetails = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.updateCartItemQuantity = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { quantity } = req.body;
+
+    console.log("Received request to update item:", itemId, "to quantity:", quantity); // Debugging log
+
+    // Validate quantity
+    if (quantity < 1) {
+      return res.status(400).json({ message: "Quantity must be at least 1" });
+    }
+
+    // Find the cart item
+    const cartItem = await AddToCart.findById(itemId);
+    if (!cartItem) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    // Fetch the price from the MenuItem model
+    const menuItem = await MenuItem.findById(cartItem.menuItemId);
+    if (!menuItem) {
+      return res.status(404).json({ message: "Menu item not found" });
+    }
+
+    const price = menuItem.price;
+    if (!price || isNaN(price)) {
+      return res.status(400).json({ message: "Invalid price value" });
+    }
+
+    // Calculate totalAmount
+    const totalAmount = quantity * price;
+
+    // Update the cart item
+    cartItem.quantity = quantity;
+    cartItem.totalAmount = totalAmount;
+
+    const updatedCartItem = await cartItem.save();
+
+    console.log("Updated item in database:", updatedCartItem); // Debugging log
+    res.status(200).json(updatedCartItem);
+  } catch (error) {
+    console.error("Error updating cart item quantity:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.deleteCartItem = async (req, res) => {
+  try {
+    const { itemId } = req.params
+
+
+    const deletedItem = await AddToCart.findByIdAndDelete(itemId);
+
+    if (!deletedItem) {
+      return res.status(404).json({ message: "Cart is not founsd" })
+    }
+    res.status(200).json({ message: "Cart item deleted successfully", deletedItem });
+  } catch (error) {
+    console.error("Error deleting cart item:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
