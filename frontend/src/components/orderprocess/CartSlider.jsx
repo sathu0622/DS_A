@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { IoTrashBin } from "react-icons/io5";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const CartSlider = ({ isOpen, userId, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantLocation, setRestaurantLocation] = useState("");
   const [orderNote, setOrderNote] = useState("");
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    navigate("/checkout", { state: { cartItems, restaurantName, restaurantLocation, subtotal: calculateSubtotal() } });
+  };
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -175,7 +181,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
           <p className="text-lg font-bold">Subtotal: LKR {calculateSubtotal()}</p>
           <button
             className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
-            onClick={() => console.log("Proceed to checkout")}
+            onClick={handleCheckout}
           >
             Go to checkout
           </button>
