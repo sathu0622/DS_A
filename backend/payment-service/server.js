@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 
 
 const paymentRoutes = require('./routes/paymentRoutes');
+const promoRoutes = require('./routes/promoRoutes');
 
 const calculateTotalOrderAmount = (items) => {
     return items.reduce((total, item) => total + item.amount * 100, 0);
@@ -45,7 +46,7 @@ const calculateTotalOrderAmount = (items) => {
     }
   });
 
-
+app.use('/api/promo', promoRoutes);
 app.use('/api/payments', paymentRoutes);
 
   app.listen(PORT, () => {
