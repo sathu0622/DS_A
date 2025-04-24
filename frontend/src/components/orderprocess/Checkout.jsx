@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/main_components/NavBar";
 import StripePayment from "../payment/StripePayment"; 
 
 const Checkout = () => {
   const location = useLocation();
+	const navigate = useNavigate();
   const { cartItems, restaurantName, restaurantLocation, subtotal } = location.state || {};
 
   const deliveryFee = 150;
@@ -38,6 +39,44 @@ const Checkout = () => {
       setServiceFee(serviceFee - 200);
     }
   };
+
+	const handlePlaceOrder = async () => {
+		try {
+			const userId = localStorage.getItem("userId");
+			const restaurantId = cartItems[0]?.restaurantId; // Assuming all items are from the same restaurant
+			const address = "Seewalee Mawatha, Kaduwela"; // Replace with dynamic address input if needed
+
+			const response = await fetch("http://localhost:8000/api/orders/pending-order", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					userId,
+					restaurantId,
+					items: cartItems.map((item) => ({
+						menuItemId: item.menuItemId,
+						quantity: item.quantity,
+						totalAmount: item.totalAmount,
+					})),
+					address,
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error("Failed to place order");
+			}
+
+			const data = await response.json();
+			alert("Order placed successfully!");
+
+			// Clear the cart and navigate to a success page
+			navigate("/");
+		} catch (error) {
+			console.error("Error placing order:", error);
+			alert("Failed to place order. Please try again.");
+		}
+	};
 
   return (
     <div>
@@ -120,7 +159,7 @@ const Checkout = () => {
                     checked={selectedOption === "Card Payment"}
                     onChange={() => handlePaymentMethodChange("Card Payment")}
                     className="mr-2"
-                  />
+								  />
 								  <label htmlFor="cardPayment" className="text-black font-bold text-lg mr-20">
                     Card Payment
                   </label>
@@ -165,7 +204,10 @@ const Checkout = () => {
                 <p>LKR {total}</p>
               </div>
               {selectedOption !== "Card Payment" && (
-							  <button className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold">
+							  <button
+								  className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold"
+								  onClick={handlePlaceOrder}
+							  >
                   Place a Order
                 </button>
               )}
