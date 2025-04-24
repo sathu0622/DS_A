@@ -183,7 +183,7 @@ const NavBar = () => {
       {/* Cart Slider */}
       <CartSlider
         isOpen={isCartOpen}
-        cartItems={[]} // Pass cart items 
+        userId={auth.userId} // Pass the logged-in user's ID
         onClose={() => setIsCartOpen(false)}
       />
     </div>

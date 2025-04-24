@@ -1,4 +1,28 @@
+const mongoose = require("mongoose");
 const AddToCart = require("../models/addtocart");
+
+// Connect to the `test` database
+const testDbConnection = mongoose.createConnection(process.env.TEST_DB_URI);
+
+// Import the `Restaurant` and `MenuItem` models from the `test` database
+const Restaurant = testDbConnection.model(
+  "Restaurant",
+  new mongoose.Schema({
+    name: String,
+    description: String,
+    location: String,
+  })
+);
+
+const MenuItem = testDbConnection.model(
+  "MenuItem",
+  new mongoose.Schema({
+    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant" },
+    name: String,
+    description: String,
+    price: Number,
+  })
+);
 
 exports.addToCart = async (req, res) => {
   try {
@@ -32,6 +56,38 @@ exports.getCartItemCount = async (req, res) => {
     res.status(200).json({ totalQuantity });
   } catch (error) {
     console.error("Error fetching cart items:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getCartDetails = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Fetch cart items from the `ordersystem` database
+    const cartItems = await AddToCart.find({ userId });
+
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(404).json({ message: "No cart items found" });
+    }
+
+    // Enrich cart items with restaurant and menu item details
+    const enrichedCartItems = await Promise.all(
+      cartItems.map(async (item) => {
+        const menuItem = await MenuItem.findById(item.menuItemId);
+        const restaurant = await Restaurant.findById(item.restaurantId);
+
+        return {
+          ...item.toObject(),
+          menuItemName: menuItem?.name || "Unknown",
+          restaurantName: restaurant?.name || "Unknown",
+        };
+      })
+    );
+
+    res.status(200).json(enrichedCartItems);
+  } catch (error) {
+    console.error("Error fetching cart details:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
