@@ -18,12 +18,14 @@ const Checkout = () => {
   const handlePaymentMethodChange = (method) => {
     setSelectedOption(method);
     if (method === "Card Payment") {
+		setServiceFee(0); 
       setIsLoading(true); 
       setTimeout(() => {
         setIsLoading(false);
         setShowPopup(true);
       }, 2000); 
     } else {
+		setServiceFee(30);
       setShowPopup(false);
     }
   };
@@ -40,8 +42,8 @@ const Checkout = () => {
   return (
     <div>
       <NavBar />
-      <div className="min-h-screen bg-gray-100 p-8 pl-20 pr-20">
-        <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+		  <div className="min-h-screen bg-gray-100 p-4 pl-20 pr-20">
+			  <h1 className="text-3xl font-bold mb-2 ml-5">Checkout</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Section */}
@@ -93,7 +95,7 @@ const Checkout = () => {
 				</p>
 			  <div className="flex justify-between items-center">
                 {/* Cash on Delivery */}
-                <div className="flex items-center">
+							  <div className="flex items-center  ml-20">
                   <input
                     type="radio"
                     id="cashOnDelivery"
@@ -119,7 +121,7 @@ const Checkout = () => {
                     onChange={() => handlePaymentMethodChange("Card Payment")}
                     className="mr-2"
                   />
-                  <label htmlFor="cardPayment" className="text-black font-bold text-lg">
+								  <label htmlFor="cardPayment" className="text-black font-bold text-lg mr-20">
                     Card Payment
                   </label>
                 </div>
@@ -163,7 +165,7 @@ const Checkout = () => {
                 <p>LKR {total}</p>
               </div>
               {selectedOption !== "Card Payment" && (
-                <button className="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 w-full font-bold">
+							  <button className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold">
                   Place a Order
                 </button>
               )}
