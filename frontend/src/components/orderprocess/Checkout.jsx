@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "../../components/main_components/NavBar";
-import StripePayment from "../payment/StripePayment"; // Import StripePayment component
+import StripePayment from "../payment/StripePayment"; 
 
 const Checkout = () => {
   const location = useLocation();
@@ -9,8 +9,8 @@ const Checkout = () => {
 
   const deliveryFee = 150;
   const [serviceFee, setServiceFee] = useState(30);
-  const [selectedOption, setSelectedOption] = useState("Cash on Delivery"); // Default payment method
-  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard"); // Default delivery option
+	const [selectedOption, setSelectedOption] = useState("Cash on Delivery");
+	const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard");
   const [isLoading, setIsLoading] = useState(false); 
   const [showPopup, setShowPopup] = useState(false);
   const total = subtotal + deliveryFee + serviceFee;
