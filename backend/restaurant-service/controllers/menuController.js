@@ -1,4 +1,5 @@
 const MenuItem = require('../models/MenuItem');
+const Restaurant = require('../models/Restaurant');
 
 exports.getAllMenuItem = async (req, res) => {
   try {
@@ -51,3 +52,23 @@ exports.deleteMenuItem = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getOwnerMenuItems = async (req, res) => {
+  try {
+    const ownerId = req.user.userId; 
+
+    // Find all restaurants owned by the logged-in user
+    const ownedRestaurants = await Restaurant.find({ ownerId });
+
+    
+    const restaurantIds = ownedRestaurants.map(r => r._id);
+
+    
+    const menuItems = await MenuItem.find({ restaurantId: { $in: restaurantIds } });
+
+    res.status(200).json(menuItems);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+

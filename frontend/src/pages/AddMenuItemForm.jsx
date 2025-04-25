@@ -1,5 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 const AddMenuItemForm = () => {
   const [formData, setFormData] = useState({
@@ -146,6 +148,15 @@ const AddMenuItemForm = () => {
             Add Item
           </button>
         </form>
+        <Link to="/viewMenuItems">
+  <button
+    className="mt-6 w-full bg-gray-800 text-white font-semibold py-2 rounded hover:bg-orange-600"
+  >
+    View Menu Items
+  </button>
+</Link>
+
+
       </div>
     </div>
   );
