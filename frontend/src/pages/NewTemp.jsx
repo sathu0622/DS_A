@@ -211,7 +211,8 @@ const NewTemp = () => {
       {/* Cart Slider */}
       <CartSlider
         isOpen={isCartOpen}
-        userId={auth.userId} // Pass the logged-in user's ID
+        userId={auth.userId}
+        restaurantId={restaurantId}
         onClose={() => setIsCartOpen(false)}
       />
     </div>

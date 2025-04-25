@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { IoTrashBin } from "react-icons/io5";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -9,8 +9,8 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantLocation, setRestaurantLocation] = useState("");
-  const [orderNote, setOrderNote] = useState("");
   const navigate = useNavigate();
+  const sliderRef = useRef(null); 
 
   const handleCheckout = () => {
     navigate("/checkout", { state: { cartItems, restaurantName, restaurantLocation, subtotal: calculateSubtotal() } });
@@ -42,6 +42,22 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
       fetchCartData();
     }
   }, [isOpen, userId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sliderRef.current && !sliderRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => total + item.totalAmount, 0);
@@ -101,7 +117,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         isOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 w-96 z-50`}
     >
-      <div className="p-4 h-full flex flex-col">
+      <div ref={sliderRef} className="p-4 h-full flex flex-col">
         {/* Close Button */}
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
@@ -186,18 +202,6 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
             </ul>
           )}
         </div>
-
-        {/* Add Order Note */}
-        {cartItems.length > 0 && (
-          <div className="mt-4">
-            <textarea
-              className="w-full border border-gray-300 rounded p-2"
-              placeholder="Add an order note (e.g., utensils, special instructions)"
-              value={orderNote}
-              onChange={(e) => setOrderNote(e.target.value)}
-            />
-          </div>
-        )}
 
         {/* Subtotal and Checkout */}
         {cartItems.length > 0 && (
