@@ -19,5 +19,5 @@ router.get('/', restaurantController.getAllRestaurants);
 // Get restaurants by logged-in owner
 router.get('/owner/mine', auth.verifyToken, restaurantController.getRestaurantsByOwner);
 
-router.get('/', controller.getAllRestaurants);
+
 module.exports = router;
