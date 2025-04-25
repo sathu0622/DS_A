@@ -109,42 +109,58 @@ const StripePayment = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
-      <div className="p-6 bg-white border-2 border-orange-500 shadow-xl rounded-2xl w-96 text-center">
-        <h2 className="text-2xl font-bold text-orange-600 mb-4">Complete Your Payment</h2>
-
-        <div className="mb-4">
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 p-4">
+      {/* Title */}
+      <h2 className="text-4xl font-bold text-orange-600 mb-8 text-center">
+        Complete Your Payment
+      </h2>
+  
+      <div className="flex flex-col md:flex-row gap-6 bg-white/80 w-full max-w-4xl p-6 rounded-xl shadow-md">
+        
+        {/* Promo Code Section - Left */}
+        <div className="md:w-1/2 w-full bg-white border border-dashed border-orange-300 rounded-xl p-5 shadow-sm">
+          <h3 className="text-2xl font-semibold text-orange-600 mb-3 text-center">Have a Promo Code?</h3>
           <input
             type="text"
             value={promoCode}
             onChange={(e) => setPromoCode(e.target.value)}
             placeholder="Enter promo code"
-            className="border p-2 rounded w-full"
+            className="border p-3 rounded w-full mb-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           <button
             onClick={handleApplyPromo}
-            className="mt-2 w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition"
+            className="w-full bg-orange-500 text-white py-2.5 rounded hover:bg-orange-600 transition"
           >
             Apply Promo
           </button>
-          {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-red-500 text-sm mt-2 text-center">{errorMessage}</p>
+          )}
           {appliedCode && (
-            <p className="text-green-600 text-sm mt-1">
+            <p className="text-green-600 text-sm mt-2 text-center">
               Promo <strong>{appliedCode}</strong> applied: {discount}% OFF
             </p>
           )}
         </div>
-
-        {loading && <p className="text-orange-500">Loading payment details...</p>}
-
-        {clientSecret && (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <PaymentForm totalAmount={(baseAmount * (1 - discount / 100)) / 100} />
-          </Elements>
-        )}
+  
+        {/* Payment Section - Right */}
+        <div className="md:w-1/2 w-full text-center flex flex-col justify-center">
+          {loading && (
+            <p className="text-orange-500 mb-4">Loading payment details...</p>
+          )}
+  
+          {clientSecret && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <PaymentForm totalAmount={(baseAmount * (1 - discount / 100)) / 100} />
+            </Elements>
+          )}
+        </div>
+  
       </div>
     </div>
   );
+  
+  
 };
 
 export default StripePayment;
