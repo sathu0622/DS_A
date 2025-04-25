@@ -7,6 +7,10 @@ import Verify from './pages/Verify';
 import Login from './pages/Login';
 
 import { AuthProvider } from './context/AuthContext';
+import AddMenuItemForm from './pages/AddMenuItemForm';
+import AddRestaurantForm from './pages/AddRestaurantForm';
+
+
 
 
 function App() {
@@ -19,6 +23,10 @@ function App() {
           <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/addMenu" element={<AddMenuItemForm />} />
+        <Route path="/addRestaurant" element={<AddRestaurantForm />} />
+         
+        
         </Routes>
     </Router>
     </AuthProvider>

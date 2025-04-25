@@ -1,11 +1,31 @@
 const mongoose = require('mongoose');
 
 const restaurantSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  location: String,
-  isAvailable: { type: Boolean, default: true },
-  ownerId: String, //the user who registered
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  isAvailable: {
+    type: Boolean,
+    default: true,
+  },
+  ownerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', 
+    required: true,
+  },
+ 
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);
