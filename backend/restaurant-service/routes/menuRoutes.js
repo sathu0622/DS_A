@@ -9,6 +9,6 @@ router.post('/', auth.verifyToken, upload.single('image'), controller.addMenuIte
 router.put('/:id', auth.verifyToken, controller.updateMenuItem);
 router.delete('/:id', auth.verifyToken, controller.deleteMenuItem);
 
-
+router.get('/owner-items',auth.verifyToken,  controller.getOwnerMenuItems);
 router.get('/', controller.getAllMenuItem);
 module.exports = router;
