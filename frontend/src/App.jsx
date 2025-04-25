@@ -13,6 +13,10 @@ import Temp from './pages/temp';
 import NewTemp from "./pages/NewTemp";
 
 import { AuthProvider } from './context/AuthContext';
+import AddMenuItemForm from './pages/AddMenuItemForm';
+import AddRestaurantForm from './pages/AddRestaurantForm';
+
+
 
 
 function App() {
@@ -30,6 +34,10 @@ function App() {
 
           <Route path="/temp" element={<Temp />} />
           <Route path="/restaurants/:restaurantId" element={<NewTemp />} />
+        <Route path="/addMenu" element={<AddMenuItemForm />} />
+        <Route path="/addRestaurant" element={<AddRestaurantForm />} />
+         
+        
         </Routes>
     </Router>
     </AuthProvider>

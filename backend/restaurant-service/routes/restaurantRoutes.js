@@ -1,10 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/restaurantController');
+
+const restaurantController = require('../controllers/restaurantController');
 const auth = require('../middleware/authMiddleware');
 
-router.post('/', auth.verifyToken, controller.addRestaurant);
-router.patch('/:id/availability', auth.verifyToken, controller.updateAvailability);
+// Add a new restaurant
+router.post('/', auth.verifyToken, restaurantController.addRestaurant);
 
-router.get('/', controller.getAllRestaurants);
+// Update a restaurant
+router.put('/:id', auth.verifyToken, restaurantController.updateRestaurant);
+
+// Delete a restaurant
+router.delete('/:id', auth.verifyToken, restaurantController.deleteRestaurant);
+
+// Get all restaurants
+router.get('/', restaurantController.getAllRestaurants);
+
+// Get restaurants by logged-in owner
+router.get('/owner/mine', auth.verifyToken, restaurantController.getRestaurantsByOwner);
+
+
 module.exports = router;

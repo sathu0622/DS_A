@@ -13,14 +13,27 @@ exports.getAllMenuItem = async (req, res) => {
 
 exports.addMenuItem = async (req, res) => {
   try {
-    const item = new MenuItem(req.body);
-    await item.save();
-    res.status(201).json(item);
+    const { name, description, price, availability, restaurantId } = req.body;
+
+    const newItem = new MenuItem({
+      name,
+      description,
+      price,
+      availability,
+      restaurantId,
+      image: req.file ? req.file.filename : null, // store the filename
+    });
+
+    await newItem.save();
+
+    res.status(201).json({
+      ...newItem._doc,
+      imageUrl: req.file ? `/uploads/${req.file.filename}` : null, // send URL if needed
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 exports.updateMenuItem = async (req, res) => {
   try {
     const updated = await MenuItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
