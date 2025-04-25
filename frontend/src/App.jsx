@@ -6,8 +6,6 @@ import Payment from './components/payment/StripePayment'
 import Register from './pages/Register';
 import Verify from './pages/Verify';
 import Login from './pages/Login';
-import Checkout from './components/orderprocess/Checkout';
-
 
 import Temp from './pages/temp';
 import NewTemp from "./pages/NewTemp";
@@ -30,8 +28,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/checkout" element={<Checkout />} />
-
           <Route path="/temp" element={<Temp />} />
           <Route path="/restaurants/:restaurantId" element={<NewTemp />} />
         <Route path="/addMenu" element={<AddMenuItemForm />} />

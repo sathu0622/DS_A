@@ -2,15 +2,12 @@ const MenuItem = require('../models/MenuItem');
 
 exports.getAllMenuItem = async (req, res) => {
   try {
-    const { restaurantId } = req.query;
-    const filter = restaurantId ? { restaurantId } : {};
-    const menuItems = await MenuItem.find(filter);
+    const menuItems = await MenuItem.find();
     res.status(200).json(menuItems);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
-
+}
 exports.addMenuItem = async (req, res) => {
   try {
     const { name, description, price, availability, restaurantId } = req.body;
