@@ -114,7 +114,7 @@ const NewTemp = () => {
   return (
     <div>
       <div>
-      <NavBar />
+        <NavBar restaurantId={restaurantId} />
       <div className="min-h-screen bg-gray-100 p-8 relative">
         <h1 className="text-3xl font-bold text-center mb-8">Menu Items</h1>
 

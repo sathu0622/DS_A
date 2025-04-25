@@ -6,10 +6,12 @@ import cartAnimation from "../../assets/cartanim.json";
 const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
   const [groupedCart, setGroupedCart] = useState([]);
-  const sliderRef = useRef(null); // Ref for the slider
-  const navigate = useNavigate(); // Initialize navigate
+	const sliderRef = useRef(null);
+	const navigate = useNavigate();
 
   useEffect(() => {
+	  let intervalId;
+
     const fetchCartData = async () => {
       if (userId) {
         try {
@@ -29,7 +31,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
                   restaurantName,
                   restaurantLocation,
                   restaurantImage,
-                  restaurantId, // Include restaurantId for navigation
+					restaurantId,
                   subtotal: 0,
                   quantity: 0,
                 };
@@ -48,7 +50,11 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
 
     if (isOpen) {
       fetchCartData();
+		intervalId = setInterval(fetchCartData, 1000);
     }
+	  return () => {
+		  clearInterval(intervalId);
+	  };
   }, [isOpen, userId, currentPage]);
 
 
@@ -78,7 +84,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
         isOpen ? "translate-x-0" : "translate-x-full"
       } transition-transform duration-100 w-96 z-50`}
     >
-      <div ref={sliderRef} className="p-4 h-full flex flex-col">
+		  <div ref={sliderRef} className="p-4 h-full flex flex-col cursor-pointer">
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
           onClick={onClose}
@@ -87,10 +93,10 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
         </button>
 
         {currentPage === "/newtemp" ? (
-          <div className="flex-1 overflow-y-auto">
+				  <div className="flex-1 overflow-y-auto">
             {/* Display cart items as usual */}
             {cartItems.map((item) => (
-              <div key={item._id} className="mb-4">
+				<div key={item._id}>
                 <p className="font-bold">{item.menuItemName}</p>
                 <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 <p className="text-sm text-gray-500">LKR {item.totalAmount}</p>
@@ -115,7 +121,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
                 <div
                   key={group.restaurantName}
                   className="mb-4 p-4 rounded-lg shadow flex items-center"
-                  onClick={() => handleCardClick(group.restaurantId)} // Add onClick handler
+					  onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img
                     src={group.restaurantImage || "https://via.placeholder.com/50"}

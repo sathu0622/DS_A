@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
 
-const NavBar = () => {
+const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -17,10 +17,10 @@ const NavBar = () => {
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
-      if (auth.token && auth.userId) {
+      if (auth.token && auth.userId && restaurantId) {
         try {
           const response = await fetch(
-            `http://localhost:8000/api/addtocart/${auth.userId}/count`,
+            `http://localhost:8000/api/addtocart/${auth.userId}/count?restaurantId=${restaurantId}`,
             {
               headers: {
                 Authorization: `Bearer ${auth.token}`,
@@ -46,7 +46,45 @@ const NavBar = () => {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [auth.token, auth.userId]);
+  }, [auth.token, auth.userId, restaurantId]);
+
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      if (auth.token && auth.userId) {
+        try {
+
+          const isNewTempPage = location.pathname.startsWith("/restaurants/");
+          if (isNewTempPage) return; 
+
+          const response = await fetch(
+            `http://localhost:8000/api/addtocart/${auth.userId}/count`,
+            {
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch cart item count");
+          }
+
+          const data = await response.json();
+          setCartItemCount(data.totalQuantity);
+        } catch (error) {
+          console.error("Error fetching cart item count:", error);
+        }
+      }
+    };
+
+    fetchCartItemCount();
+
+    const intervalId = setInterval(() => {
+      fetchCartItemCount();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [auth.token, auth.userId, location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -211,6 +249,7 @@ const NavBar = () => {
         <CartSlider
           isOpen={isCartOpen}
           userId={auth.userId}
+          restaurantId={restaurantId}
           onClose={() => setIsCartOpen(false)}
         />
       ) : (

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { IoTrashBin } from "react-icons/io5";
-import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { AiOutlineCaretLeft, AiOutlineCaretRight, AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
 import cartAnimation from "../../assets/cartanim.json";
 
-const CartSlider = ({ isOpen, userId, onClose }) => {
+const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
   const [cartItems, setCartItems] = useState([]);
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantLocation, setRestaurantLocation] = useState("");
@@ -18,16 +18,18 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
 
   useEffect(() => {
     const fetchCartData = async () => {
-      if (userId) {
+      if (userId && restaurantId) {
         try {
-          const response = await fetch(`http://localhost:8000/api/addtocart/${userId}/details`);
+          const response = await fetch(
+            `http://localhost:8000/api/addtocart/${userId}/details?restaurantId=${restaurantId}`
+          );
           if (!response.ok) {
             throw new Error("Failed to fetch cart data");
           }
           const data = await response.json();
+
           setCartItems(data);
 
-          // Assuming restaurant details are the same for all items in the cart
           if (data.length > 0) {
             setRestaurantName(data[0].restaurantName);
             setRestaurantLocation(data[0].restaurantLocation);
@@ -41,7 +43,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
     if (isOpen) {
       fetchCartData();
     }
-  }, [isOpen, userId]);
+  }, [isOpen, userId, restaurantId]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -118,12 +120,11 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         } transition-transform duration-300 w-96 z-50`}
     >
       <div ref={sliderRef} className="p-4 h-full flex flex-col">
-        {/* Close Button */}
         <button
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
           onClick={onClose}
         >
-          ✕
+          <AiOutlineClose />
         </button>
 
         {/* Restaurant Details */}
@@ -150,7 +151,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
               </p>
               <button
                 className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
-                onClick={onClose}
+                onClick={() => navigate("/temp")}
               >
                 Start Order Item
               </button>
@@ -170,7 +171,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
                     {/* Item Details */}
                     <div className="flex-1 ml-4">
                       <p className="font-bold">{item.menuItemName}</p>
-                      <p className="text-sm text-gray-500">LKR {item.totalAmount}</p>
+                      <p className="text-sm text-gray-500">LKR {item.totalAmount}.00</p>
                       <div className="flex items-center mt-2">
                         <button
                           className="px-2 py-1 bg-gray-200 rounded-4xl cursor-pointer hover:bg-gray-300"
@@ -190,7 +191,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
 
                     {/* Delete Button */}
                     <button
-                      className="text-red-500 hover:text-red-700 text-2xl"
+                      className="text-red-500 hover:text-red-700 text-2xl cursor-pointer"
                       onClick={() => handleDeleteItem(item._id)}
                     >
                       <IoTrashBin />
@@ -206,7 +207,10 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         {/* Subtotal and Checkout */}
         {cartItems.length > 0 && (
           <div className="mt-4 border-t pt-4">
-            <p className="text-lg font-bold">Subtotal: LKR {calculateSubtotal()}</p>
+            <div className="text-lg font-bold flex justify-between">
+              <span>Subtotal:</span>
+              <span>LKR {calculateSubtotal()}.00</span>
+            </div>
             <button
               className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
               onClick={handleCheckout}
