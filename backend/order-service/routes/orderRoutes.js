@@ -6,13 +6,13 @@ const {
   getOrderById,
 } = require("../controllers/orderController");
 
-// Create an order
+const { createPendingOrder } = require("../controllers/pendingOrderController");
+
+
 router.post("/", createOrder);
-
-// Get all orders
 router.get("/", getAllOrders);
-
-// Get a specific order by ID
 router.get("/:id", getOrderById);
+
+router.post("/pending-order", createPendingOrder);
 
 module.exports = router;
