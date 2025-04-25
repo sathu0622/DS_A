@@ -201,14 +201,12 @@ const Checkout = () => {
                 <p>Total</p>
                 <p>LKR {total}</p>
               </div>
-              {selectedOption !== "Card Payment" && (
-							  <button
+              <button
 								  className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold"
 								  onClick={handlePlaceOrder}
 							  >
                   Place a Order
-                </button>
-              )}
+              </button>
             </div>
           </div>
         </div>
