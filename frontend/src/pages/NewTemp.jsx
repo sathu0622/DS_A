@@ -1,7 +1,74 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import CartSlider from "../components/orderprocess/CartSlider";
 import NavBar from "../components/main_components/NavBar";
+import { IoTrashBin } from "react-icons/io5";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+
+const CartSlider = ({ isOpen, cartItems, onClose }) => {
+  const calculateSubtotal = () => {
+    return cartItems.reduce((total, item) => total + item.totalAmount, 0);
+  };
+
+  return (
+    <div
+      className={`fixed top-0 right-0 h-full bg-white shadow-lg transform ${isOpen ? "translate-x-0" : "translate-x-full"
+        } transition-transform duration-300 w-96 z-50`}
+    >
+      <div className="p-4 h-full flex flex-col">
+        {/* Close Button */}
+        <button
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+
+        {/* Cart Items */}
+        <div className="flex-1 overflow-y-auto">
+          {cartItems.length === 0 ? (
+            <p className="text-gray-500">Your cart is empty.</p>
+          ) : (
+            <ul>
+              {cartItems.map((item) => (
+                <li key={item._id} className="mb-4">
+                  <div className="flex items-center justify-between">
+                    {/* Item Image */}
+                    <img
+                      src={item.image || "https://via.placeholder.com/50"}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+
+                    {/* Item Details */}
+                    <div className="flex-1 ml-4">
+                      <p className="font-bold">{item.name}</p>
+                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">Rs. {item.price}</p>
+                    </div>
+
+                    {/* Total Price */}
+                    <p className="font-bold">Rs. {item.quantity * item.price}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Subtotal and Checkout */}
+        <div className="mt-4 border-t pt-4">
+          <p className="text-lg font-bold">Subtotal: Rs. {calculateSubtotal()}</p>
+          <button
+            className="mt-4 bg-black text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
+            onClick={() => console.log("Proceed to checkout")}
+          >
+            Go to checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const NewTemp = () => {
   const { restaurantId } = useParams();
@@ -55,8 +122,10 @@ const NewTemp = () => {
 
       const data = await response.json();
       console.log("Item added to cart:", data);
-      setCart((prevCart) => [...prevCart, { ...item, quantity }]); 
-      setIsCartOpen(true); 
+
+      // Update the cart state and open the CartSlider
+      setCart((prevCart) => [...prevCart, { ...item, quantity, totalAmount }]);
+      setIsCartOpen(true); // Open the CartSlider
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Failed to add item to cart. Please try again.");
