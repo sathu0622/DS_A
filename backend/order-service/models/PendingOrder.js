@@ -11,6 +11,7 @@ const pendingOrderSchema = new mongoose.Schema({
     },
   ],
   address: { type: String, required: true },
+  paymentOption: { type: String, required: true }, 
   status: { type: String, default: "Pending" },
   createdAt: { type: Date, default: Date.now },
 });

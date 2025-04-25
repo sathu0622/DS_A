@@ -80,17 +80,10 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
 
   return (
     <div
-      className={`fixed top-0 right-0 bg-white shadow-lg transform ${
-        isOpen ? "translate-x-0" : "translate-x-full"
+		  className={`fixed top-10 right-30 bg-white shadow-lg transform ${isOpen ? "translate-x-0" : "translate-x-[150%]"
       } transition-transform duration-100 w-96 z-50`}
     >
-		  <div ref={sliderRef} className="p-4 h-full flex flex-col cursor-pointer">
-        <button
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-          onClick={onClose}
-        >
-          ✕
-        </button>
+		  <div ref={sliderRef} className="h-full flex flex-col cursor-pointer">
 
         {currentPage === "/newtemp" ? (
 				  <div className="flex-1 overflow-y-auto">
@@ -120,7 +113,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
               groupedCart.map((group, index) => (
                 <div
                   key={group.restaurantName}
-                  className="mb-4 p-4 rounded-lg shadow flex items-center"
+					  className="p-4 rounded-lg shadow flex items-center hover:bg-gray-300 cursor-pointer"
 					  onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img

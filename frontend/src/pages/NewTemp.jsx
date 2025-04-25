@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "../components/main_components/NavBar";
 import { useAuth } from "../context/AuthContext";
-import { IoTrashBin } from "react-icons/io5";
-import { AiOutlineCaretLeft, AiOutlineCaretRight, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 import CartSlider from "../components/orderprocess/CartSlider";
 
@@ -15,7 +14,11 @@ const NewTemp = () => {
   const [selectedItem, setSelectedItem] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [quantity, setQuantity] = useState(1); 
-  const { auth, logout } = useAuth();
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    setIsCartOpen(true);
+  }, []);
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
@@ -155,7 +158,7 @@ const NewTemp = () => {
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
               onClick={closeModal}
             >
-              ✕
+                <AiOutlineClose />
             </button>
             <img
               src={selectedItem.image || "https://via.placeholder.com/150"}
