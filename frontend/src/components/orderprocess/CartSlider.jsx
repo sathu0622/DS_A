@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { IoTrashBin } from "react-icons/io5";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { Player } from "@lottiefiles/react-lottie-player";
+import cartAnimation from "../../assets/cartanim.json";
 
 const CartSlider = ({ isOpen, userId, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -86,11 +88,11 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         throw new Error("Failed to delete item");
       }
 
-      setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId)); 
+      setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
       console.log("Item deleted successfully");
     } catch (error) {
       console.error("Error deleting item:", error);
-    } 
+    }
   };
 
   return (
@@ -109,15 +111,34 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         </button>
 
         {/* Restaurant Details */}
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">{restaurantName}</h2>
-          <p className="text-sm text-gray-500">{restaurantLocation}</p>
-        </div>
+        {cartItems.length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-xl font-bold">{restaurantName}</h2>
+            <p className="text-sm text-gray-500">{restaurantLocation}</p>
+          </div>
+        )}
 
         {/* Cart Items */}
         <div className="flex-1 overflow-y-auto">
           {cartItems.length === 0 ? (
-            <p className="text-gray-500">Your cart is empty.</p>
+            <div className="flex flex-col items-center justify-center h-full">
+              <Player
+                autoplay
+                loop
+                src={cartAnimation}
+                style={{ height: "200px", width: "200px" }}
+              />
+              <p className="text-gray-500 text-lg font-bold">Add items to start a cart</p>
+              <p className="text-gray-400 text-sm text-center">
+                Once you add items from a restaurant or store, your cart will appear here.
+              </p>
+              <button
+                className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
+                onClick={onClose}
+              >
+                Start Order Item
+              </button>
+            </div>
           ) : (
             <ul>
               {cartItems.map((item) => (
@@ -156,7 +177,7 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
                       className="text-red-500 hover:text-red-700 text-2xl"
                       onClick={() => handleDeleteItem(item._id)}
                     >
-                      < IoTrashBin />
+                      <IoTrashBin />
                     </button>
                   </div>
                   <hr className="mt-2"></hr>
@@ -167,25 +188,29 @@ const CartSlider = ({ isOpen, userId, onClose }) => {
         </div>
 
         {/* Add Order Note */}
-        <div className="mt-4">
-          <textarea
-            className="w-full border border-gray-300 rounded p-2"
-            placeholder="Add an order note (e.g., utensils, special instructions)"
-            value={orderNote}
-            onChange={(e) => setOrderNote(e.target.value)}
-          />
-        </div>
+        {cartItems.length > 0 && (
+          <div className="mt-4">
+            <textarea
+              className="w-full border border-gray-300 rounded p-2"
+              placeholder="Add an order note (e.g., utensils, special instructions)"
+              value={orderNote}
+              onChange={(e) => setOrderNote(e.target.value)}
+            />
+          </div>
+        )}
 
         {/* Subtotal and Checkout */}
-        <div className="mt-4 border-t pt-4">
-          <p className="text-lg font-bold">Subtotal: LKR {calculateSubtotal()}</p>
-          <button
-            className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
-            onClick={handleCheckout}
-          >
-            Go to checkout
-          </button>
-        </div>
+        {cartItems.length > 0 && (
+          <div className="mt-4 border-t pt-4">
+            <p className="text-lg font-bold">Subtotal: LKR {calculateSubtotal()}</p>
+            <button
+              className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
+              onClick={handleCheckout}
+            >
+              Go to checkout
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

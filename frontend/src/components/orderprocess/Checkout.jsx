@@ -13,7 +13,6 @@ const Checkout = () => {
 	const [selectedOption, setSelectedOption] = useState("Cash on Delivery");
 	const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard");
   const [isLoading, setIsLoading] = useState(false); 
-  const [showPopup, setShowPopup] = useState(false);
   const total = subtotal + deliveryFee + serviceFee;
 
   const handlePaymentMethodChange = (method) => {
@@ -23,11 +22,10 @@ const Checkout = () => {
       setIsLoading(true); 
       setTimeout(() => {
         setIsLoading(false);
-        setShowPopup(true);
+        navigate("/payment");
       }, 2000); 
     } else {
-		setServiceFee(30);
-      setShowPopup(false);
+      setServiceFee(30);
     }
   };
 
@@ -109,7 +107,7 @@ const Checkout = () => {
                   <p className="text-gray-600 font-bold">
                     Priority <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full ml-2">Faster</span>
                   </p>
-                  <p className="text-gray-500 text-sm">35-50 min • Delivered directly to you</p>
+                  <p className="text-gray-500 text-sm">20-30 min • Delivered directly to you</p>
                 </div>
                 <p className="text-gray-600 font-bold">+LKR 200.00</p>
               </button>
@@ -219,22 +217,6 @@ const Checkout = () => {
         {isLoading && (
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
             <div className="w-16 h-16 border-4 border-t-orange-500 border-gray-300 rounded-full animate-spin"></div>
-          </div>
-        )}
-
-        {/* Popup Window */}
-        {showPopup && (
-          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h2 className="text-xl font-bold mb-4">Card Payment</h2>
-              <StripePayment />
-              <button
-                className="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 w-full"
-                onClick={() => setShowPopup(false)}
-              >
-                Close
-              </button>
-            </div>
           </div>
         )}
       </div>
