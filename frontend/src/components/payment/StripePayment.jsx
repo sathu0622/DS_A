@@ -51,10 +51,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import PaymentForm from "./PaymentForm";
+import { useLocation } from "react-router-dom";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const StripePayment = () => {
+  const location = useLocation();
+  const { orderId, userId, restaurantId, amount } = location.state || {};
+
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [promoCode, setPromoCode] = useState("");
@@ -62,13 +66,13 @@ const StripePayment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [appliedCode, setAppliedCode] = useState(null);
 
-  const baseAmount = 1000; // in cents ($10.00)
+  // const amount = 1000; // in cents ($10.00)
 
-  const fetchClientSecret = async (amountToPay = baseAmount) => {
+  const fetchClientSecret = async () => {
     setLoading(true);
     try {
       const response = await axios.post("http://localhost:8001/api/create-payment-intent", {
-        items: [{ id: "default", name: "Default Plan", amount: amountToPay }],
+        items: [{ id: orderId, name: "Order Payment", amount: amount }], // Amount in cents
       });
       setClientSecret(response.data.clientSecret);
     } catch (error) {
@@ -79,8 +83,10 @@ const StripePayment = () => {
   };
 
   useEffect(() => {
-    fetchClientSecret();
-  }, []);
+    if (amount) {
+      fetchClientSecret();
+    }
+  }, [amount]);
 
   const handleApplyPromo = async () => {
     try {
@@ -92,7 +98,7 @@ const StripePayment = () => {
       });
 
       const discountPercentage = res.data.discountPercentage;
-      const discountedAmount = baseAmount - (baseAmount * discountPercentage) / 100;
+      const discountedAmount = amount - (amount * discountPercentage) / 100;
 
       setDiscount(discountPercentage);
       setAppliedCode(promoCode);
@@ -149,9 +155,14 @@ const StripePayment = () => {
             <p className="text-orange-500 mb-4">Loading payment details...</p>
           )}
   
-          {clientSecret && (
+  {clientSecret && (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <PaymentForm totalAmount={(baseAmount * (1 - discount / 100)) / 100} />
+              <PaymentForm
+                totalAmount={amount}
+                orderId={orderId}
+                userId={userId}
+                restaurantId={restaurantId}
+              />
             </Elements>
           )}
         </div>

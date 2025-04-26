@@ -20,7 +20,7 @@ exports.addRestaurant = async (req, res) => {
   }
 };
 
-// Update a restaurant
+/*// Update a restaurant
 exports.updateRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
@@ -54,7 +54,7 @@ exports.deleteRestaurant = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
+*/
 // Get all restaurants
 exports.getAllRestaurants = async (req, res) => {
   try {
@@ -65,10 +65,20 @@ exports.getAllRestaurants = async (req, res) => {
   }
 };
 
-// Get restaurants by owner
+
+exports.getAllRestaurants = async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
+    res.status(200).json(restaurants);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.getRestaurantsByOwner = async (req, res) => {
   try {
-    const ownerId = req.user.userId;
+    const ownerId = req.user.userId; // 
+
     const restaurants = await Restaurant.find({ ownerId });
     res.json(restaurants);
   } catch (error) {
@@ -76,10 +86,44 @@ exports.getRestaurantsByOwner = async (req, res) => {
   }
 };
 
-exports.getAllRestaurants = async (req, res) => {
+// PUT /api/restaurants/:id
+exports.updateRestaurant = async (req, res) => {
   try {
-    const restaurants = await Restaurant.find();
-    res.status(200).json(restaurants);
+    const updated = await Restaurant.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// DELETE /api/restaurants/:id
+exports.deleteRestaurant = async (req, res) => {
+  try {
+    await Restaurant.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Restaurant deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+// controllers/restaurantController.js
+exports.toggleAvailability = async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    // Make sure the logged-in owner is the same as the restaurant's owner
+    if (restaurant.ownerId.toString() !== req.user.userId) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    restaurant.isAvailable = !restaurant.isAvailable;
+    await restaurant.save();
+
+    res.json({ message: 'Availability updated', isAvailable: restaurant.isAvailable });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

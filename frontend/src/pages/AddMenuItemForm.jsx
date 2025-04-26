@@ -20,7 +20,7 @@ const AddMenuItemForm = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const res = await axios.get('http://localhost:8002/api/restaurants', {
+        const res = await axios.get('http://localhost:8002/api/restaurants/owner', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

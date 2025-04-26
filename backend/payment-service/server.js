@@ -34,7 +34,7 @@ const calculateTotalOrderAmount = (items) => {
     try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: calculateTotalOrderAmount(items),
-            currency: "cad",
+            currency: "lkr",
             description: "food payment",
             automatic_payment_methods: { enabled: true },
         });

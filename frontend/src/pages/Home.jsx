@@ -26,13 +26,15 @@ const Home = () => {
       <NavBar />
       {/* Background Section */}
       <div
-        className="h-[80vh] bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${bgimg})`,
-        }}
-      >
-        {/* Add any content here if needed */}
-      </div>
+  className="h-[80vh] bg-cover bg-center flex items-center justify-center"
+  style={{
+    backgroundImage: `url(${bgimg})`,
+  }}
+>
+  <h1 className="text-white text-4xl md:text-6xl font-bold text-center">
+    Welcome to SpeedySpoon
+  </h1>
+</div>
 
       {/* Middle Section
       <div className="text-center py-16 px-4">

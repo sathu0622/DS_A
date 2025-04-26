@@ -4,7 +4,7 @@ import RoleSelect from '../components/RoleSelect';
 import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const [form, setForm] = useState({ email: '', phone: '', password: '', role: 'customer' });
+  const [form, setForm] = useState({ email: '', phone: '', password: '', role: 'driver' });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -39,7 +39,7 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-white flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-orange-600 mb-6 text-center">Customer Register</h2>
+        <h2 className="text-2xl font-bold text-orange-600 mb-6 text-center">Driver Register</h2>
         <InputField label="Email" type="email" value={form.email} onChange={(e) => handleChange(e)} name="email" />
         <InputField label="Phone" type="text" value={form.phone} onChange={(e) => handleChange(e)} name="phone" />
         <InputField label="Password" type="password" value={form.password} onChange={(e) => handleChange(e)} name="password" />
