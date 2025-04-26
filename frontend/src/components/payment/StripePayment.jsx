@@ -44,8 +44,6 @@
 // };
 
 // export default StripePayment;
-
-
 import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -65,10 +63,9 @@ const StripePayment = () => {
   const [discount, setDiscount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [appliedCode, setAppliedCode] = useState(null);
+  const [finalAmount, setFinalAmount] = useState(amount);
 
-  // const amount = 1000; // in cents ($10.00)
-
-  const fetchClientSecret = async () => {
+  const fetchClientSecret = async (amount) => {
     setLoading(true);
     try {
       const response = await axios.post("http://localhost:8001/api/create-payment-intent", {
@@ -84,9 +81,9 @@ const StripePayment = () => {
 
   useEffect(() => {
     if (amount) {
-      fetchClientSecret();
+      fetchClientSecret(finalAmount); // Use the final amount after applying discount
     }
-  }, [amount]);
+  }, [finalAmount]);
 
   const handleApplyPromo = async () => {
     try {
@@ -104,8 +101,7 @@ const StripePayment = () => {
       setAppliedCode(promoCode);
       setErrorMessage("");
 
-      fetchClientSecret(Math.round(discountedAmount)); // round to nearest cent
-
+      setFinalAmount(Math.round(discountedAmount)); // Update final amount after discount
     } catch (err) {
       console.error(err);
       setDiscount(0);
@@ -120,7 +116,7 @@ const StripePayment = () => {
       <h2 className="text-4xl font-bold text-orange-600 mb-8 text-center">
         Complete Your Payment
       </h2>
-  
+
       <div className="flex flex-col md:flex-row gap-6 bg-white/80 w-full max-w-4xl p-6 rounded-xl shadow-md">
         
         {/* Promo Code Section - Left */}
@@ -148,17 +144,17 @@ const StripePayment = () => {
             </p>
           )}
         </div>
-  
+
         {/* Payment Section - Right */}
         <div className="md:w-1/2 w-full text-center flex flex-col justify-center">
           {loading && (
             <p className="text-orange-500 mb-4">Loading payment details...</p>
           )}
-  
-  {clientSecret && (
+
+          {clientSecret && (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
               <PaymentForm
-                totalAmount={amount}
+                totalAmount={finalAmount} // Pass the final discounted amount here
                 orderId={orderId}
                 userId={userId}
                 restaurantId={restaurantId}
@@ -166,12 +162,10 @@ const StripePayment = () => {
             </Elements>
           )}
         </div>
-  
+
       </div>
     </div>
   );
-  
-  
 };
 
 export default StripePayment;

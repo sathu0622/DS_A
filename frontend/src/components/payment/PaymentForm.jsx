@@ -80,7 +80,8 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
                     orderId,
                     stripePaymentId: paymentIntent.id,
                     stripeCustomerId: paymentIntent.customer,
-                    amount: paymentIntent.amount/100,
+                    // amount: paymentIntent.amount/100,
+                    amount: totalAmount,
                     status: paymentIntent.status,
                 });
                 await updateOrderStatus(); 
