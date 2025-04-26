@@ -26,6 +26,10 @@ const Tracking = () => {
     };
 
     fetchOrders();
+
+		const intervalId = setInterval(fetchOrders, 5000);
+
+		return () => clearInterval(intervalId);
   }, [userId]);
 
   return (
