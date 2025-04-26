@@ -83,7 +83,7 @@ const NewTemp = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8001/api/menu?restaurantId=${restaurantId}`
+          `http://localhost:8002/api/menu?restaurantId=${restaurantId}`
         );
         if (!response.ok) throw new Error("Failed to fetch menu items");
         const data = await response.json();

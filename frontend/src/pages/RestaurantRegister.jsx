@@ -4,7 +4,7 @@ import RoleSelect from '../components/RoleSelect';
 import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const [form, setForm] = useState({ email: '', phone: '', password: '', role: 'customer' });
+  const [form, setForm] = useState({ email: '', phone: '', password: '', role: 'restaurant' });
   const navigate = useNavigate();
 
   const handleChange = (e) => {

@@ -19,10 +19,21 @@ export default function Login() {
       const data = await res.json();
 
       if (data.token) {
-        login({ token: data.token, userId: data.userId, role: data.role }); // ✅ add role
+        login({ token: data.token, userId: data.userId, role: data.role });
+      
         alert(`Logged in as ${data.role}`);
-        window.location.href = '/'; // or redirect based on role
-      } else {
+      
+        if (data.role === 'restaurant') {
+          window.location.href = '/restaurant/dashboard';
+        } else if (data.role === 'driver') {
+          window.location.href = '/driver/dashboard';
+        } else if (data.role === 'customer') {
+          window.location.href = '/';
+        } else {
+          window.location.href = '/'; // fallback
+        }
+      }
+      else {
         alert(data.msg);
       }      
     } catch (err) {

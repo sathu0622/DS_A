@@ -166,7 +166,7 @@ const NavBar = () => {
             </li>
             <li>
               <a
-                href="#restaurant"
+                href="/register-restaurant"
                 className="block text-gray-700 hover:text-black cursor-pointer"
               >
                 Add your restaurant
@@ -174,7 +174,7 @@ const NavBar = () => {
             </li>
             <li>
               <a
-                href="#deliver"
+                href="/register-driver"
                 className="block text-gray-700 hover:text-black cursor-pointer"
               >
                 Sign up to deliver
