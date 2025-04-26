@@ -6,7 +6,7 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import CartSlider from "../components/orderprocess/CartSlider";
 
-const NewTemp = () => {
+const Menuitem = () => {
   const { restaurantId } = useParams();
   const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState([]);
@@ -224,4 +224,4 @@ const NewTemp = () => {
   );
 };
 
-export default NewTemp;
+export default Menuitem;

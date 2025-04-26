@@ -147,7 +147,7 @@ const NavBar = ({ restaurantId }) => {
     if (!auth.token) {
       navigate("/");
     } else if (auth.role === "customer") {
-      navigate("/temp");
+      navigate("/Loghome");
     } else {
       alert("Access restricted to customers only.");
     }

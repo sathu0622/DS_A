@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavBar from '../components/main_components/NavBar';
 
 
-const Temp = () => {
+const loginHome = () => {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
 
@@ -53,4 +53,4 @@ const Temp = () => {
   );
 };
 
-export default Temp;
+export default loginHome;

@@ -151,7 +151,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
               </p>
               <button
                 className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
-                onClick={() => navigate("/temp")}
+                onClick={() => navigate("/Loghome")}
               >
                 Start Order Item
               </button>
