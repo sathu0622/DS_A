@@ -71,6 +71,7 @@ const NewTemp = () => {
     const userId = localStorage.getItem("userId");
     const menuItemId = item._id; 
     const totalAmount = item.price * quantity;
+    const image = item.image;
 
     try {
       const response = await fetch("http://localhost:8000/api/addtocart", {
@@ -84,6 +85,7 @@ const NewTemp = () => {
           menuItemId,
           quantity,
           totalAmount,
+          image,
         }),
       });
 
@@ -96,7 +98,7 @@ const NewTemp = () => {
 
       // Update the cart state and open the CartSlider
       setCart((prevCart) => [...prevCart, { ...item, quantity, totalAmount }]);
-      setIsCartOpen(true); // Open the CartSlider
+      setIsCartOpen(true);
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Failed to add item to cart. Please try again.");

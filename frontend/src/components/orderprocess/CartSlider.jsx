@@ -163,8 +163,8 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
                   <div className="flex items-center justify-between">
                     {/* Item Image */}
                     <img
-                      src={item.menuItemId.image || "https://via.placeholder.com/50"}
-                      alt={item.menuItemName}
+                      src={`http://localhost:8002/uploads/${item.image}`}
+                      alt={item.menuItemName.image}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
 
