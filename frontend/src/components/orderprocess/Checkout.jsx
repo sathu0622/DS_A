@@ -190,27 +190,27 @@ const Checkout = () => {
                       <p className="font-bold">{item.menuItemName}</p>
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-bold">LKR {item.totalAmount}</p>
+                    <p className="font-bold">LKR {item.totalAmount}.00</p>
                   </li>
                 ))}
               </ul>
               <hr className="my-4" />
               <div className="flex justify-between mb-2">
                 <p className="text-gray-600">Subtotal</p>
-                <p className="font-bold">LKR {subtotal}</p>
+                <p className="font-bold">LKR {subtotal}.00</p>
               </div>
               <div className="flex justify-between mb-2">
                 <p className="text-gray-600">Delivery Fee</p>
-                <p className="font-bold">LKR {deliveryFee}</p>
+                <p className="font-bold">LKR {deliveryFee}.00</p>
               </div>
               <div className="flex justify-between mb-4">
                 <p className="text-gray-600">Service Fee</p>
-                <p className="font-bold">LKR {serviceFee}</p>
+                <p className="font-bold">LKR {serviceFee}.00</p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between text-lg font-bold">
                 <p>Total</p>
-                <p>LKR {total}</p>
+                <p>LKR {total}.00</p>
               </div>
               <button
 								  className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold"
