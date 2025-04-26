@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Player } from "@lottiefiles/react-lottie-player";
-import cartAnimation from "../../assets/cartanim.json";
+import cartAnimation from "../../assets/lottie/cartanim.json";
 
 const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
   const [cartItems, setCartItems] = useState([]);

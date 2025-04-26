@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
-import Complete from "../../assets/successfull.json"
+import Complete from "../../assets/lottie/successfull.json"
 
 const CompleteCard = ({ isVisible }) => {
   return (

@@ -13,6 +13,7 @@ const pendingOrderSchema = new mongoose.Schema(
     ],
     address: { type: String, required: true },
     paymentOption: { type: String, required: true },
+    totalAmount: { type: Number, required: true },
     status: { type: String, default: "Pending" },
   },
   { timestamps: true }

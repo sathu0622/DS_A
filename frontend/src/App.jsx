@@ -44,7 +44,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
 
           <Route path="/tracking" element={<Tracking />} />
-          <Route path="/Loghome" element={<Loghome />} />
+          <Route path="/loghome" element={<Loghome />} />
           <Route path="/restaurants/:restaurantId" element={<Menuitem />} />
         <Route path="/addMenu" element={<AddMenuItemForm />} />
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />

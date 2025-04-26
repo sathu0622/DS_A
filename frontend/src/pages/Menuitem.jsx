@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../components/main_components/NavBar";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineClose } from "react-icons/ai";
@@ -15,6 +15,16 @@ const Menuitem = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [quantity, setQuantity] = useState(1); 
   const { auth } = useAuth();
+
+  const navigate = useNavigate();
+
+  const userRole = localStorage.getItem("role");
+
+  useEffect(() => {
+    if (userRole !== "customer") {
+      navigate("/");
+    }
+  }, [userRole, navigate]);
 
   useEffect(() => {
     setIsCartOpen(true);
@@ -124,19 +134,42 @@ const Menuitem = () => {
         <h1 className="text-3xl font-bold text-center mb-8">Menu Items</h1>
 
         {/* Menu Item Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {menuItems.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer"
-              onClick={() => openModal(item)} 
-            >
-              <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
-              <p className="text-gray-600">{item.description}</p>
-              <p className="text-gray-500 mt-2">Price: Rs. {item.price}</p>
-            </div>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+            {menuItems.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white shadow-lg rounded-2xl overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                onClick={() => openModal(item)}
+              >
+                {/* Image */}
+                <img
+                  src={`http://localhost:8002/uploads/${item.image}`}
+                  alt={item.name}
+                  className="w-full h-40 object-cover"
+                />
+
+                {/* Content */}
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">{item.name}</h2>
+                  <p className="text-gray-600 text-sm mb-2 line-clamp-2">{item.description}</p>
+                  <p className="text-gray-700 font-semibold mb-2">Price: Rs. {item.price}.00</p>
+                  {item.offer && (
+                    <span className="inline-block bg-pink-500 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">
+                      {item.offer}
+                    </span>
+                  )}
+
+                  {/* Delivery Info */}
+                  <div className="flex justify-between items-center text-gray-500 text-sm">
+                    <span>⭐ {item.rating || "4.5"}</span>
+                    <span>🚚 {item.deliveryFee || "150.00"} Fee</span>
+                    <span>⏱️ {item.deliveryTime || "30 min"}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
       </div>
 
       {/* Cart Slider */}
@@ -201,14 +234,14 @@ const Menuitem = () => {
               Add {quantity} to Order - Rs. {selectedItem.price * quantity}.00
             </button>
 
-            <button
+              {/* <button
               className="bg-gray-200 text-black py-2 px-4 rounded hover:bg-gray-300 w-full"
               onClick={() => {
                 console.log("See details clicked");
               }}
             >
               See Details
-            </button>
+            </button> */}
           </div>
         </div>
       )}

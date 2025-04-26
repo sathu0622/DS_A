@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/main_components/NavBar";
-import StripePayment from "../payment/StripePayment"; 
+import UpdateLocation from "../../pages/UpdateLocation";
 
 const Checkout = () => {
   const location = useLocation();
@@ -13,20 +13,50 @@ const Checkout = () => {
 	const [selectedOption, setSelectedOption] = useState("Cash on Delivery");
 	const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard");
   const [isLoading, setIsLoading] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const total = subtotal + deliveryFee + serviceFee;
+
+
+  const handleDeliveryOptionChange = (option) => {
+    if (selectedDeliveryOption === option) {
+      return;
+    }
+    setSelectedDeliveryOption(option);
+
+    if (option === "Priority") {
+      setServiceFee((prevFee) => prevFee + 200);
+    } else if (option === "Standard") {
+      setServiceFee((prevFee) => prevFee - 200);
+    }
+  };
+
 
   const handlePaymentMethodChange = (method) => {
     setSelectedOption(method);
-    if (method === "Card Payment") {
-		setServiceFee(0); 
-      setIsLoading(true); 
+    if (method === "Card Payment") { 
+      setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
-      }, 2000); 
+      }, 2000);
+      setServiceFee(0);
     } else {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
       setServiceFee(30);
     }
   };
+
+  const handleclickedit = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsModalOpen(true)
+    }, 2000);
+  };
+
   const handlePlaceOrder = async () => {
     try {
       setIsLoading(true);
@@ -83,9 +113,7 @@ const Checkout = () => {
   return (
     <div>
       <NavBar />
-		  <div className="min-h-screen bg-gray-100 p-4 pl-20 pr-20">
-			  <h1 className="text-3xl font-bold mb-2 ml-5">Checkout</h1>
-
+      <div className="min-h-screen bg-gray-100 p-4 pl-20 pr-20 mt-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Section */}
           <div className="lg:col-span-2">
@@ -96,13 +124,15 @@ const Checkout = () => {
                   <p className="text-gray-600 font-bold">Seewalee Mawatha Kaduwela</p>
                   <p className="text-gray-500">New Kandy Road, Malabe</p>
                 </div>
-                <button className="bg-gray-300 text-black text-sm font-bold rounded-4xl py-1 px-2 hover:bg-gray-400">
+                <button className="bg-gray-300 cursor-pointer text-black text-sm font-bold rounded-4xl py-1 px-2 hover:bg-gray-400"
+                  onClick={handleclickedit}
+                >
                   Edit
                 </button>
               </div>
               <h2 className="text-xl font-bold mb-4">Delivery Options</h2>
               <button
-                className={`flex items-center justify-between mb-4 border p-4 rounded-lg w-full ${
+                className={`flex items-center cursor-pointer justify-between mb-4 border p-4 rounded-lg w-full ${
                   selectedDeliveryOption === "Priority" ? "border-black" : "border-gray-300"
                 }`}
                 onClick={() => handleDeliveryOptionChange("Priority")}
@@ -116,7 +146,7 @@ const Checkout = () => {
                 <p className="text-gray-600 font-bold">+LKR 200.00</p>
               </button>
               <button
-                className={`flex items-center justify-between mb-4 border p-4 rounded-lg w-full ${
+                className={`flex items-center cursor-pointer justify-between mb-4 border p-4 rounded-lg w-full ${
                   selectedDeliveryOption === "Standard" ? "border-black" : "border-gray-300"
                 }`}
                 onClick={() => handleDeliveryOptionChange("Standard")}
@@ -219,6 +249,22 @@ const Checkout = () => {
         {isLoading && (
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
             <div className="w-16 h-16 border-4 border-t-orange-500 border-gray-300 rounded-full animate-spin"></div>
+          </div>
+        )}
+
+        {isModalOpen && (
+          <div
+            className="fixed backdrop-blur-[1px] inset-0 flex items-center justify-center z-50"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <div>
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                onClick={() => setIsModalOpen(false)}
+              >
+              </button>
+              <UpdateLocation />
+            </div>
           </div>
         )}
       </div>

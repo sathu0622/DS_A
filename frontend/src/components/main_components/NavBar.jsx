@@ -147,7 +147,7 @@ const NavBar = ({ restaurantId }) => {
     if (!auth.token) {
       navigate("/");
     } else if (auth.role === "customer") {
-      navigate("/Loghome");
+      navigate("/loghome");
     } else {
       alert("Access restricted to customers only.");
     }
@@ -183,7 +183,7 @@ const NavBar = ({ restaurantId }) => {
               <TiThMenu />
             </button>
             <div
-              className="flex items-center ml-4 animate-bounce cursor-pointer"
+              className="flex items-center ml-4 animate-pulse cursor-pointer"
               onClick={handlehomeclick}
             >
               <img src={logo} alt="Logo" className="h-12 w-16" />
@@ -217,7 +217,7 @@ const NavBar = ({ restaurantId }) => {
             {/* User Role */}
             {auth.token && auth.role === "customer" ? (
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
+                className="bg-red-600 font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
                 onClick={handleLogoutClick}
               >
                 Logout
@@ -274,14 +274,6 @@ const NavBar = ({ restaurantId }) => {
             </>
           )}
           <ul className="space-y-4">
-            <li>
-              <a
-                href="#business"
-                className="block text-gray-700 hover:text-black cursor-pointer"
-              >
-                Create a business account
-              </a>
-            </li>
             <li>
               <a
                 href="/register-restaurant"
