@@ -41,3 +41,27 @@ exports.getUserOrders = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.updatePendingOrderStatus = async (req, res) => {
+  const orderId = req.params.id;
+
+  try {
+    const updatedOrder = await PendingOrder.findByIdAndUpdate(
+      orderId,
+      { status: "Processing" }, // still hardcoded
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({
+      message: "Order status updated to Processing",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

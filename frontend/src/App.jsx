@@ -23,6 +23,8 @@ import MyRestaurants from './pages/MyRestaurants';
 import RestaurantRegister from './pages/RestaurantRegister'
 import DriverRegister from './pages/DriverRegister'
 import UpdateLocation from './pages/UpdateLocation'
+
+import UserProfile from './pages/UserProfile'
 function App() {
 
   return (
@@ -48,7 +50,7 @@ function App() {
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />
         <Route path="/myRestaurants" element={<MyRestaurants />} />
-        
+        <Route path="/user-profile" element={<UserProfile />} />
         </Routes>
     </Router>
     </AuthProvider>

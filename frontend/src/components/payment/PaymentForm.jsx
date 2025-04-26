@@ -26,6 +26,18 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
       }
     };
 
+    const updateOrderStatus = async () => {
+      try {
+        console.log("Updating orderId:", orderId); // 👈 add this
+        const response = await axios.patch(
+          `http://localhost:8000/api/orders/pending-orders/${orderId}/status`
+        );
+        console.log("Order status updated:", response.data);
+      } catch (err) {
+        console.error("Failed to update order status:", err.response?.data || err.message);
+      }
+    };
+    
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -68,10 +80,11 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
                     orderId,
                     stripePaymentId: paymentIntent.id,
                     stripeCustomerId: paymentIntent.customer,
-                    amount: paymentIntent.amount,
+                    // amount: paymentIntent.amount/100,
+                    amount: totalAmount,
                     status: paymentIntent.status,
                 });
-
+                await updateOrderStatus(); 
                 setMessage("Payment successful!");
                 window.location.href = PAYMENT_SUCCESS_URL;
             } else {
