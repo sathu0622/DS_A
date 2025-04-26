@@ -27,30 +27,14 @@ const Checkout = () => {
       setServiceFee(30);
     }
   };
-
-  const handleDeliveryOptionChange = (option) => {
-    if (selectedDeliveryOption === option) {
-
-      return;
-    }
-
-    setSelectedDeliveryOption(option);
-
-    if (option === "Priority") {
-      setServiceFee((prevFee) => prevFee + 200);
-    } else if (option === "Standard") {
-      setServiceFee((prevFee) => prevFee - 200); 
-    }
-  };
-
-	const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async () => {
     try {
       setIsLoading(true);
-
+  
       const userId = localStorage.getItem("userId");
       const restaurantId = cartItems[0]?.restaurantId;
-      const address = "Seewalee Mawatha, Kaduwela"; 
-
+      const address = "Seewalee Mawatha, Kaduwela";
+  
       const orderData = {
         userId,
         restaurantId,
@@ -63,7 +47,7 @@ const Checkout = () => {
         paymentOption: selectedOption,
         status: "Pending",
       };
-
+  
       const response = await fetch("http://localhost:8000/api/orders/pending-order", {
         method: "POST",
         headers: {
@@ -71,14 +55,23 @@ const Checkout = () => {
         },
         body: JSON.stringify(orderData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to place order");
       }
-
+  
       const data = await response.json();
-
-      navigate("/payment", { state: { orderId: data.pendingOrder._id } });
+      const orderId = data.pendingOrder._id;
+  
+      // Pass order details to StripePayment
+      navigate("/payment", {
+        state: {
+          orderId,
+          userId,
+          restaurantId,
+          amount: subtotal + deliveryFee + serviceFee,
+        },
+      });
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
@@ -86,7 +79,7 @@ const Checkout = () => {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div>
       <NavBar />
