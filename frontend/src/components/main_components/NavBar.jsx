@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { TiThMenu } from "react-icons/ti";
+import { TbTruckDelivery } from "react-icons/tb";
 import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
@@ -110,6 +111,9 @@ const NavBar = ({ restaurantId }) => {
     setIsMenuOpen(false);
   };
 
+  const navigateTracking = () => {
+    navigate("/tracking")
+  };
   const handleSignupClick = () => {
     navigate("/register");
   };
@@ -143,8 +147,20 @@ const NavBar = ({ restaurantId }) => {
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
+            {auth.token && auth.role === "customer" && (
+
+              <button
+                className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
+                onClick={navigateTracking}
+              >
+                <TbTruckDelivery className="text-lg" />
+              </button>
+            )}
+
             {/* Cart Icon */}
             {auth.token && auth.role === "customer" && (
+
+
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={handleCartClick}

@@ -12,6 +12,8 @@ import Checkout from './components/orderprocess/Checkout';
 import Temp from './pages/temp'
 import NewTemp from "./pages/NewTemp";
 
+import Tracking from './components/orderprocess/Tracking';
+
 import { AuthProvider } from './context/AuthContext';
 import AddMenuItemForm from './pages/AddMenuItemForm';
 import AddRestaurantForm from './pages/AddRestaurantForm';
@@ -41,6 +43,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/checkout" element={<Checkout />} />
 
+          <Route path="/tracking" element={<Tracking />} />
           <Route path="/temp" element={<Temp />} />
           <Route path="/restaurants/:restaurantId" element={<NewTemp />} />
         <Route path="/addMenu" element={<AddMenuItemForm />} />

@@ -26,8 +26,8 @@ const MenuItem = testDbConnection.model(
 
 exports.addToCart = async (req, res) => {
   try {
-    const { userId, restaurantId, menuItemId, quantity, totalAmount } = req.body;
-    if (!userId || !restaurantId || !menuItemId || !quantity || !totalAmount) {
+    const { userId, restaurantId, menuItemId, quantity, totalAmount, image } = req.body;
+    if (!userId || !restaurantId || !menuItemId || !quantity || !totalAmount || !image) {
       return res.status(400).json({ error: "All fields are required" });
     }
     const cartItem = new AddToCart({
@@ -36,6 +36,7 @@ exports.addToCart = async (req, res) => {
       menuItemId,
       quantity,
       totalAmount,
+      image,
     });
     const savedCartItem = await cartItem.save();
     res.status(201).json({ message: "Item added to cart", cartItem: savedCartItem });
