@@ -7,12 +7,11 @@ import DeliveryCard from "../tracking_components/DeliveryCard";
 import CompleteCard from "../tracking_components/CompleteCard";
 
 const Tracking = () => {
-  const [orders, setOrders] = useState([]); // Store all user orders
+	const [orders, setOrders] = useState([]); 
 
-  const userId = localStorage.getItem("userId"); // Get the logged-in user's ID
+	const userId = localStorage.getItem("userId"); 
 
-  useEffect(() => {
-    // Fetch user orders from the backend
+	useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
@@ -20,7 +19,7 @@ const Tracking = () => {
           throw new Error("Failed to fetch orders");
         }
         const data = await response.json();
-        setOrders(data); // Set the fetched orders
+		  setOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -44,7 +43,6 @@ const Tracking = () => {
             { label: "Complete", description: "Delivered successfully" },
           ];
 
-          // Determine the current step based on the order status
           const currentStep = steps.findIndex((step) => step.label === order.status);
 
           return (
@@ -54,8 +52,7 @@ const Tracking = () => {
                 steps={steps}
                 currentStep={currentStep}
               />
-              <div className="mt-4">
-                {/* Show only the card corresponding to the current step */}
+				  <div className="mt-4">
                 {currentStep === 0 && <PendingCard isVisible={true} />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
                 {currentStep === 2 && <DeliveryCard isVisible={true} />}

@@ -18,9 +18,9 @@ const ProgressLine = ({ steps, currentStep, handleStepClick }) => {
             className="absolute top-1/2 transform -translate-y-1/2 cursor-pointer"
             style={{
               left: `${(index / (steps.length - 1)) * 100}%`,
-              transform: "translate(-20%, 20%)", // Center the step icon
+              transform: "translate(-20%, 20%)",
             }}
-            onClick={() => handleStepClick(index)} // Show the relevant card on click
+            onClick={() => handleStepClick(index)}
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
