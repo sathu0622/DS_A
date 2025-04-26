@@ -13,7 +13,6 @@ const Checkout = () => {
 	const [selectedOption, setSelectedOption] = useState("Cash on Delivery");
 	const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard");
   const [isLoading, setIsLoading] = useState(false); 
-  const [showPopup, setShowPopup] = useState(false);
   const total = subtotal + deliveryFee + serviceFee;
 
   const handlePaymentMethodChange = (method) => {
@@ -23,60 +22,70 @@ const Checkout = () => {
       setIsLoading(true); 
       setTimeout(() => {
         setIsLoading(false);
-        setShowPopup(true);
       }, 2000); 
     } else {
-		setServiceFee(30);
-      setShowPopup(false);
+      setServiceFee(30);
     }
   };
 
   const handleDeliveryOptionChange = (option) => {
+    if (selectedDeliveryOption === option) {
+
+      return;
+    }
+
     setSelectedDeliveryOption(option);
+
     if (option === "Priority") {
-      setServiceFee(serviceFee + 200); 
-    } else {
-      setServiceFee(serviceFee - 200);
+      setServiceFee((prevFee) => prevFee + 200);
+    } else if (option === "Standard") {
+      setServiceFee((prevFee) => prevFee - 200); 
     }
   };
 
 	const handlePlaceOrder = async () => {
-		try {
-			const userId = localStorage.getItem("userId");
-			const restaurantId = cartItems[0]?.restaurantId; // Assuming all items are from the same restaurant
-			const address = "Seewalee Mawatha, Kaduwela"; // Replace with dynamic address input if needed
+    try {
+      setIsLoading(true);
 
-			const response = await fetch("http://localhost:8000/api/orders/pending-order", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					userId,
-					restaurantId,
-					items: cartItems.map((item) => ({
-						menuItemId: item.menuItemId,
-						quantity: item.quantity,
-						totalAmount: item.totalAmount,
-					})),
-					address,
-				}),
-			});
+      const userId = localStorage.getItem("userId");
+      const restaurantId = cartItems[0]?.restaurantId;
+      const address = "Seewalee Mawatha, Kaduwela"; 
 
-			if (!response.ok) {
-				throw new Error("Failed to place order");
-			}
+      const orderData = {
+        userId,
+        restaurantId,
+        items: cartItems.map((item) => ({
+          menuItemId: item.menuItemId,
+          quantity: item.quantity,
+          totalAmount: item.totalAmount,
+        })),
+        address,
+        paymentOption: selectedOption,
+        status: "Pending",
+      };
 
-			const data = await response.json();
-			alert("Order placed successfully!");
+      const response = await fetch("http://localhost:8000/api/orders/pending-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
-			// Clear the cart and navigate to a success page
-			navigate("/");
-		} catch (error) {
-			console.error("Error placing order:", error);
-			alert("Failed to place order. Please try again.");
-		}
-	};
+      if (!response.ok) {
+        throw new Error("Failed to place order");
+      }
+
+      const data = await response.json();
+
+      navigate("/payment", { state: { orderId: data.pendingOrder._id } });
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -109,7 +118,7 @@ const Checkout = () => {
                   <p className="text-gray-600 font-bold">
                     Priority <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full ml-2">Faster</span>
                   </p>
-                  <p className="text-gray-500 text-sm">35-50 min • Delivered directly to you</p>
+                  <p className="text-gray-500 text-sm">20-30 min • Delivered directly to you</p>
                 </div>
                 <p className="text-gray-600 font-bold">+LKR 200.00</p>
               </button>
@@ -203,14 +212,12 @@ const Checkout = () => {
                 <p>Total</p>
                 <p>LKR {total}</p>
               </div>
-              {selectedOption !== "Card Payment" && (
-							  <button
+              <button
 								  className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold"
 								  onClick={handlePlaceOrder}
 							  >
                   Place a Order
-                </button>
-              )}
+              </button>
             </div>
           </div>
         </div>
@@ -219,22 +226,6 @@ const Checkout = () => {
         {isLoading && (
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
             <div className="w-16 h-16 border-4 border-t-orange-500 border-gray-300 rounded-full animate-spin"></div>
-          </div>
-        )}
-
-        {/* Popup Window */}
-        {showPopup && (
-          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h2 className="text-xl font-bold mb-4">Card Payment</h2>
-              <StripePayment />
-              <button
-                className="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 w-full"
-                onClick={() => setShowPopup(false)}
-              >
-                Close
-              </button>
-            </div>
           </div>
         )}
       </div>

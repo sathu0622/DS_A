@@ -3,14 +3,19 @@ const AddToCart = require("../models/addtocart");
 
 exports.createPendingOrder = async (req, res) => {
   try {
-    const { userId, restaurantId, items, address } = req.body; 
+    const { userId, restaurantId, items, address, paymentOption, status } = req.body;
 
-    // Save the pending order
-    const pendingOrder = new PendingOrder({ userId, restaurantId, items, address });
+    const pendingOrder = new PendingOrder({
+      userId,
+      restaurantId,
+      items,
+      address,
+      paymentOption,
+      status,
+    });
     await pendingOrder.save();
 
-    // Delete the cart items for the user
-    await AddToCart.deleteMany({ userId });
+    await AddToCart.deleteMany({ userId, restaurantId });
 
     res.status(201).json({ message: "Order placed successfully", pendingOrder });
   } catch (error) {

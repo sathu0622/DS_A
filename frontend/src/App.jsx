@@ -9,7 +9,7 @@ import Login from './pages/Login';
 import Checkout from './components/orderprocess/Checkout';
 
 
-import Temp from './pages/temp';
+import Temp from './pages/temp'
 import NewTemp from "./pages/NewTemp";
 
 import { AuthProvider } from './context/AuthContext';
