@@ -11,7 +11,7 @@ const Temp = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch("http://localhost:8001/api/restaurants");
+        const response = await fetch("http://localhost:8002/api/restaurants");
         if (!response.ok) throw new Error("Failed to fetch restaurants");
         const data = await response.json();
         setRestaurants(data);

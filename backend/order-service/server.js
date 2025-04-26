@@ -3,7 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const connectToDatabase = require("./config/database");
 const errorHandler = require("./middleware/errorHandler");
-const orderRoutes = require("./routes/orderRoutes");
+const pendingOrderRoutes = require("./routes/pendingOrderRoutes");
 const addToCartRoutes = require("./routes/addToCartRoutes");
 
 const app = express();
@@ -20,7 +20,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use("/api/orders", orderRoutes);
+app.use("/api/orders", pendingOrderRoutes);
 app.use("/api/addtocart", addToCartRoutes);
 
 app.use(errorHandler);
