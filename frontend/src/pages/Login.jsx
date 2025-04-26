@@ -28,7 +28,7 @@ export default function Login() {
         } else if (data.role === 'driver') {
           window.location.href = '/driver/dashboard';
         } else if (data.role === 'customer') {
-          window.location.href = '/';
+          window.location.href = '/temp';
         } else {
           window.location.href = '/'; // fallback
         }

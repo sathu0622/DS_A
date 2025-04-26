@@ -6,6 +6,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
+import logo from "../../assets/logo.png";
 
 const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +16,29 @@ const NavBar = ({ restaurantId }) => {
   const { auth, logout } = useAuth();
   const location = useLocation();
   const menuRef = useRef(null);
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
@@ -114,8 +138,19 @@ const NavBar = ({ restaurantId }) => {
   const navigateTracking = () => {
     navigate("/tracking")
   };
+
   const handleSignupClick = () => {
     navigate("/register");
+  };
+
+  const handlehomeclick = () => {
+    if (!auth.token) {
+      navigate("/");
+    } else if (auth.role === "customer") {
+      navigate("/temp");
+    } else {
+      alert("Access restricted to customers only.");
+    }
   };
 
   const handleLoginClick = () => {
@@ -134,7 +169,10 @@ const NavBar = ({ restaurantId }) => {
   return (
     <div>
       {/* Navigation Bar */}
-      <nav className="bg-white text-white p-2 border-b border-black">
+      <nav
+        className={`bg-orange-400 bg-opacity- backdrop-blur-md text-white p-2 border-black rounded-b-4xl fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
+      >
         <div className="container mx-auto flex justify-between items-center">
           {/* Left: Menu Icon */}
           <div className="flex justify-start">
@@ -144,11 +182,17 @@ const NavBar = ({ restaurantId }) => {
             >
               <TiThMenu />
             </button>
+            <div
+              className="flex items-center ml-4 animate-bounce cursor-pointer"
+              onClick={handlehomeclick}
+            >
+              <img src={logo} alt="Logo" className="h-12 w-16" />
+              <span className="text-xl font-bold text-black">SpeedySpoon</span>
+            </div>
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
             {auth.token && auth.role === "customer" && (
-
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={navigateTracking}
@@ -159,8 +203,6 @@ const NavBar = ({ restaurantId }) => {
 
             {/* Cart Icon */}
             {auth.token && auth.role === "customer" && (
-
-
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={handleCartClick}
@@ -183,14 +225,14 @@ const NavBar = ({ restaurantId }) => {
             ) : (
                 <>
                 <button
-                  className="bg-white text-black px-4 py-2 rounded-4xl hover:bg-gray-100 shadow-lg cursor-pointer"
+                    className="bg-white text-black font-bold px-4 py-2 rounded-4xl hover:bg-gray-100 shadow-lg cursor-pointer"
                   onClick={handleLoginClick}
                 >
                   Login
                 </button>
 
                 <button
-                  className="bg-black px-4 py-2 rounded-4xl hover:bg-gray-800 text-white shadow-lg cursor-pointer"
+                    className="bg-black px-4 py-2 font-bold rounded-4xl hover:bg-gray-800 text-white shadow-lg cursor-pointer"
                   onClick={handleSignupClick}
                 >
                   Signup
@@ -218,13 +260,13 @@ const NavBar = ({ restaurantId }) => {
           {!auth.token && (
             <>
               <button
-                className="w-full bg-black text-white py-2 mb-4 rounded hover:bg-gray-800 cursor-pointer"
+                className="w-full bg-black text-white py-2 mb-4 font-bold rounded hover:bg-gray-800 cursor-pointer"
                 onClick={handleSignupClick}
               >
                 Sign up
               </button>
               <button
-                className="w-full bg-gray-200 text-black py-2 mb-4 rounded hover:bg-gray-300 cursor-pointer"
+                className="w-full bg-gray-200 text-black font-bold py-2 mb-4 rounded hover:bg-gray-300 cursor-pointer"
                 onClick={handleLoginClick}
               >
                 Log in

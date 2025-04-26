@@ -1,13 +1,16 @@
 import React from "react";
+import "./ProgressLine.css"; // Import the CSS file for animations
 
 const ProgressLine = ({ steps, currentStep, handleStepClick }) => {
   return (
     <div className="w-full max-w-2xl mx-auto mb-6 mt-10">
       <div className="relative flex items-center justify-center">
-        {/* Progress Line */}
+        {/* Static Background Line */}
         <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300 transform -translate-y-1/2"></div>
+
+        {/* Animated Progress Line */}
         <div
-          className="absolute top-1/2 left-0 h-1 bg-green-500 transform -translate-y-1/2 transition-all duration-500"
+          className="absolute top-1/2 left-0 h-1 bg-green-500 transform -translate-y-1/2"
           style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
         ></div>
 
@@ -18,14 +21,14 @@ const ProgressLine = ({ steps, currentStep, handleStepClick }) => {
             className="absolute top-1/2 transform -translate-y-1/2 cursor-pointer"
             style={{
               left: `${(index / (steps.length - 1)) * 100}%`,
-              transform: "translate(-20%, 20%)",
+              transform: "translate(-20%, 20%)", // Center the step icon
             }}
-            onClick={() => handleStepClick(index)}
+            onClick={() => handleStepClick(index)} // Show the relevant card on click
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
                 index <= currentStep ? "bg-green-500" : "bg-gray-300"
-              } transition-colors duration-500`}
+                } ${index === currentStep ? "step-animation" : ""} ${index === currentStep ? "step-animation" : ""} transition-colors duration-500`}
             >
               {index + 1}
             </div>
@@ -33,6 +36,7 @@ const ProgressLine = ({ steps, currentStep, handleStepClick }) => {
               className={`mt-2 text-sm font-medium ${
                 index <= currentStep ? "text-green-500" : "text-gray-500"
               } text-center`}
+              style={{ marginLeft: "-10px" }} 
             >
               {step.label}
             </p>
