@@ -161,7 +161,7 @@ const NewTemp = () => {
                 <AiOutlineClose />
             </button>
             <img
-              src={selectedItem.image || "https://via.placeholder.com/150"}
+                src={`http://localhost:8002/uploads/${selectedItem.image}`}
                 alt={selectedItem.image}
                 className="w-full h-48 object-cover"
             />

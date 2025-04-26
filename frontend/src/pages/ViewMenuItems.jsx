@@ -85,7 +85,7 @@ const ViewMenuItems = () => {
           {item.image && (
             <img
               src={`http://localhost:8002/uploads/${item.image}`}
-              alt={item.name}
+              alt={item.image}
               className="w-full h-48 object-cover"
             />
           )}
