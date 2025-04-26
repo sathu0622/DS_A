@@ -16,6 +16,7 @@ import { AuthProvider } from './context/AuthContext';
 import AddMenuItemForm from './pages/AddMenuItemForm';
 import AddRestaurantForm from './pages/AddRestaurantForm';
 import ViewMenuItems from './pages/ViewMenuItems';
+import MyRestaurants from './pages/MyRestaurants';
 
 
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/addMenu" element={<AddMenuItemForm />} />
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />
+        <Route path="/myRestaurants" element={<MyRestaurants />} />
         
         </Routes>
     </Router>

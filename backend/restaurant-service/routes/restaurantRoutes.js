@@ -17,7 +17,11 @@ router.delete('/:id', auth.verifyToken, restaurantController.deleteRestaurant);
 router.get('/', restaurantController.getAllRestaurants);
 
 // Get restaurants by logged-in owner
-router.get('/owner/mine', auth.verifyToken, restaurantController.getRestaurantsByOwner);
+router.get('/owner', auth.verifyToken, restaurantController.getRestaurantsByOwner);
+
+
+router.patch('/:id/availability', auth.verifyToken, restaurantController.toggleAvailability);
+
 
 
 module.exports = router;

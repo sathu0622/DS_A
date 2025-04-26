@@ -93,6 +93,10 @@ const ViewMenuItems = () => {
             <h2 className="text-xl font-semibold">{item.name}</h2>
             <p className="text-gray-600">Price: Rs.{item.price.toFixed(2)}</p>
             <p className="text-sm text-gray-500">{item.description}</p>
+            <p className="text-sm text-gray-700 mt-1">
+  <strong>Restaurant:</strong> {item.restaurantId?.name || 'Unknown'}
+</p>
+
             <p
               className={`text-sm font-medium mt-2 ${
                 item.availability ? 'text-green-600' : 'text-red-600'

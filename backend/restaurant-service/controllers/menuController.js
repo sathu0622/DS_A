@@ -57,16 +57,23 @@ exports.getOwnerMenuItems = async (req, res) => {
   try {
     const ownerId = req.user.userId; 
 
+    const menuItems = await MenuItem.find()
+      .populate({
+        path: 'restaurantId',
+        match: { ownerId },
+        select: 'name', 
+      });
+
     // Find all restaurants owned by the logged-in user
     const ownedRestaurants = await Restaurant.find({ ownerId });
 
     
     const restaurantIds = ownedRestaurants.map(r => r._id);
 
-    
-    const menuItems = await MenuItem.find({ restaurantId: { $in: restaurantIds } });
+    const filteredItems = menuItems.filter(item => item.restaurantId !== null);
+    //const menuItems = await MenuItem.find({ restaurantId: { $in: restaurantIds } });
 
-    res.status(200).json(menuItems);
+    res.status(200).json(filteredItems);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
