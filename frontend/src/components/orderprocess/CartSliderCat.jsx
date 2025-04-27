@@ -117,12 +117,12 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
                   onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img
-                    src={`http://localhost:8002/uploads/${group.restaurantName}`}
+                    src={`http://localhost:8002/uploads/${group.image}`}
                     alt={group.restaurantName}
                     className="w-12 h-12 object-cover rounded-full mr-4"
                   />
                   <div className="flex-1">
-                    <p className="font-bold">{group.restaurantImage}</p>
+                    <p className="font-bold">{group.restaurantName}</p>
                     <p className="text-sm text-gray-500">
                       Subtotal: LKR {group.subtotal.toFixed(2)}
                     </p>
