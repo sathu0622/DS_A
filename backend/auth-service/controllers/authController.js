@@ -164,15 +164,18 @@ exports.updateLocation = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+
+    const user = await User.findById(id).select("-password -otp -otpExpires"); // exclude sensitive fields
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    res.json({ location: user.location });
+    res.json({ user });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+

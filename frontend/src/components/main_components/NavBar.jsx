@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
 import logo from "../../assets/logo.png";
+import { FaUserCircle } from "react-icons/fa"; // Add this
 
 const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -165,6 +166,10 @@ const NavBar = ({ restaurantId }) => {
     logout();
     navigate("/");
   };
+  const navigateUserProfile = () => {
+    navigate("/user-profile");
+  };
+  
 
   return (
     <div>
@@ -192,7 +197,7 @@ const NavBar = ({ restaurantId }) => {
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
-            {auth.token && auth.role === "customer" && (
+            {auth.token && (
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={navigateTracking}
@@ -202,7 +207,7 @@ const NavBar = ({ restaurantId }) => {
             )}
 
             {/* Cart Icon */}
-            {auth.token && auth.role === "customer" && (
+            {auth.token &&  (
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={handleCartClick}
@@ -214,8 +219,18 @@ const NavBar = ({ restaurantId }) => {
               </button>
             )}
 
+           {/* Cart Icon */}
+           {auth.token &&  (
+              <button
+              className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer"
+              onClick={navigateUserProfile}
+            >
+              <FaUserCircle className="text-lg" />
+            </button>
+            )}
+
             {/* User Role */}
-            {auth.token && auth.role === "customer" ? (
+            {auth.token ? (
               <button
                 className="bg-red-600 font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
                 onClick={handleLogoutClick}
