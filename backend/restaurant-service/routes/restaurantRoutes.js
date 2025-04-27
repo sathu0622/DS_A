@@ -3,9 +3,10 @@ const router = express.Router();
 
 const restaurantController = require('../controllers/restaurantController');
 const auth = require('../middleware/authMiddleware');
+const upload = require('../middleware/upload');
 
 // Add a new restaurant
-router.post('/', auth.verifyToken, restaurantController.addRestaurant);
+router.post('/', auth.verifyToken, upload.single('image'), restaurantController.addRestaurant);
 
 // Update a restaurant
 router.put('/:id', auth.verifyToken, restaurantController.updateRestaurant);

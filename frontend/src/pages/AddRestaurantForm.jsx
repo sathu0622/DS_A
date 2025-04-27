@@ -8,7 +8,7 @@ const AddRestaurantForm = () => {
     location: '',
     isAvailable: true,
   });
-
+  const [image, setImage] = useState(null);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
@@ -21,33 +21,37 @@ const AddRestaurantForm = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      logo: e.target.files[0],
-    }));
-  };
+  // const handleFileChange = (e) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     logo: e.target.files[0],
+  //   }));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const data = new FormData(); // ✅ first create FormData object
+  
+    data.append('name', formData.name);
+    data.append('description', formData.description);
+    data.append('location', formData.location);
+    data.append('isAvailable', formData.isAvailable);
+  
+    if (image) {
+      data.append('image', image); // ✅ now append the file safely
+    }
+  
     try {
       const token = localStorage.getItem('token'); 
-
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('description', formData.description);
-      data.append('location', formData.location);
-      data.append('isAvailable', formData.isAvailable);
-      
-
+  
       const response = await axios.post('http://localhost:8002/api/restaurants', data, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data', // ✅ important for uploading files
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       setSuccess('Restaurant added successfully!');
       setError('');
       setFormData({
@@ -55,13 +59,17 @@ const AddRestaurantForm = () => {
         description: '',
         location: '',
         isAvailable: true,
-       
       });
+      // setImage(null);
     } catch (err) {
       console.error(err);
       setError('Failed to add restaurant.');
       setSuccess('');
     }
+  };
+  
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   return (
@@ -115,6 +123,12 @@ const AddRestaurantForm = () => {
               Available
             </label>
           </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full"
+          />
           <button
             type="submit"
             className="w-full bg-orange-500 text-white font-semibold py-2 rounded hover:bg-orange-600"
