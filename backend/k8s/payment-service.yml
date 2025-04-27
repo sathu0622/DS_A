@@ -46,7 +46,7 @@ spec:
     - protocol: TCP
       port: 8001
       targetPort: 8001
-      nodePort: 30001  # Choose any port between 30000-32767
+      nodePort: 30003  # Choose any port between 30000-32767
 ---
 apiVersion: apps/v1
 kind: Deployment
