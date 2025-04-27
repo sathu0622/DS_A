@@ -58,6 +58,7 @@ export default function AddRestaurantForm() {
         location: '',
         isAvailable: true,
       });
+      setImage(null);
       setPreview(null);
     } catch (err) {
       console.error(err);
@@ -176,7 +177,7 @@ export default function AddRestaurantForm() {
 
           <button
             type="submit"
-            className="w-full cursor-pointer bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
+            className="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
           >
             Add Restaurant
           </button>
