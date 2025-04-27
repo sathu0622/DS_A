@@ -117,7 +117,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
 					  onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img
-                    src={group.restaurantImage || "https://via.placeholder.com/50"}
+                    src={`http://localhost:8002/uploads/${group.image}`}
                     alt={group.restaurantName}
                     className="w-12 h-12 object-cover rounded-full mr-4"
                   />

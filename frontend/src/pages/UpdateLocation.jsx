@@ -1,16 +1,21 @@
 import { useState } from 'react';
 
 export default function UpdateLocation() {
-  const [location, setLocation] = useState('');
+  const [addressNo, setAddressNo] = useState('');
+  const [streetName, setStreetName] = useState('');
+  const [city, setCity] = useState('');
 
   const handleUpdate = async () => {
-    if (!location) {
-      alert('Please enter a location');
+    if (!addressNo || !streetName || !city) {
+      alert('Please fill in all fields');
       return;
     }
 
+
+    const location = `${addressNo}, ${streetName}, ${city}`;
+
     try {
-        const userId = localStorage.getItem("userId")
+      const userId = localStorage.getItem("userId");
 
       const res = await fetch(`http://localhost:5000/api/auth/users/${userId}/location`, {
         method: 'PUT',
@@ -31,10 +36,24 @@ export default function UpdateLocation() {
       <h2 className="text-xl font-bold text-orange-600 mb-4 text-center">Update Location</h2>
       <input
         type="text"
-        placeholder="Enter new location"
+        placeholder="Address No"
         className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-500"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        value={addressNo}
+        onChange={(e) => setAddressNo(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Street Name"
+        className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-500"
+        value={streetName}
+        onChange={(e) => setStreetName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="City"
+        className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-500"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
       />
       <button
         onClick={handleUpdate}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/main_components/NavBar";
 import UpdateLocation from "../../pages/UpdateLocation";
@@ -15,7 +15,40 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false); 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [userLocation, setUserLocation] = useState("");
+  const [addressParts, setAddressParts] = useState({
+    addressNo: "",
+    streetName: "",
+    city: "",
+  });
+
   const total = subtotal + deliveryFee + serviceFee;
+
+
+  useEffect(() => {
+    const fetchUserLocation = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(`http://localhost:5000/api/auth/users/${userId}`);
+        const data = await response.json();
+
+        if (response.ok && data.location) {
+          setUserLocation(data.location);
+
+          const [addressNo, streetName, city] = data.location.split(", ");
+          setAddressParts({ addressNo, streetName, city });
+        } else {
+          console.error("Failed to fetch user location:", data.msg || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error fetching user location:", error);
+      }
+    };
+
+    fetchUserLocation();
+
+    return () => clearInterval(setInterval(fetchUserLocation, 10000));
+  }, []);
 
 
   const handleDeliveryOptionChange = (option) => {
@@ -63,7 +96,6 @@ const Checkout = () => {
   
       const userId = localStorage.getItem("userId");
       const restaurantId = cartItems[0]?.restaurantId;
-      const address = "Seewalee Mawatha, Kaduwela";
   
       const orderData = {
         userId,
@@ -73,11 +105,12 @@ const Checkout = () => {
           quantity: item.quantity,
           totalAmount: item.totalAmount,
         })),
-        address,
+        address: userLocation,
         paymentOption: selectedOption,
-        status: "Pending",
+        totalAmount: total,
+        status: selectedOption === "Cash on Delivery" ? "Pending" : "Pending",
       };
-  
+
       const response = await fetch("http://localhost:8000/api/orders/pending-order", {
         method: "POST",
         headers: {
@@ -93,15 +126,27 @@ const Checkout = () => {
       const data = await response.json();
       const orderId = data.pendingOrder._id;
   
-      // Pass order details to StripePayment
-      navigate("/payment", {
-        state: {
-          orderId,
-          userId,
-          restaurantId,
-          amount: subtotal + deliveryFee + serviceFee,
-        },
-      });
+      if (selectedOption === "Cash on Delivery") {
+        // Navigate to the tracking page
+        navigate("/tracking", {
+          state: {
+            orderId,
+            userId,
+            restaurantId,
+            amount: total
+          },
+        });
+      } else if (selectedOption === "Card Payment") {
+        // Navigate to the payment page
+        navigate("/payment", {
+          state: {
+            orderId,
+            userId,
+            restaurantId,
+              amount: total, // Pass the total amount to the payment page
+            },
+          });
+        }
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
@@ -121,8 +166,8 @@ const Checkout = () => {
               <h2 className="text-xl font-bold mb-4">Delivery Details</h2>
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <p className="text-gray-600 font-bold">Seewalee Mawatha Kaduwela</p>
-                  <p className="text-gray-500">New Kandy Road, Malabe</p>
+                  <p className="text-gray-600 font-bold">{addressParts.addressNo || "Loading..."}</p>
+                  <p className="text-gray-500">{addressParts.streetName}, {addressParts.city || "Loading..."}</p>
                 </div>
                 <button className="bg-gray-300 cursor-pointer text-black text-sm font-bold rounded-4xl py-1 px-2 hover:bg-gray-400"
                   onClick={handleclickedit}
@@ -208,12 +253,19 @@ const Checkout = () => {
               <p className="text-gray-500 mb-4">{restaurantLocation}</p>
               <ul>
                 {cartItems.map((item) => (
-                  <li key={item._id} className="flex justify-between items-center mb-4">
-                    <div>
-                      <p className="font-bold">{item.menuItemName}</p>
+                  <li key={item._id} className="rounded-lg shadow flex items-center p-2">
+                    <img
+                      src={`http://localhost:8002/uploads/${item.image}`}
+                      alt={item.image}
+                      className="w-12 h-12 object-cover rounded-full mr-2"
+                    />
+                    <div className="flex-1">
+                      <p className="font-semibold">{item.menuItemName}</p>
                       <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-bold">LKR {item.totalAmount}.00</p>
+                    <p className="text-right ml-auto font-bold text-gray-700">
+                      LKR {item.totalAmount}.00
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -255,13 +307,17 @@ const Checkout = () => {
         {isModalOpen && (
           <div
             className="fixed backdrop-blur-[1px] inset-0 flex items-center justify-center z-50"
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => setIsModalOpen(false)} // Close the modal when clicking outside
           >
-            <div>
+            <div
+              className="relative bg-white p-6 rounded-lg shadow-lg"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            >
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsModalOpen(false)} // Close button inside the modal
               >
+                ✕
               </button>
               <UpdateLocation />
             </div>
