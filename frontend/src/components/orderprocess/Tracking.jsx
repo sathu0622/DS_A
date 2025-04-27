@@ -8,21 +8,11 @@ import PreparingCard from "../tracking_components/PreparingCard";
 import DeliveryCard from "../tracking_components/DeliveryCard";
 import CompleteCard from "../tracking_components/CompleteCard";
 
-import { Player } from "@lottiefiles/react-lottie-player";
-import Noorder from "../../assets/lottie/noorder.json"
-
 const Tracking = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
-  const userRole = localStorage.getItem("role");
-
-  useEffect(() => {
-    if (userRole !== "customer") {
-      navigate("/");
-    }
-  }, [userRole, navigate]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -32,38 +22,24 @@ const Tracking = () => {
           throw new Error("Failed to fetch orders");
         }
         const data = await response.json();
-        const sortedOrders = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setOrders(sortedOrders);
+        setOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
-
-    const intervalId = setInterval(fetchOrders, 5000);
-
-    return () => clearInterval(intervalId);
   }, [userId]);
 
   return (
     <div>
       <NavBar />
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-
-        {/* <Player
-				  autoplay
-				  loop
-				  src={Noorder}
-				  style={{ height: "200px", width: "200px" }}
-			  /> */}
         <h1 className="text-3xl font-bold mb-6">Order Tracking</h1>
-
-        {/* Separate Progress Lines for Each Order */}
-        {orders.map((order, orderIndex) => {
+        {orders.map((order) => {
           const steps = [
             { label: "Pending", description: "Order received" },
-            { label: "Processing", description: "Process your order" },
+            { label: "Processing", description: "Processing your order" },
             { label: "Preparing", description: "Preparing your order" },
             { label: "Delivery", description: "Out for delivery" },
             { label: "Complete", description: "Delivered successfully" },
@@ -74,10 +50,11 @@ const Tracking = () => {
           return (
             <div key={order._id} className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl mb-8">
               <h3 className="text-md font-semibold mb-2">Order ID: {order._id.slice(-10)}</h3>
-              <ProgressLine
-                steps={steps}
-                currentStep={currentStep}
-              />
+              <p className="text-sm text-gray-600 mb-4">Restaurant: {order.restaurantName}</p>
+              <p className="text-sm text-gray-600 mb-4">Total Amount: Rs: {order.totalAmount}.00</p>
+              <p className="text-sm text-gray-600 mb-4">Payment Method: {order.paymentOption}</p>
+              <p className="text-sm text-gray-600 mb-4">Delivery Address: {order.address}</p>
+              <ProgressLine steps={steps} currentStep={currentStep} />
               <div className="mt-4">
                 {currentStep === 0 && <PendingCard isVisible={true} />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
