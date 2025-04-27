@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Player } from "@lottiefiles/react-lottie-player";
-import cartAnimation from "../../assets/cartanim.json";
+import cartAnimation from "../../assets/lottie/cartanim.json";
 
 const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -117,7 +117,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
 					  onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img
-                    src={group.restaurantImage || "https://via.placeholder.com/50"}
+                    src={`http://localhost:8002/uploads/${group.image}`}
                     alt={group.restaurantName}
                     className="w-12 h-12 object-cover rounded-full mr-4"
                   />

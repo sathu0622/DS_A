@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../main_components/NavBar";
 import ProgressLine from "../tracking_components/ProgressLine";
 import PendingCard from "../tracking_components/PendingCard";
 import ProcessingCard from "../tracking_components/ProcessingCard";
+import PreparingCard from "../tracking_components/PreparingCard";
 import DeliveryCard from "../tracking_components/DeliveryCard";
 import CompleteCard from "../tracking_components/CompleteCard";
 
 const Tracking = () => {
-	const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
-	const userId = localStorage.getItem("userId"); 
+  const userId = localStorage.getItem("userId");
 
-	useEffect(() => {
+  useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
@@ -19,30 +22,25 @@ const Tracking = () => {
           throw new Error("Failed to fetch orders");
         }
         const data = await response.json();
-		  setOrders(data);
+        setOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
-
-		const intervalId = setInterval(fetchOrders, 5000);
-
-		return () => clearInterval(intervalId);
   }, [userId]);
 
   return (
     <div>
       <NavBar />
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-        <h1 className="text-2xl font-bold mb-8">Order Tracking</h1>
-
-        {/* Separate Progress Lines for Each Order */}
-        {orders.map((order, orderIndex) => {
+        <h1 className="text-3xl font-bold mb-6">Order Tracking</h1>
+        {orders.map((order) => {
           const steps = [
             { label: "Pending", description: "Order received" },
-            { label: "Processing", description: "Preparing your order" },
+            { label: "Processing", description: "Processing your order" },
+            { label: "Preparing", description: "Preparing your order" },
             { label: "Delivery", description: "Out for delivery" },
             { label: "Complete", description: "Delivered successfully" },
           ];
@@ -51,16 +49,18 @@ const Tracking = () => {
 
           return (
             <div key={order._id} className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl mb-8">
-              <h3 className="text-md font-semibold mb-2">Order ID: {order._id}</h3>
-              <ProgressLine
-                steps={steps}
-                currentStep={currentStep}
-              />
-				  <div className="mt-4">
+              <h3 className="text-md font-semibold mb-2">Order ID: {order._id.slice(-10)}</h3>
+              <p className="text-sm text-gray-600 mb-4">Restaurant: {order.restaurantName}</p>
+              <p className="text-sm text-gray-600 mb-4">Total Amount: Rs: {order.totalAmount}.00</p>
+              <p className="text-sm text-gray-600 mb-4">Payment Method: {order.paymentOption}</p>
+              <p className="text-sm text-gray-600 mb-4">Delivery Address: {order.address}</p>
+              <ProgressLine steps={steps} currentStep={currentStep} />
+              <div className="mt-4">
                 {currentStep === 0 && <PendingCard isVisible={true} />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
-                {currentStep === 2 && <DeliveryCard isVisible={true} />}
-                {currentStep === 3 && <CompleteCard isVisible={true} />}
+                {currentStep === 2 && <PreparingCard isVisible={true} />}
+                {currentStep === 3 && <DeliveryCard isVisible={true} />}
+                {currentStep === 4 && <CompleteCard isVisible={true} />}
               </div>
             </div>
           );

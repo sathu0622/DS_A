@@ -9,8 +9,8 @@ import Login from './pages/Login';
 import Checkout from './components/orderprocess/Checkout';
 
 
-import Temp from './pages/temp'
-import NewTemp from "./pages/NewTemp";
+import Loghome from './pages/loginHome'
+import Menuitem from "./pages/Menuitem";
 
 import Tracking from './components/orderprocess/Tracking';
 
@@ -44,8 +44,8 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
 
           <Route path="/tracking" element={<Tracking />} />
-          <Route path="/temp" element={<Temp />} />
-          <Route path="/restaurants/:restaurantId" element={<NewTemp />} />
+          <Route path="/loghome" element={<Loghome />} />
+          <Route path="/restaurants/:restaurantId" element={<Menuitem />} />
         <Route path="/addMenu" element={<AddMenuItemForm />} />
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />

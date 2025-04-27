@@ -3,7 +3,7 @@ import { IoTrashBin } from "react-icons/io5";
 import { AiOutlineCaretLeft, AiOutlineCaretRight, AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
-import cartAnimation from "../../assets/cartanim.json";
+import cartAnimation from "../../assets/lottie/cartanim.json";
 
 const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -151,7 +151,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
               </p>
               <button
                 className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
-                onClick={() => navigate("/temp")}
+                onClick={() => navigate("/loghome")}
               >
                 Start Order Item
               </button>

@@ -3,7 +3,7 @@ import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const PAYMENT_SUCCESS_URL = "http://localhost:5173/success"; // Update for production
+const PAYMENT_SUCCESS_URL = "http://localhost:5173/tracking"; // Update for production
 
 const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
     const stripe = useStripe();

@@ -1,14 +1,14 @@
 import React from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
-import Complete from "../../assets/lottie/successfull.json"
+import Prepare from "../../assets/lottie/prepare.json"
 
-const CompleteCard = ({ isVisible }) => {
+const PreparingCard = ({ isVisible }) => {
   return (
 	  <div>
 		  <Player
 			  autoplay
 			  loop
-			  src={Complete}
+			  src={Prepare}
 			  style={{ height: "200px", width: "200px" }}
 		  />
 		  <div
@@ -16,10 +16,10 @@ const CompleteCard = ({ isVisible }) => {
         isVisible ? "block" : "hidden"
 				  }`}
 		  >
-			  <p className="text-gray-600 text-center font-bold text-lg">Order Delivered successfully</p>
+			  <p className="text-gray-600 text-center font-bold text-lg">Processing Your Order</p>
 		  </div>
-	  </div>
+    </div>
   );
 };
 
-export default CompleteCard;
+export default PreparingCard;
