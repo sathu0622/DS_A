@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   otp: String,
   otpExpires: Date,
   phone: { type: String, required: true, unique: true },
-  role: { type: String, enum: ['admin', 'restaurant', 'customer', 'driver'], required: true },
+  location:{type: String},
+  role: { type: String, enum: ['driver', 'restaurant', 'customer'], required: true },
 });
 
 module.exports = mongoose.model('User', userSchema);

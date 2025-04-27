@@ -3,18 +3,66 @@ const AddToCart = require("../models/addtocart");
 
 exports.createPendingOrder = async (req, res) => {
   try {
-    const { userId, restaurantId, items, address } = req.body; 
+    const { userId, restaurantId, items, address, paymentOption, totalAmount, status } = req.body;
 
-    // Save the pending order
-    const pendingOrder = new PendingOrder({ userId, restaurantId, items, address });
+    const pendingOrder = new PendingOrder({
+      userId,
+      restaurantId,
+      items,
+      address,
+      paymentOption,
+      totalAmount,
+      status,
+    });
     await pendingOrder.save();
 
-    // Delete the cart items for the user
-    await AddToCart.deleteMany({ userId });
+    await AddToCart.deleteMany({ userId, restaurantId });
 
     res.status(201).json({ message: "Order placed successfully", pendingOrder });
   } catch (error) {
     console.error("Error creating pending order:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Fetch all orders for the user
+    const orders = await PendingOrder.find({ userId });
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: "No orders found for this user" });
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.updatePendingOrderStatus = async (req, res) => {
+  const orderId = req.params.id;
+
+  try {
+    const updatedOrder = await PendingOrder.findByIdAndUpdate(
+      orderId,
+      { status: "Processing" }, // still hardcoded
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({
+      message: "Order status updated to Processing",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

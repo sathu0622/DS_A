@@ -1,0 +1,16 @@
+/* Animation for the current step */
+@keyframes stepPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.step-animation {
+  animation: stepPulse 1.5s infinite; /* Pulse animation for the current step */
+}

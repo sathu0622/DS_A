@@ -1,0 +1,17 @@
+/* Keyframes for orange color animation */
+@keyframes orangePulse {
+  0% {
+    color: black;
+  }
+  50% {
+    color: orange;
+  }
+  100% {
+    color: black;
+  }
+}
+
+/* Animation class */
+.animate-orange {
+  animation: orangePulse 2s infinite; /* 2 seconds animation, loops infinitely */
+}

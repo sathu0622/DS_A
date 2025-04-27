@@ -1,76 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../components/main_components/NavBar";
-import { IoTrashBin } from "react-icons/io5";
-import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { useAuth } from "../context/AuthContext";
+import { AiOutlineClose } from "react-icons/ai";
 
-const CartSlider = ({ isOpen, cartItems, onClose }) => {
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + item.totalAmount, 0);
-  };
+import CartSlider from "../components/orderprocess/CartSlider";
 
-  return (
-    <div
-      className={`fixed top-0 right-0 h-full bg-white shadow-lg transform ${isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 w-96 z-50`}
-    >
-      <div className="p-4 h-full flex flex-col">
-        {/* Close Button */}
-        <button
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto">
-          {cartItems.length === 0 ? (
-            <p className="text-gray-500">Your cart is empty.</p>
-          ) : (
-            <ul>
-              {cartItems.map((item) => (
-                <li key={item._id} className="mb-4">
-                  <div className="flex items-center justify-between">
-                    {/* Item Image */}
-                    <img
-                      src={item.image || "https://via.placeholder.com/50"}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-
-                    {/* Item Details */}
-                    <div className="flex-1 ml-4">
-                      <p className="font-bold">{item.name}</p>
-                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
-                      <p className="text-sm text-gray-500">Rs. {item.price}</p>
-                    </div>
-
-                    {/* Total Price */}
-                    <p className="font-bold">Rs. {item.quantity * item.price}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Subtotal and Checkout */}
-        <div className="mt-4 border-t pt-4">
-          <p className="text-lg font-bold">Subtotal: Rs. {calculateSubtotal()}</p>
-          <button
-            className="mt-4 bg-black text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
-            onClick={() => console.log("Proceed to checkout")}
-          >
-            Go to checkout
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const NewTemp = () => {
+const Menuitem = () => {
   const { restaurantId } = useParams();
   const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState([]);
@@ -78,12 +14,57 @@ const NewTemp = () => {
   const [selectedItem, setSelectedItem] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [quantity, setQuantity] = useState(1); 
+  const { auth } = useAuth();
+
+  const navigate = useNavigate();
+
+  const userRole = localStorage.getItem("role");
+
+  useEffect(() => {
+    if (userRole !== "customer") {
+      navigate("/");
+    }
+  }, [userRole, navigate]);
+
+  useEffect(() => {
+    setIsCartOpen(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      if (auth.token && auth.userId) {
+        try {
+          const response = await fetch(`http://localhost:8000/api/addtocart/${auth.userId}/count`, {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch cart item count");
+          }
+
+          const data = await response.json();
+          setCartItemCount(data.totalQuantity);
+        } catch (error) {
+          console.error("Error fetching cart item count:", error);
+        }
+      }
+    };
+    fetchCartItemCount();
+
+    const intervalId = setInterval(() => {
+      fetchCartItemCount();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [auth.token, auth.userId]); 
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8001/api/menu?restaurantId=${restaurantId}`
+          `http://localhost:8002/api/menu?restaurantId=${restaurantId}`
         );
         if (!response.ok) throw new Error("Failed to fetch menu items");
         const data = await response.json();
@@ -100,6 +81,7 @@ const NewTemp = () => {
     const userId = localStorage.getItem("userId");
     const menuItemId = item._id; 
     const totalAmount = item.price * quantity;
+    const image = item.image;
 
     try {
       const response = await fetch("http://localhost:8000/api/addtocart", {
@@ -113,6 +95,7 @@ const NewTemp = () => {
           menuItemId,
           quantity,
           totalAmount,
+          image,
         }),
       });
 
@@ -125,7 +108,7 @@ const NewTemp = () => {
 
       // Update the cart state and open the CartSlider
       setCart((prevCart) => [...prevCart, { ...item, quantity, totalAmount }]);
-      setIsCartOpen(true); // Open the CartSlider
+      setIsCartOpen(true);
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Failed to add item to cart. Please try again.");
@@ -145,24 +128,48 @@ const NewTemp = () => {
 
   return (
     <div>
-      <NavBar />
+      <div>
+        <NavBar restaurantId={restaurantId} />
       <div className="min-h-screen bg-gray-100 p-8 relative">
         <h1 className="text-3xl font-bold text-center mb-8">Menu Items</h1>
 
         {/* Menu Item Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {menuItems.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer"
-              onClick={() => openModal(item)} 
-            >
-              <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
-              <p className="text-gray-600">{item.description}</p>
-              <p className="text-gray-500 mt-2">Price: Rs. {item.price}</p>
-            </div>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+            {menuItems.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white shadow-lg rounded-2xl overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                onClick={() => openModal(item)}
+              >
+                {/* Image */}
+                <img
+                  src={`http://localhost:8002/uploads/${item.image}`}
+                  alt={item.name}
+                  className="w-full h-40 object-cover"
+                />
+
+                {/* Content */}
+                <div className="p-4">
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">{item.name}</h2>
+                  <p className="text-gray-600 text-sm mb-2 line-clamp-2">{item.description}</p>
+                  <p className="text-gray-700 font-semibold mb-2">Price: Rs. {item.price}.00</p>
+                  {item.offer && (
+                    <span className="inline-block bg-pink-500 text-white text-xs font-semibold px-2 py-1 rounded-full mb-2">
+                      {item.offer}
+                    </span>
+                  )}
+
+                  {/* Delivery Info */}
+                  <div className="flex justify-between items-center text-gray-500 text-sm">
+                    <span>⭐ {item.rating || "4.5"}</span>
+                    <span>🚚 {item.deliveryFee || "150.00"} Fee</span>
+                    <span>⏱️ {item.deliveryTime || "30 min"}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
       </div>
 
       {/* Cart Slider */}
@@ -186,12 +193,12 @@ const NewTemp = () => {
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
               onClick={closeModal}
             >
-              ✕
+                <AiOutlineClose />
             </button>
             <img
-              src={selectedItem.image || "https://via.placeholder.com/150"}
-              alt={selectedItem.name}
-              className="w-full h-48 object-cover rounded-lg mb-4"
+                src={`http://localhost:8002/uploads/${selectedItem.image}`}
+                alt={selectedItem.image}
+                className="w-full h-48 object-cover"
             />
             <h2 className="text-2xl font-bold mb-2">{selectedItem.name}</h2>
             <p className="text-gray-600 mb-4">{selectedItem.description}</p>
@@ -227,19 +234,27 @@ const NewTemp = () => {
               Add {quantity} to Order - Rs. {selectedItem.price * quantity}.00
             </button>
 
-            <button
+              {/* <button
               className="bg-gray-200 text-black py-2 px-4 rounded hover:bg-gray-300 w-full"
               onClick={() => {
                 console.log("See details clicked");
               }}
             >
               See Details
-            </button>
+            </button> */}
           </div>
         </div>
       )}
     </div>
+      {/* Cart Slider */}
+      <CartSlider
+        isOpen={isCartOpen}
+        userId={auth.userId}
+        restaurantId={restaurantId}
+        onClose={() => setIsCartOpen(false)}
+      />
+    </div>
   );
 };
 
-export default NewTemp;
+export default Menuitem;

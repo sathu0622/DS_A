@@ -3,21 +3,26 @@ const Restaurant = require('../models/Restaurant');
 // Add a restaurant
 exports.addRestaurant = async (req, res) => {
   try {
-    const { name, description, location } = req.body;
+    const { name, description, location, isAvailable } = req.body;
     const ownerId = req.user.userId; 
 
     const newRestaurant = new Restaurant({
       name,
       description,
       location,
+      isAvailable,
+      image: req.file ? req.file.filename : null, // store the filename
       ownerId
     });
 
     const savedRestaurant = await newRestaurant.save();
-    res.status(201).json(savedRestaurant);
+    res.status(201).json({
+      ...savedRestaurant._doc,
+      imageUrl: req.file ? `/uploads/${req.file.filename}` : null, // send URL if needed
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    console.error('Error while adding restaurant:', error); // add this
+    res.status(500).json({ error: error.message });}  
 };
 
 /*// Update a restaurant
@@ -128,3 +133,15 @@ exports.toggleAvailability = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getRestaurantById = async (req, res) => {
+  const { id } = req.params;
+  const restaurant = await Restaurant.findById(id);
+
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+
+  res.status(200).json(restaurant);
+};
+

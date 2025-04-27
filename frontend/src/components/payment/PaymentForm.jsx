@@ -3,15 +3,42 @@ import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const PAYMENT_SUCCESS_URL = "http://localhost:5173/success"; // Update for production
+const PAYMENT_SUCCESS_URL = "http://localhost:5173/tracking"; // Update for production
 
-const PaymentForm = ({ totalAmount }) => {
+const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
     const stripe = useStripe();
     const elements = useElements();
 
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const savePaymentDetails = async (paymentData) => {
+      try {
+        const response = await axios.post("http://localhost:8001/api/payments/save-payment", {
+          ...paymentData,
+          orderId,
+          userId,
+          restaurantId,
+        });
+        console.log("Payment saved successfully:", response.data);
+      } catch (err) {
+        console.error("Failed to save payment:", err);
+      }
+    };
+
+    const updateOrderStatus = async () => {
+      try {
+        console.log("Updating orderId:", orderId); // 👈 add this
+        const response = await axios.patch(
+          `http://localhost:8000/api/orders/pending-orders/${orderId}/status`
+        );
+        console.log("Order status updated:", response.data);
+      } catch (err) {
+        console.error("Failed to update order status:", err.response?.data || err.message);
+      }
+    };
+    
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -25,9 +52,9 @@ const PaymentForm = ({ totalAmount }) => {
 
         const name = localStorage.getItem("fullName") || "Customer Name";
         const email = localStorage.getItem("email") || "customer@example.com";
-        const userId = localStorage.getItem("userId") || "661e84aaf39c4c04d8f2781b";
-        const restaurantId = localStorage.getItem("restaurantId") || "661e84aaf39c4c04d8f2781b";
-        const orderId = localStorage.getItem("orderId") || "661e84aaf39c4c04d8f2781b";
+        // const userId = localStorage.getItem("userId") || "661e84aaf39c4c04d8f2781b";
+        // const restaurantId = localStorage.getItem("restaurantId") || "661e84aaf39c4c04d8f2781b";
+        // const orderId = localStorage.getItem("orderId") || "661e84aaf39c4c04d8f2781b";
 
         try {
             const { error: submitError } = await elements.submit();
@@ -53,10 +80,11 @@ const PaymentForm = ({ totalAmount }) => {
                     orderId,
                     stripePaymentId: paymentIntent.id,
                     stripeCustomerId: paymentIntent.customer,
-                    amount: paymentIntent.amount,
+                    // amount: paymentIntent.amount/100,
+                    amount: totalAmount,
                     status: paymentIntent.status,
                 });
-
+                await updateOrderStatus(); 
                 setMessage("Payment successful!");
                 window.location.href = PAYMENT_SUCCESS_URL;
             } else {
@@ -70,15 +98,15 @@ const PaymentForm = ({ totalAmount }) => {
         }
     };
 
-    const savePaymentDetails = async (paymentData) => {
-        try {
-            const response = await axios.post("http://localhost:8001/api/payments/save-payment", paymentData);
-            console.log("Payment saved successfully:", response.data);
-        } catch (err) {
-            console.error("Failed to save payment:", err);
-            setMessage("Payment successful, but saving details failed.");
-        }
-    };
+    // const savePaymentDetails = async (paymentData) => {
+    //     try {
+    //         const response = await axios.post("http://localhost:8001/api/payments/save-payment", paymentData);
+    //         console.log("Payment saved successfully:", response.data);
+    //     } catch (err) {
+    //         console.error("Failed to save payment:", err);
+    //         setMessage("Payment successful, but saving details failed.");
+    //     }
+    // };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-white px-4 py-8">
@@ -94,7 +122,7 @@ const PaymentForm = ({ totalAmount }) => {
   
           <div className="text-lg font-semibold text-center text-gray-800 mb-4">
             Total:{" "}
-            <span className="text-orange-500">${totalAmount.toFixed(2)}</span>
+            <span className="text-orange-500">{totalAmount.toFixed(2)}</span>
           </div>
   
           <form onSubmit={handleSubmit} className="space-y-6">

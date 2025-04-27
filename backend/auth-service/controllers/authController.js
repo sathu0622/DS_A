@@ -143,3 +143,46 @@ exports.login = async (req, res) => {
     res.status(500).json({ msg: "Server error", error });
   }
 };
+
+
+exports.updateLocation = async (req, res) => {
+  const { id } = req.params;
+  const { location } = req.body;
+
+  if (!location) {
+    return res.status(400).json({ msg: 'Location is required' });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { location },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    res.json({ msg: 'Location updated successfully', user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json({ location: user.location });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};

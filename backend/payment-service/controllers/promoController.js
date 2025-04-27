@@ -35,3 +35,24 @@ exports.applyPromoCode = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.getPromoCodesByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params; // Assuming userId is passed as a route parameter
+
+    // Find all promo codes for this user
+    const promoCodes = await PromoCode.find({ userId: userId });
+
+    if (promoCodes.length === 0) {
+      return res.status(404).json({ error: 'No promo codes found for this user' });
+    }
+
+    res.status(200).json({
+      message: 'Promo codes retrieved successfully',
+      promoCodes,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

@@ -9,8 +9,10 @@ import Login from './pages/Login';
 import Checkout from './components/orderprocess/Checkout';
 
 
-import Temp from './pages/temp';
-import NewTemp from "./pages/NewTemp";
+import Loghome from './pages/loginHome'
+import Menuitem from "./pages/Menuitem";
+
+import Tracking from './components/orderprocess/Tracking';
 
 import { AuthProvider } from './context/AuthContext';
 import AddMenuItemForm from './pages/AddMenuItemForm';
@@ -19,8 +21,12 @@ import ViewMenuItems from './pages/ViewMenuItems';
 import MyRestaurants from './pages/MyRestaurants';
 import DeliveryTracking from './pages/DeliveryTracking';
 
+import RestaurantRegister from './pages/RestaurantRegister'
+import DriverRegister from './pages/DriverRegister'
+import UpdateLocation from './pages/UpdateLocation'
+import RestaurantDashboard from './pages/RestaurantDashboard';
 
-
+import UserProfile from './pages/UserProfile'
 function App() {
 
   return (
@@ -30,18 +36,25 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register-restaurant" element={<RestaurantRegister />} />
+          <Route path="/register-driver" element={<DriverRegister />} />
+
+          <Route path="/update-location" element={<UpdateLocation />} />
+
           <Route path="/verify" element={<Verify />} />
           <Route path="/login" element={<Login />} />
           <Route path="/checkout" element={<Checkout />} />
 
-          <Route path="/temp" element={<Temp />} />
-          <Route path="/restaurants/:restaurantId" element={<NewTemp />} />
+          <Route path="/tracking" element={<Tracking />} />
+          <Route path="/loghome" element={<Loghome />} />
+          <Route path="/restaurants/:restaurantId" element={<Menuitem />} />
         <Route path="/addMenu" element={<AddMenuItemForm />} />
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />
         <Route path="/myRestaurants" element={<MyRestaurants />} />
         <Route path="/deliveryTracking" element={<DeliveryTracking />} />
-        
+        <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/restaurant/dashboard" element={<RestaurantDashboard />} />
         </Routes>
     </Router>
     </AuthProvider>

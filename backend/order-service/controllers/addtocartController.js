@@ -26,8 +26,8 @@ const MenuItem = testDbConnection.model(
 
 exports.addToCart = async (req, res) => {
   try {
-    const { userId, restaurantId, menuItemId, quantity, totalAmount } = req.body;
-    if (!userId || !restaurantId || !menuItemId || !quantity || !totalAmount) {
+    const { userId, restaurantId, menuItemId, quantity, totalAmount, image } = req.body;
+    if (!userId || !restaurantId || !menuItemId || !quantity || !totalAmount || !image) {
       return res.status(400).json({ error: "All fields are required" });
     }
     const cartItem = new AddToCart({
@@ -36,6 +36,7 @@ exports.addToCart = async (req, res) => {
       menuItemId,
       quantity,
       totalAmount,
+      image,
     });
     const savedCartItem = await cartItem.save();
     res.status(201).json({ message: "Item added to cart", cartItem: savedCartItem });
@@ -48,14 +49,19 @@ exports.addToCart = async (req, res) => {
 exports.getCartItemCount = async (req, res) => {
   try {
     const { userId } = req.params;
+    const { restaurantId } = req.query; // Get restaurantId from query parameters
 
-    const cartItems = await AddToCart.find({ userId });
+    const filter = { userId };
+    if (restaurantId) {
+      filter.restaurantId = restaurantId; // Filter by restaurantId if provided
+    }
 
+    const cartItems = await AddToCart.find(filter);
     const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     res.status(200).json({ totalQuantity });
   } catch (error) {
-    console.error("Error fetching cart items:", error);
+    console.error("Error fetching cart item count:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -63,9 +69,15 @@ exports.getCartItemCount = async (req, res) => {
 exports.getCartDetails = async (req, res) => {
   try {
     const { userId } = req.params;
+    const { restaurantId } = req.query;
 
-    // Fetch cart items from the `ordersystem` database
-    const cartItems = await AddToCart.find({ userId });
+    // Fetch cart items for the user and filter by restaurantId
+    const filter = { userId };
+    if (restaurantId) {
+      filter.restaurantId = restaurantId;
+    }
+
+    const cartItems = await AddToCart.find(filter);
 
     if (!cartItems || cartItems.length === 0) {
       return res.status(404).json({ message: "No cart items found" });
@@ -81,6 +93,7 @@ exports.getCartDetails = async (req, res) => {
           ...item.toObject(),
           menuItemName: menuItem?.name || "Unknown",
           restaurantName: restaurant?.name || "Unknown",
+          restaurantLocation: restaurant?.location || "Unknown",
         };
       })
     );
@@ -99,18 +112,16 @@ exports.updateCartItemQuantity = async (req, res) => {
 
     console.log("Received request to update item:", itemId, "to quantity:", quantity); // Debugging log
 
-    // Validate quantity
     if (quantity < 1) {
-      return res.status(400).json({ message: "Quantity must be at least 1" });
+      return res.status(400).json({ message: "Quantity min 1" });
     }
 
-    // Find the cart item
     const cartItem = await AddToCart.findById(itemId);
     if (!cartItem) {
       return res.status(404).json({ message: "Cart item not found" });
     }
 
-    // Fetch the price from the MenuItem model
+
     const menuItem = await MenuItem.findById(cartItem.menuItemId);
     if (!menuItem) {
       return res.status(404).json({ message: "Menu item not found" });
@@ -121,16 +132,14 @@ exports.updateCartItemQuantity = async (req, res) => {
       return res.status(400).json({ message: "Invalid price value" });
     }
 
-    // Calculate totalAmount
     const totalAmount = quantity * price;
 
-    // Update the cart item
     cartItem.quantity = quantity;
     cartItem.totalAmount = totalAmount;
 
     const updatedCartItem = await cartItem.save();
 
-    console.log("Updated item in database:", updatedCartItem); // Debugging log
+    console.log("Updated item in database:", updatedCartItem);
     res.status(200).json(updatedCartItem);
   } catch (error) {
     console.error("Error updating cart item quantity:", error);
