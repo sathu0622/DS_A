@@ -133,3 +133,15 @@ exports.toggleAvailability = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getRestaurantById = async (req, res) => {
+  const { id } = req.params;
+  const restaurant = await Restaurant.findById(id);
+
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+
+  res.status(200).json(restaurant);
+};
+

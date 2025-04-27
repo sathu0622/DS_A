@@ -22,6 +22,8 @@ router.get('/owner', auth.verifyToken, restaurantController.getRestaurantsByOwne
 
 
 router.patch('/:id/availability', auth.verifyToken, restaurantController.toggleAvailability);
+router.get('/:id', restaurantController.getRestaurantById);
+
 
 
 
