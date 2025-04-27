@@ -50,7 +50,7 @@ const Tracking = () => {
           return (
             <div key={order._id} className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl mb-8">
               <h3 className="text-md font-semibold mb-2">Order ID: {order._id.slice(-10)}</h3>
-              <p className="text-sm text-gray-600 mb-4">Restaurant: {order.restaurantName}</p>
+              <p className="text-sm text-gray-600 mb-4">Restaurant: {order.restaurantId}</p>
               <p className="text-sm text-gray-600 mb-4">Total Amount: Rs: {order.totalAmount}.00</p>
               <p className="text-sm text-gray-600 mb-4">Payment Method: {order.paymentOption}</p>
               <p className="text-sm text-gray-600 mb-4">Delivery Address: {order.address}</p>
