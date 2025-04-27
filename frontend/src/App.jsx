@@ -17,6 +17,7 @@ import AddMenuItemForm from './pages/AddMenuItemForm';
 import AddRestaurantForm from './pages/AddRestaurantForm';
 import ViewMenuItems from './pages/ViewMenuItems';
 import MyRestaurants from './pages/MyRestaurants';
+import DeliveryTracking from './pages/DeliveryTracking';
 
 
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/addRestaurant" element={<AddRestaurantForm />} />
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />
         <Route path="/myRestaurants" element={<MyRestaurants />} />
+        <Route path="/deliveryTracking" element={<DeliveryTracking />} />
         
         </Routes>
     </Router>

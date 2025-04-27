@@ -40,6 +40,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 require("dotenv").config(); // Make sure this line is at the top
+const Driver = require('../models/Driver');
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -75,6 +76,15 @@ exports.register = async (req, res) => {
 
     await user.save();
 
+    if (user.role === 'driver') {
+      const driver = new Driver({
+        userId: user._id,
+        name: email, // or phone, or you can ask for name in req.body
+        currentLocation: { lat: 0, lng: 0 }, // default values
+        updatedAt: new Date(),
+      });
+      await driver.save();
+    }
     await transporter.sendMail({
       to: email,
       subject: "Verify your Email",

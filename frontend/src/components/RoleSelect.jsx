@@ -11,6 +11,7 @@ const RoleSelect = ({ value, onChange, name }) => (
       <option value="admin">Admin</option>
       <option value="restaurant">Restaurant</option>
       <option value="customer">Customer</option>
+      <option value="driver">Driver</option>
     </select>
   </div>
 );
