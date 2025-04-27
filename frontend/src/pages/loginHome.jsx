@@ -53,12 +53,10 @@ const loginHome = () => {
 
               {/* Restaurant Image */}
               <img
-  src={restaurant.image ? `http://localhost:8002/uploads/${restaurant.image}` : "https://via.placeholder.com/300"}
-  alt={restaurant.image}
-  className="w-full h-40 object-cover"
-/>
-
-
+                src={restaurant.image ? `http://localhost:8002/uploads/${restaurant.image}` : "https://via.placeholder.com/300"}
+                alt={restaurant.image}
+                className="w-full h-40 object-cover"
+              />
               {/* Restaurant Details */}
               <div className="p-4">
                 {/* Name */}
@@ -100,8 +98,8 @@ const loginHome = () => {
 
                 {/* Restaurant Image */}
                 <img
-                  src={restaurant.image || "https://via.placeholder.com/300"}
-                  alt={restaurant.name}
+                  src={restaurant.image ? `http://localhost:8002/uploads/${restaurant.image}` : "https://via.placeholder.com/300"}
+                  alt={restaurant.image}
                   className="w-full h-40 object-cover"
                 />
 

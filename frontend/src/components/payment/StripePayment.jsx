@@ -50,6 +50,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import PaymentForm from "./PaymentForm";
 import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -64,12 +66,13 @@ const StripePayment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [appliedCode, setAppliedCode] = useState(null);
   const [finalAmount, setFinalAmount] = useState(amount);
+  const [applyingPromo, setApplyingPromo] = useState(false);
 
-  const fetchClientSecret = async (amount) => {
+  const fetchClientSecret = async (amountToUse) => {
     setLoading(true);
     try {
       const response = await axios.post("http://localhost:8001/api/create-payment-intent", {
-        items: [{ id: orderId, name: "Order Payment", amount: amount }], // Amount in cents
+        items: [{ id: orderId, name: "Order Payment", amount: amountToUse }],
       });
       setClientSecret(response.data.clientSecret);
     } catch (error) {
@@ -81,14 +84,14 @@ const StripePayment = () => {
 
   useEffect(() => {
     if (amount) {
-      fetchClientSecret(finalAmount); // Use the final amount after applying discount
+      fetchClientSecret(finalAmount);
     }
-  }, []);
+  }, [finalAmount]);
 
   const handleApplyPromo = async () => {
+    setApplyingPromo(true);
     try {
-      const userId = localStorage.getItem("userId"); // replace with actual user ID logic
-
+      const userId = localStorage.getItem("userId");
       const res = await axios.post("http://localhost:8001/api/promo/apply-promo", {
         userId,
         promoCode,
@@ -100,61 +103,119 @@ const StripePayment = () => {
       setDiscount(discountPercentage);
       setAppliedCode(promoCode);
       setErrorMessage("");
+      setFinalAmount(Math.round(discountedAmount));
 
-      setFinalAmount(Math.round(discountedAmount)); // Update final amount after discount
+      // 🎉 Trigger confetti on success
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     } catch (err) {
       console.error(err);
       setDiscount(0);
       setAppliedCode(null);
       setErrorMessage(err.response?.data?.error || "Invalid promo code");
+    } finally {
+      setApplyingPromo(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 p-4">
-      {/* Title */}
-      <h2 className="text-4xl font-bold text-orange-600 mb-8 text-center">
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 p-6">
+      <motion.h2
+        className="text-4xl font-bold text-orange-600 mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
         Complete Your Payment
-      </h2>
+      </motion.h2>
 
-      <div className="flex flex-col md:flex-row gap-6 bg-white/80 w-full max-w-4xl p-6 rounded-xl shadow-md">
-        
-        {/* Promo Code Section - Left */}
+      <motion.div
+        className="flex flex-col md:flex-row gap-6 bg-white/80 w-full max-w-4xl p-6 rounded-2xl shadow-lg backdrop-blur-md"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Promo Code Section */}
         <div className="md:w-1/2 w-full bg-white border border-dashed border-orange-300 rounded-xl p-5 shadow-sm">
-          <h3 className="text-2xl font-semibold text-orange-600 mb-3 text-center">Have a Promo Code?</h3>
-          <input
-            type="text"
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-            placeholder="Enter promo code"
-            className="border p-3 rounded w-full mb-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
-          />
+          <h3 className="text-2xl font-semibold text-orange-600 mb-4 text-center">
+            🎁 Have a Promo Code?
+          </h3>
+          <div className="relative mb-3">
+            <input
+              type="text"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              placeholder="Enter your promo code"
+              className={`border p-3 rounded w-full focus:outline-none focus:ring-2 ${appliedCode ? "focus:ring-green-400" : "focus:ring-orange-400"
+                } transition-all`}
+              disabled={applyingPromo}
+            />
+            {applyingPromo && (
+              <span className="absolute right-4 top-3 animate-spin">🔄</span>
+            )}
+          </div>
           <button
             onClick={handleApplyPromo}
-            className="w-full bg-orange-500 text-white py-2.5 rounded hover:bg-orange-600 transition"
+            disabled={!promoCode || applyingPromo}
+            className={`w-full py-2.5 rounded transition ${applyingPromo
+              ? "bg-orange-300 cursor-not-allowed"
+              : "bg-orange-500 hover:bg-orange-600 text-white"
+              }`}
           >
             Apply Promo
           </button>
-          {errorMessage && (
-            <p className="text-red-500 text-sm mt-2 text-center">{errorMessage}</p>
-          )}
-          {appliedCode && (
-            <p className="text-green-600 text-sm mt-2 text-center">
-              Promo <strong>{appliedCode}</strong> applied: {discount}% OFF
-            </p>
-          )}
+          <AnimatePresence>
+            {errorMessage && (
+              <motion.p
+                className="text-red-500 text-sm mt-3 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                ❌ {errorMessage}
+              </motion.p>
+            )}
+            {appliedCode && (
+              <motion.p
+                className="text-green-600 text-sm mt-3 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                ✅ Promo <strong>{appliedCode}</strong> applied: {discount}% OFF!
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Payment Section - Right */}
+        {/* Payment Section */}
         <div className="md:w-1/2 w-full text-center flex flex-col justify-center">
           {loading && (
             <p className="text-orange-500 mb-4">Loading payment details...</p>
           )}
 
+          <motion.div
+            className="bg-gradient-to-r from-orange-100 to-orange-50 rounded-xl p-5 shadow-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h4 className="text-lg font-semibold text-orange-600 mb-3">
+              🧾 Order Summary
+            </h4>
+            <div className="flex justify-between font-bold text-xl">
+              <span>Total to Pay:</span>
+              <span>RS: {finalAmount}</span>
+            </div>
+          </motion.div>
+
           {clientSecret && (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
               <PaymentForm
-                totalAmount={finalAmount} // Pass the final discounted amount here
+                totalAmount={finalAmount}
                 orderId={orderId}
                 userId={userId}
                 restaurantId={restaurantId}
@@ -162,8 +223,7 @@ const StripePayment = () => {
             </Elements>
           )}
         </div>
-
-      </div>
+      </motion.div>
     </div>
   );
 };
