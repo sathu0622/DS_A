@@ -113,16 +113,16 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
               groupedCart.map((group, index) => (
                 <div
                   key={group.restaurantName}
-					  className="p-4 rounded-lg shadow flex items-center hover:bg-gray-300 cursor-pointer"
-					  onClick={() => handleCardClick(group.restaurantId)}
+                  className="p-4 rounded-lg shadow flex items-center hover:bg-gray-300 cursor-pointer"
+                  onClick={() => handleCardClick(group.restaurantId)}
                 >
                   <img
-                    src={`http://localhost:8002/uploads/${group.image}`}
+                    src={`http://localhost:8002/uploads/${group.restaurantName}`}
                     alt={group.restaurantName}
                     className="w-12 h-12 object-cover rounded-full mr-4"
                   />
                   <div className="flex-1">
-                    <p className="font-bold">{group.restaurantName}</p>
+                    <p className="font-bold">{group.restaurantImage}</p>
                     <p className="text-sm text-gray-500">
                       Subtotal: LKR {group.subtotal.toFixed(2)}
                     </p>
