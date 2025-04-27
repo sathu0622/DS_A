@@ -83,7 +83,7 @@ const StripePayment = () => {
     if (amount) {
       fetchClientSecret(finalAmount); // Use the final amount after applying discount
     }
-  }, [finalAmount]);
+  }, []);
 
   const handleApplyPromo = async () => {
     try {
