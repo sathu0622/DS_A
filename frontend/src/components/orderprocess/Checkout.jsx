@@ -150,7 +150,7 @@ const Checkout = () => {
         }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("Failed to place order. Please try again.");
+      alert("please add your location");
     } finally {
       setIsLoading(false);
     }
