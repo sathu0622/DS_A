@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaRegRegistered } from "react-icons/fa";
 import { TiThMenu } from "react-icons/ti";
 import { TbTruckDelivery } from "react-icons/tb";
 import { ImSpoonKnife } from "react-icons/im";
+import { CiLogin } from "react-icons/ci";
 import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
@@ -273,6 +274,20 @@ const NavBar = ({ restaurantId }) => {
         <div className="space-y-4 p-4">
           {!auth.token && (
             <>
+              <button
+                className="w-full bg-gray-100 text-black px-4 cursor-pointer py-3 rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
+                onClick={() => navigate("/register-restaurant")}
+              >
+                <CiLogin className="text-xl" />
+                <span className="font-medium">Login</span>
+              </button>
+              <button
+                className="w-full bg-gray-100 text-black px-4 py-3 cursor-pointer rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
+                onClick={() => navigate("/register-driver")}
+              >
+                <FaRegRegistered className="text-xl" />
+                <span className="font-medium">Signup</span>
+              </button>
               <button
                 className="w-full bg-gray-100 text-black px-4 cursor-pointer py-3 rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
                 onClick={() => navigate("/register-restaurant")}
