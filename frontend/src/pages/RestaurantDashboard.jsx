@@ -1,8 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const RestaurantDashboard = () => {
+  const [restaurants, setRestaurants] = useState([]);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
+  const [totalSales, setTotalSales] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+
+  const fetchUserProfile = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+
+      const response3 = await fetch("http://localhost:8002/api/restaurants"); // Or your correct restaurant endpoint
+      if (!response3.ok) throw new Error("Failed to fetch restaurants");
+      const data3 = await response3.json();
+      setRestaurants(data3);
+
+      const response2 = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
+      if (!response2.ok) throw new Error("Failed to fetch user profile");
+      const data2 = await response2.json(); 
+      setOrderHistory(data2);
+
+      const response1 = await fetch(`http://localhost:5000/api/auth/users/all/${userId}`);
+      if (!response1.ok) throw new Error("Failed to fetch user profile");
+      const data1 = await response1.json(); 
+      setUserDetails(data1);
+
+      const response = await fetch(`http://localhost:8001/api/payments/user/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch payment history");
+      const data = await response.json();
+      setPaymentHistory(data);
+    } catch (error) {
+      console.error("Failed to fetch profile data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  // Calculate total sales and total orders
+  useEffect(() => {
+    if (paymentHistory.length > 0) {
+      const total = paymentHistory.reduce((sum, payment) => sum + payment.amount, 0);
+      setTotalSales(total);
+    }
+
+    if (orderHistory.length > 0) {
+      setTotalOrders(orderHistory.length);
+    }
+  }, [paymentHistory, orderHistory]);
 
   const [isRegistered, setIsRegistered] = useState(true);
   const navigate = useNavigate();
@@ -18,7 +68,7 @@ const RestaurantDashboard = () => {
   };
 
   const handleViewRestaurant = () => {
-    navigate("/myRestaurants");// Navigate to restaurant details page (you can handle routing here)
+    navigate("/myRestaurants");
     alert("Viewing your restaurant!");
   };
 
@@ -26,19 +76,12 @@ const RestaurantDashboard = () => {
     navigate("/addMenu");
   };
 
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-20">
       {/* Header */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <h1 className="text-2xl font-bold text-pink-600">Good Morning!</h1>
-        <p className="text-gray-600">John Doe</p>
-        <div className="bg-red-100 text-red-600 p-2 rounded mt-2">
-          Reminder: Dummy data will be reset in every 30 minutes.
-        </div>
-
-
-      <div className="flex space-x-4">
+        <div className="flex space-x-4">
           {!isRegistered ? (
             <button
               onClick={handleRegister}
@@ -48,7 +91,7 @@ const RestaurantDashboard = () => {
             </button>
           ) : (
             <>
-            <button
+              <button
                 onClick={handleRegisterRest}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
@@ -72,30 +115,30 @@ const RestaurantDashboard = () => {
       </div>
 
       {/* Overview Section */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <button className="bg-pink-500 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-pink-600">
           <h2 className="text-lg font-bold">Total Sales</h2>
-          <p className="text-2xl font-bold">$</p>
+          <p className="text-2xl font-bold">Rs.{totalSales.toFixed(2)}</p>
         </button>
         <button className="bg-blue-500 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-600">
           <h2 className="text-lg font-bold">Total Orders</h2>
-          <p className="text-2xl font-bold">0</p>
+          <p className="text-2xl font-bold">{totalOrders}</p>
         </button>
-        <button className="bg-blue-400 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-500">
+        {/* <button className="bg-blue-400 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-500">
           <h2 className="text-lg font-bold">Total Customers</h2>
           <p className="text-2xl font-bold">0</p>
         </button>
         <button className="bg-purple-500 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-purple-600">
           <h2 className="text-lg font-bold">Total Menu Items</h2>
           <p className="text-2xl font-bold">0</p>
-        </button>
+        </button> */}
       </div>
 
-      {/* Order Statistics Section */}
+      {/* Order Statistics Section
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
           <h2 className="text-lg font-bold text-pink-500">Total Orders</h2>
-          <p className="text-2xl font-bold">0</p>
+          <p className="text-2xl font-bold">{totalOrders}</p>
         </button>
         <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
           <h2 className="text-lg font-bold text-yellow-500">Pending</h2>
@@ -125,7 +168,7 @@ const RestaurantDashboard = () => {
           <h2 className="text-lg font-bold text-red-600">Rejected</h2>
           <p className="text-2xl font-bold">0</p>
         </button>
-      </div>
+      </div> */}
 
       {/* Sales Summary Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -133,35 +176,35 @@ const RestaurantDashboard = () => {
           <h2 className="text-lg font-bold">Sales Summary</h2>
           <div className="mt-4">
             <p className="text-gray-600">Total Sales</p>
-            <p className="text-2xl font-bold">$0</p>
+            <p className="text-2xl font-bold">Rs.{totalSales.toFixed(2)}</p>
           </div>
           <div className="mt-4">
             <p className="text-gray-600">Avg. Sales Per Day</p>
-            <p className="text-2xl font-bold">$0</p>
+            <p className="text-2xl font-bold">Rs.{totalSales.toFixed(2)/5}</p>
           </div>
         </button>
         <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
           <h2 className="text-lg font-bold">Orders Summary</h2>
           <div className="mt-4">
-            <p className="text-gray-600">Delivered (%)</p>
+            <p className="text-gray-600">Delivered (50%)</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "50%" }}></div>
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-gray-600">Returned (%)</p>
+            <p className="text-gray-600">Returned (20%)</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div className="bg-purple-500 h-2.5 rounded-full" style={{ width: "20%" }}></div>
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-gray-600">Canceled (%)</p>
+            <p className="text-gray-600">Canceled (10%)</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div className="bg-red-500 h-2.5 rounded-full" style={{ width: "10%" }}></div>
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-gray-600">Rejected (%)</p>
+            <p className="text-gray-600">Rejected (5%)</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div className="bg-red-600 h-2.5 rounded-full" style={{ width: "5%" }}></div>
             </div>
