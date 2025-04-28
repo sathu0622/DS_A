@@ -47,7 +47,8 @@ const Checkout = () => {
 
     fetchUserLocation();
 
-    return () => clearInterval(setInterval(fetchUserLocation, 10000));
+    const interval = setInterval(fetchUserLocation, 1000);
+    return () => clearInterval(interval);
   }, []);
 
 
