@@ -24,6 +24,7 @@ import RestaurantRegister from './pages/RestaurantRegister'
 import DriverRegister from './pages/DriverRegister'
 import UpdateLocation from './pages/UpdateLocation'
 import RestaurantDashboard from './pages/RestaurantDashboard';
+import DriverDashboard from './pages/DriverDashboard';
 
 import UserProfile from './pages/UserProfile'
 function App() {
@@ -53,6 +54,7 @@ function App() {
         <Route path="/myRestaurants" element={<MyRestaurants />} />
         <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/restaurant/dashboard" element={<RestaurantDashboard />} />
+          <Route path="/driver/dashboard" element={<DriverDashboard />} />
         </Routes>
     </Router>
     </AuthProvider>
