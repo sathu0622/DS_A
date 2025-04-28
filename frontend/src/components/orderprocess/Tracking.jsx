@@ -102,8 +102,8 @@ const Tracking = () => {
               <div className="mt-4">
                 {currentStep === 0 && <PendingCard isVisible={true} />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
-                {currentStep === 2 && <PreparingCard isVisible={true} />}
-                {currentStep === 3 && <DeliveryCard isVisible={true} />}
+                {currentStep === 2 && <PreparingCard isVisible={true}  orders={orders}/>}
+                {currentStep === 3 && <DeliveryCard isVisible={true} orders={orders} />}
                 {currentStep === 4 && <CompleteCard isVisible={true} />}
               </div>
             </div>
