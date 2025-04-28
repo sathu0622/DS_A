@@ -69,25 +69,56 @@ const MyRestaurants = () => {
   return (
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Manage My Restaurants</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {restaurants.map((r) => (
-          <div key={r._id} className="bg-white p-4 shadow rounded relative">
-            <h3 className="text-lg font-semibold">{r.name}</h3>
-            <p className="text-sm">{r.location}</p>
-            <p className="text-sm mb-2">{r.description}</p>
-            <p className={`text-sm font-semibold ${r.isAvailable ? 'text-green-600' : 'text-red-500'}`}>
-              {r.isAvailable ? 'Available' : 'Not Available'}
-            </p>
-            <div className="flex gap-2 mt-3">
-              <button onClick={() => handleEdit(r)} className="bg-yellow-400 px-3 py-1 rounded text-white">Edit</button>
-              <button onClick={() => handleDelete(r._id)} className="bg-red-500 px-3 py-1 rounded text-white">Delete</button>
-              <button onClick={() => toggleAvailability(r._id)} className="bg-blue-500 px-3 py-1 rounded text-white">
-                Toggle Availability
-              </button>
-            </div>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {restaurants.map((r) => (
+    <div
+      key={r._id}
+      className="bg-white shadow-lg rounded-2xl overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+    >
+      {/* Restaurant Image */}
+      <img
+        src={`http://localhost:8002/uploads/${r.image}`} // Assuming 'logo' field in restaurant has the image filename
+        alt={r.name}
+        className="w-full h-40 object-cover"
+      />
+
+      {/* Restaurant Content */}
+      <div className="p-4">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">{r.name}</h2>
+        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{r.description}</p>
+        <p className="text-gray-600 text-sm mb-2">{r.location}</p>
+
+        {/* Availability */}
+        <p className={`text-sm font-semibold mb-2 ${r.isAvailable ? 'text-green-600' : 'text-red-500'}`}>
+          {r.isAvailable ? 'Available' : 'Not Available'}
+        </p>
+
+        {/* Buttons */}
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={() => handleEdit(r)}
+            className="bg-yellow-400 px-3 py-1 rounded text-white text-sm hover:bg-yellow-500"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(r._id)}
+            className="bg-red-500 px-3 py-1 rounded text-white text-sm hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toggleAvailability(r._id)}
+            className="bg-blue-500 px-3 py-1 rounded text-white text-sm hover:bg-blue-600"
+          >
+            Toggle
+          </button>
+        </div>
       </div>
+    </div>
+  ))}
+</div>
+
 
       {editing && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
