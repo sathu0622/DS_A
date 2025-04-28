@@ -80,7 +80,16 @@ const AddMenuItemForm = () => {
 
   
   return (
-    <div className="min-h-screen bg-white flex justify-center items-center">
+    <div
+    className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 via-yellow-100 to-orange-300"
+      style={{
+        backgroundImage:
+          'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-orange-600 mb-6 text-center">Add New Menu Item</h2>
         {message && <p className="text-center mb-4 text-sm text-green-600">{message}</p>}

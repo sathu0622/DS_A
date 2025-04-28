@@ -1,6 +1,32 @@
+import { useState } from "react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantDashboard = () => {
+
+  const [isRegistered, setIsRegistered] = useState(true);
+  const navigate = useNavigate();
+
+  const handleRegister = () => {
+    navigate("/register-restaurant");
+    setIsRegistered(true);
+  };
+
+  const handleRegisterRest = () => {
+    navigate("/addRestaurant");
+    setIsRegistered(true);
+  };
+
+  const handleViewRestaurant = () => {
+    navigate("/myRestaurants");// Navigate to restaurant details page (you can handle routing here)
+    alert("Viewing your restaurant!");
+  };
+
+  const handleAddMenu = () => {
+    navigate("/addMenu");
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       {/* Header */}
@@ -9,6 +35,39 @@ const RestaurantDashboard = () => {
         <p className="text-gray-600">John Doe</p>
         <div className="bg-red-100 text-red-600 p-2 rounded mt-2">
           Reminder: Dummy data will be reset in every 30 minutes.
+        </div>
+
+
+      <div className="flex space-x-4">
+          {!isRegistered ? (
+            <button
+              onClick={handleRegister}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            >
+              Register Your Restaurant
+            </button>
+          ) : (
+            <>
+            <button
+                onClick={handleRegisterRest}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Add New Restaurant
+              </button>
+              <button
+                onClick={handleViewRestaurant}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                View my Restaurants
+              </button>
+              <button
+                onClick={handleAddMenu}
+                className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Add Menu
+              </button>
+            </>
+          )}
         </div>
       </div>
 
