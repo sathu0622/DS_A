@@ -179,3 +179,24 @@ exports.getPendingOrders = async (req, res) => {
   }
 };
 
+exports.getResturentById = async (req, res) => {
+  try {
+    const { restaurantId } = req.params;
+
+    if (!restaurantId) {
+      return res.status(400).json({ message: "Order ID is required" });
+    }
+
+    const order = await PendingOrder.find({ restaurantId: restaurantId,  status: 'Processing', });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error("Error fetching user order:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+

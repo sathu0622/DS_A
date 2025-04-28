@@ -25,6 +25,7 @@ import DriverRegister from './pages/DriverRegister'
 import UpdateLocation from './pages/UpdateLocation'
 import RestaurantDashboard from './pages/RestaurantDashboard';
 import DriverDashboard from './pages/DriverDashboard';
+import ConfirmOrder from './pages/ConfirmOrder';
 
 import Navbar from './components/main_components/NavBar'
 
@@ -57,8 +58,9 @@ function App() {
         <Route path="/viewMenuItems" element={<ViewMenuItems />} />
         <Route path="/myRestaurants" element={<MyRestaurants />} />
         <Route path="/user-profile" element={<UserProfile />} />
-          <Route path="/restaurant/dashboard" element={<RestaurantDashboard />} />
+          <Route path="/restaurant/dashboard" element={<RestaurantDashboard />} /> ConfirmOrder
           <Route path="/driver/dashboard" element={<DriverDashboard />} />
+          <Route path="/confirmOrder" element={<ConfirmOrder />} />
         </Routes>
     </Router>
     </AuthProvider>

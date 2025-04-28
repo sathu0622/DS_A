@@ -76,6 +76,10 @@ const RestaurantDashboard = () => {
     navigate("/addMenu");
   };
 
+  const handleConfirmOrder = () => {
+    navigate("/confirmOrder")
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-20">
       {/* Header */}
@@ -108,6 +112,12 @@ const RestaurantDashboard = () => {
                 className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
               >
                 Add Menu
+              </button>
+              <button
+                onClick={handleConfirmOrder}
+                className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Confirm Order
               </button>
             </>
           )}

@@ -13,6 +13,7 @@ const MyRestaurants = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRestaurants(res.data);
+      console.log(restaurants)
     } catch (err) {
       console.error(err);
     }

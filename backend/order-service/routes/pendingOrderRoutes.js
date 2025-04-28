@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 
-const { createPendingOrder, getUserOrders, updatePendingOrderStatus, updateProcessingOrderStatus,updateOrderPreparingStatus,updateOrderDeliveryStatus, getUserOrderById, getPendingOrders } = require("../controllers/pendingOrderController");
+const { createPendingOrder, getUserOrders, updatePendingOrderStatus, updateProcessingOrderStatus,updateOrderPreparingStatus,updateOrderDeliveryStatus, getUserOrderById, getPendingOrders, getResturentById } = require("../controllers/pendingOrderController");
 
 
 router.post("/pending-order", createPendingOrder);
@@ -13,5 +13,6 @@ router.patch("/preparing-orders/:id/status", updateOrderPreparingStatus);
 router.patch("/delivery-orders/:id/status", updateOrderDeliveryStatus);
 router.get("/order/:orderId", getUserOrderById);
 router.get("/order", getPendingOrders);
+router.get("/restaurant/:restaurantId", getResturentById);
 
 module.exports = router;
