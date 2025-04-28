@@ -201,19 +201,20 @@ const NavBar = ({ restaurantId }) => {
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
+            {/* Delivery Icon - Hidden on Mobile */}
             {auth.token && auth.role === "customer" && (
               <button
-                className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
+                className="hidden md:flex bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={navigateTracking}
               >
                 <TbTruckDelivery className="text-lg" />
               </button>
             )}
 
-            {/* Cart Icon */}
+            {/* Cart Icon - Hidden on Mobile */}
             {auth.token && auth.role === "customer" && (
               <button
-                className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
+                className="hidden md:flex bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={handleCartClick}
               >
                 <FaShoppingCart className="text-lg" />
@@ -223,35 +224,37 @@ const NavBar = ({ restaurantId }) => {
               </button>
             )}
 
-           {/* Cart Icon */}
-           {auth.token &&  (
+            {/* Profile Button - Hidden on Mobile */}
+            {auth.token && (
               <button
-              className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer"
-              onClick={navigateUserProfile}
-            >
-              <FaUserCircle className="text-lg" />
-            </button>
+                className="hidden md:flex bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer"
+                onClick={navigateUserProfile}
+              >
+                <FaUserCircle className="text-lg" />
+              </button>
             )}
 
-            {/* User Role */}
+            {/* Logout Button - Hidden on Mobile */}
             {auth.token ? (
               <button
-                className="bg-red-600 font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
+                className="hidden md:flex bg-red-600 font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
                 onClick={handleLogoutClick}
               >
                 Logout
               </button>
             ) : (
                 <>
+                  {/* Login Button - Hidden on Mobile */}
                 <button
-                    className="bg-white text-black font-bold px-4 py-2 rounded-4xl hover:bg-gray-100 shadow-lg cursor-pointer"
+                    className="hidden md:flex bg-white text-black font-bold px-4 py-2 rounded-4xl hover:bg-gray-100 shadow-lg cursor-pointer"
                   onClick={handleLoginClick}
                 >
                   Login
                 </button>
 
+                  {/* Signup Button - Hidden on Mobile */}
                 <button
-                    className="bg-black px-4 py-2 font-bold rounded-4xl hover:bg-gray-800 text-white shadow-lg cursor-pointer"
+                    className="hidden md:flex bg-black px-4 py-2 font-bold rounded-4xl hover:bg-gray-800 text-white shadow-lg cursor-pointer"
                   onClick={handleSignupClick}
                 >
                   Signup
@@ -276,20 +279,20 @@ const NavBar = ({ restaurantId }) => {
             <>
               <button
                 className="w-full bg-gray-100 text-black px-4 cursor-pointer py-3 rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
-                onClick={() => navigate("/register-restaurant")}
+                onClick={handleLoginClick}
               >
                 <CiLogin className="text-xl" />
                 <span className="font-medium">Login</span>
               </button>
               <button
                 className="w-full bg-gray-100 text-black px-4 py-3 cursor-pointer rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
-                onClick={() => navigate("/register-driver")}
+                onClick={handleSignupClick}
               >
                 <FaRegRegistered className="text-xl" />
                 <span className="font-medium">Signup</span>
               </button>
               <button
-                className="w-full bg-gray-100 text-black px-4 cursor-pointer py-3 rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
+                className="w-full bg-gray-100 text-black px-4 py-3 cursor-pointer rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
                 onClick={() => navigate("/register-restaurant")}
               >
                 <ImSpoonKnife className="text-xl" />
