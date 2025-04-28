@@ -41,7 +41,7 @@ setRestaurants(data3);
       const data2 = await response2.json(); 
       setOrderHistory(data2);  // ✅ Corrected line
 
-      const response1 = await fetch(`http://localhost:5000/api/auth/users/${userId}`);
+      const response1 = await fetch(`http://localhost:5000/api/auth/users/all/${userId}`);
       if (!response1.ok) throw new Error("Failed to fetch user profile");
       const data1 = await response1.json(); 
       setUserDetails(data1);  // ✅ Corrected line
