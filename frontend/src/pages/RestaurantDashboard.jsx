@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";  // Make sure to import axios
 
 const RestaurantDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -8,17 +9,51 @@ const RestaurantDashboard = () => {
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [totalSales, setTotalSales] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0); // State for total orders
 
-  const fetchUserProfile = async () => {
+  const [isRegistered, setIsRegistered] = useState(true);
+  const navigate = useNavigate();
+
+  // Function to fetch user profile data
+  const fetchUserProfile = async (userId) => {
     try {
-      const userId = localStorage.getItem("userId");
+      // Fetch restaurants
+      const res = await axios.get(`http://localhost:8002/api/restaurants/owner/${userId}`);
+      setRestaurants(res.data);
+      console.log('Fetched restaurants:', res.data);
 
-      const response3 = await fetch("http://localhost:8002/api/restaurants"); // Or your correct restaurant endpoint
-      if (!response3.ok) throw new Error("Failed to fetch restaurants");
-      const data3 = await response3.json();
-      setRestaurants(data3);
+      // Fetch orders along with their menu details
+      const fetchRestaurantOrders = async () => {
+        try {
+          console.log('Fetching orders for restaurants:', restaurants);
+  
+          const orderResults = await Promise.all(
+            restaurants.map(async (restaurant) => {
+              try {
+                const res = await axios.get(`http://localhost:8000/api/orders/restaurant/restaurantDashboard/${restaurant._id}`);
+                console.log(`Fetched orders for restaurant ${restaurant._id}:`, res.data);
+                return res.data;  // return the fetched orders for this restaurant
+              } catch (err) {
+                console.error(`Error fetching orders for restaurant ${restaurant._id}:`, err);
+                return []; // If error, return empty array
+              }
+            })
+          );
+  
+          const flattenedOrders = orderResults.flat(); // Flatten the array of orders with menu data
+          console.log('Flattened Orders with Menu:', flattenedOrders);
+          setTotalOrders(flattenedOrders.length);
+          console.log("setTotalOrders: ", flattenedOrders.length) // Update the total orders
+        } catch (err) {
+          console.error('Error fetching restaurant orders:', err);
+        }
+      };
 
+      if (restaurants.length > 0) {
+        fetchRestaurantOrders();
+      }
+
+      // Fetch user order history and payment history
       const response2 = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
       if (!response2.ok) throw new Error("Failed to fetch user profile");
       const data2 = await response2.json(); 
@@ -28,19 +63,18 @@ const RestaurantDashboard = () => {
       if (!response1.ok) throw new Error("Failed to fetch user profile");
       const data1 = await response1.json(); 
       setUserDetails(data1);
-
-      const response = await fetch(`http://localhost:8001/api/payments/user/${userId}`);
-      if (!response.ok) throw new Error("Failed to fetch payment history");
-      const data = await response.json();
-      setPaymentHistory(data);
     } catch (error) {
       console.error("Failed to fetch profile data", error);
     }
   };
 
+  // Get userId from localStorage and fetch the user profile data
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      fetchUserProfile(userId);
+    }
+  }, []);  // Empty dependency array to run once on component mount
 
   // Calculate total sales and total orders
   useEffect(() => {
@@ -50,12 +84,9 @@ const RestaurantDashboard = () => {
     }
 
     if (orderHistory.length > 0) {
-      setTotalOrders(orderHistory.length);
+      setTotalOrders(orderHistory.length); // Update total orders from orderHistory if needed
     }
   }, [paymentHistory, orderHistory]);
-
-  const [isRegistered, setIsRegistered] = useState(true);
-  const navigate = useNavigate();
 
   const handleRegister = () => {
     navigate("/register-restaurant");
@@ -77,7 +108,7 @@ const RestaurantDashboard = () => {
   };
 
   const handleConfirmOrder = () => {
-    navigate("/confirmOrder")
+    navigate("/confirmOrder");
   }
 
   return (
@@ -132,53 +163,9 @@ const RestaurantDashboard = () => {
         </button>
         <button className="bg-blue-500 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-600">
           <h2 className="text-lg font-bold">Total Orders</h2>
-          <p className="text-2xl font-bold">{totalOrders}</p>
+          <p className="text-2xl font-bold">{totalOrders}</p> {/* Display total orders */}
         </button>
-        {/* <button className="bg-blue-400 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-blue-500">
-          <h2 className="text-lg font-bold">Total Customers</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-purple-500 text-white p-4 rounded-lg shadow cursor-pointer hover:bg-purple-600">
-          <h2 className="text-lg font-bold">Total Menu Items</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button> */}
       </div>
-
-      {/* Order Statistics Section
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-pink-500">Total Orders</h2>
-          <p className="text-2xl font-bold">{totalOrders}</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-yellow-500">Pending</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-green-500">Processing</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-blue-500">Out For Delivery</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-green-600">Delivered</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-red-500">Canceled</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-purple-500">Returned</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-        <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
-          <h2 className="text-lg font-bold text-red-600">Rejected</h2>
-          <p className="text-2xl font-bold">0</p>
-        </button>
-      </div> */}
 
       {/* Sales Summary Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -195,30 +182,7 @@ const RestaurantDashboard = () => {
         </button>
         <button className="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100">
           <h2 className="text-lg font-bold">Orders Summary</h2>
-          <div className="mt-4">
-            <p className="text-gray-600">Delivered (50%)</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "50%" }}></div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-600">Returned (20%)</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-purple-500 h-2.5 rounded-full" style={{ width: "20%" }}></div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-600">Canceled (10%)</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-red-500 h-2.5 rounded-full" style={{ width: "10%" }}></div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-600">Rejected (5%)</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-red-600 h-2.5 rounded-full" style={{ width: "5%" }}></div>
-            </div>
-          </div>
+          {/* Add order summary details as needed */}
         </button>
       </div>
     </div>
