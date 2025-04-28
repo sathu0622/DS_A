@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { TiThMenu } from "react-icons/ti";
 import { TbTruckDelivery } from "react-icons/tb";
+import { ImSpoonKnife } from "react-icons/im";
 import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
@@ -262,32 +263,63 @@ const NavBar = ({ restaurantId }) => {
 
       {/* Sliding Menu */}
       <div
-        ref={menuRef} 
-        className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg transform ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
+        ref={menuRef}
+        className={`fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
       >
-        <button
-          className="text-2xl p-4 cursor-pointer"
-          onClick={closeMenu}
-        >
+        <button className="text-2xl p-4 cursor-pointer" onClick={closeMenu}>
           ✕
         </button>
-        <div className="">
+        <div className="space-y-4 p-4">
           {!auth.token && (
             <>
-              <div
-                className="bg-gray-100  border-gray-300 shadow-md hover:bg-orange-400 cursor-pointer"
+              <button
+                className="w-full bg-gray-100 text-black px-4 cursor-pointer py-3 rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
                 onClick={() => navigate("/register-restaurant")}
               >
-                <h3 className="text-lg font-bold text-gray-800 p-6">Add your restaurant</h3>
-              </div>
-              <div
-                className="bg-gray-100 border-gray-300 shadow-md hover:bg-orange-400 cursor-pointer"
+                <ImSpoonKnife className="text-xl" />
+                <span className="font-medium">Add your restaurant</span>
+              </button>
+              <button
+                className="w-full bg-gray-100 text-black px-4 py-3 cursor-pointer rounded-lg hover:bg-red-600 shadow-md flex items-center gap-3"
                 onClick={() => navigate("/register-driver")}
               >
-                <h3 className="text-lg font-bold text-gray-800 p-6">Sign up to deliver</h3>
-              </div>
+                <TbTruckDelivery className="text-xl" />
+                <span className="font-medium">Sign up to deliver</span>
+              </button>
+            </>
+          )}
+        </div>
+        <div className="space-y-4 p-4">
+          {auth.token && auth.role === "customer" && (
+            <>
+              <button
+                className="w-full bg-gray-100 text-black px-4 py-3 rounded-lg hover:bg-gray-200 shadow-md flex items-center gap-3"
+                onClick={navigateTracking}
+              >
+                <TbTruckDelivery className="text-xl" />
+                <span className="font-medium">Track Orders</span>
+              </button>
+              <button
+                className="w-full bg-gray-100 text-black px-4 py-3 rounded-lg hover:bg-gray-200 shadow-md flex items-center gap-3"
+                onClick={handleCartClick}
+              >
+                <FaShoppingCart className="text-xl" />
+                <span className="font-medium">Cart</span>
+              </button>
+              <button
+                className="w-full bg-gray-100 text-black px-4 py-3 rounded-lg hover:bg-gray-200 shadow-md flex items-center gap-3"
+                onClick={navigateUserProfile}
+              >
+                <FaUserCircle className="text-xl" />
+                <span className="font-medium">Profile</span>
+              </button>
+              <button
+                className="w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 shadow-md flex items-center gap-3"
+                onClick={handleLogoutClick}
+              >
+                <span className="font-medium">Logout</span>
+              </button>
             </>
           )}
         </div>
