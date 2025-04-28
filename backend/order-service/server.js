@@ -35,7 +35,7 @@ app.listen(PORT, () => {
 // Schedule a job to run every minute
 cron.schedule("* * * * *", async () => {
 	try {
-		const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000); // 10 minutes ago
+		const tenMinutesAgo = new Date(Date.now() - 20 * 60 * 1000); // 10 minutes ago
 
 		// Find orders with status "Completed" that were updated more than 10 minutes ago
 		const completedOrders = await PendingOrder.find({
