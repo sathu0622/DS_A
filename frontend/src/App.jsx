@@ -25,12 +25,16 @@ import DriverRegister from './pages/DriverRegister'
 import UpdateLocation from './pages/UpdateLocation'
 import RestaurantDashboard from './pages/RestaurantDashboard';
 
+import Navbar from './components/main_components/NavBar'
+
 import UserProfile from './pages/UserProfile'
 function App() {
 
   return (
     <AuthProvider>
+
     <Router>
+    <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/payment" element={<Payment />} />
