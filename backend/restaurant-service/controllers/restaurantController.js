@@ -82,7 +82,7 @@ exports.getAllRestaurants = async (req, res) => {
 
 exports.getRestaurantsByOwner = async (req, res) => {
   try {
-    const ownerId = req.user.userId; // 
+    const ownerId = req.user.userId; 
 
     const restaurants = await Restaurant.find({ ownerId });
     res.json(restaurants);
@@ -145,3 +145,16 @@ exports.getRestaurantById = async (req, res) => {
   res.status(200).json(restaurant);
 };
 
+const mongoose = require('mongoose');
+
+exports.getRestaurantsByOwnerId = async (req, res) => {
+  try {
+    const ownerId = new mongoose.Types.ObjectId(req.params.ownerId);
+
+
+    const restaurants = await Restaurant.find({ ownerId });
+    res.json(restaurants);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -161,10 +161,28 @@ exports.updateLocation = async (req, res) => {
   }
 };
 
+exports.getAllUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json({ location: user.location });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
 exports.getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
@@ -176,3 +194,5 @@ exports.getUserById = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+

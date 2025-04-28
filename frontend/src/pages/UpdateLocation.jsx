@@ -32,7 +32,7 @@ export default function UpdateLocation() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <div className="w-full mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-xl font-bold text-orange-600 mb-4 text-center">Update Location</h2>
       <input
         type="text"

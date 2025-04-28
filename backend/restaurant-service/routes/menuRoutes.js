@@ -11,4 +11,5 @@ router.delete('/:id', auth.verifyToken, controller.deleteMenuItem);
 
 router.get('/owner-items',auth.verifyToken,  controller.getOwnerMenuItems);
 router.get('/', controller.getAllMenuItem);
+router.get('/menuId/:menuId', controller.getMenuById);
 module.exports = router;
