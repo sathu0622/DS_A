@@ -12,8 +12,13 @@ const RestaurantDashboard = () => {
     setIsRegistered(true);
   };
 
+  const handleRegisterRest = () => {
+    navigate("/addRestaurant");
+    setIsRegistered(true);
+  };
+
   const handleViewRestaurant = () => {
-    // Navigate to restaurant details page (you can handle routing here)
+    navigate("/myRestaurants");// Navigate to restaurant details page (you can handle routing here)
     alert("Viewing your restaurant!");
   };
 
@@ -43,11 +48,17 @@ const RestaurantDashboard = () => {
             </button>
           ) : (
             <>
+            <button
+                onClick={handleRegisterRest}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Add New Restaurant
+              </button>
               <button
                 onClick={handleViewRestaurant}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
-                View Your Restaurant
+                View my Restaurants
               </button>
               <button
                 onClick={handleAddMenu}
