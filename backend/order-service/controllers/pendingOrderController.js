@@ -221,3 +221,19 @@ exports.getResturentDashboard = async (req, res) => {
   }
 };
 
+exports.deletePendingOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedOrder = await PendingOrder.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order cancelled successfully" });
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+

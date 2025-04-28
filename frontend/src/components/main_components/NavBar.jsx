@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
 import logo from "../../assets/logo.png";
-import { FaUserCircle } from "react-icons/fa"; // Add this
+import { FaUserCircle } from "react-icons/fa";
 
 const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -149,8 +149,10 @@ const NavBar = ({ restaurantId }) => {
       navigate("/");
     } else if (auth.role === "customer") {
       navigate("/loghome");
+    } else if (auth.role === "restaurant") {
+      navigate("/restaurant/dashboard");
     } else {
-      alert("Access restricted to customers only.");
+      alert("Access restricted.");
     }
   };
 
@@ -192,12 +194,12 @@ const NavBar = ({ restaurantId }) => {
               onClick={handlehomeclick}
             >
               <img src={logo} alt="Logo" className="h-12 w-16" />
-              <span className="text-xl font-bold text-black">SpeedySpoon</span>
+              <span className="text-xl font-bold text-white">SpeedySpoon</span>
             </div>
           </div>
 
           <div className="flex gap-4 ml-auto items-center relative">
-            {auth.token && (
+            {auth.token && auth.role === "customer" && (
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={navigateTracking}
@@ -207,7 +209,7 @@ const NavBar = ({ restaurantId }) => {
             )}
 
             {/* Cart Icon */}
-            {auth.token &&  (
+            {auth.token && auth.role === "customer" && (
               <button
                 className="bg-gray-100 text-black px-4 py-2 rounded-4xl hover:bg-gray-200 shadow-lg flex items-center gap-2 cursor-pointer relative"
                 onClick={handleCartClick}
@@ -271,41 +273,23 @@ const NavBar = ({ restaurantId }) => {
         >
           ✕
         </button>
-        <div className="p-4">
+        <div className="">
           {!auth.token && (
             <>
-              <button
-                className="w-full bg-black text-white py-2 mb-4 font-bold rounded hover:bg-gray-800 cursor-pointer"
-                onClick={handleSignupClick}
+              <div
+                className="bg-gray-100  border-gray-300 shadow-md hover:bg-orange-400 cursor-pointer"
+                onClick={() => navigate("/register-restaurant")}
               >
-                Sign up
-              </button>
-              <button
-                className="w-full bg-gray-200 text-black font-bold py-2 mb-4 rounded hover:bg-gray-300 cursor-pointer"
-                onClick={handleLoginClick}
+                <h3 className="text-lg font-bold text-gray-800 p-6">Add your restaurant</h3>
+              </div>
+              <div
+                className="bg-gray-100 border-gray-300 shadow-md hover:bg-orange-400 cursor-pointer"
+                onClick={() => navigate("/register-driver")}
               >
-                Log in
-              </button>
+                <h3 className="text-lg font-bold text-gray-800 p-6">Sign up to deliver</h3>
+              </div>
             </>
           )}
-          <ul className="space-y-4">
-            <li>
-              <a
-                href="/register-restaurant"
-                className="block text-gray-700 hover:text-black cursor-pointer"
-              >
-                Add your restaurant
-              </a>
-            </li>
-            <li>
-              <a
-                href="/register-driver"
-                className="block text-gray-700 hover:text-black cursor-pointer"
-              >
-                Sign up to deliver
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
 

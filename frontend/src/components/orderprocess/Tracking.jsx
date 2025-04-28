@@ -103,7 +103,13 @@ const Tracking = () => {
               </div>
               <ProgressLine steps={steps} currentStep={currentStep} />
               <div className="mt-4">
-                {currentStep === 0 && <PendingCard isVisible={true} />}
+                {currentStep === 0 && <PendingCard
+                  isVisible={currentStep === 0}
+                  orderId={order._id}
+                  onOrderCancelled={(cancelledOrderId) => {
+                    setOrders((prevOrders) => prevOrders.filter((o) => o._id !== cancelledOrderId));
+                  }}
+                />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
                 {currentStep === 2 && <PreparingCard isVisible={true}  orders={orders}/>}
                 {currentStep === 3 && <DeliveryCard isVisible={true} orders={orders} />}
