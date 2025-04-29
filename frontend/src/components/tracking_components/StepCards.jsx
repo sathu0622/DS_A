@@ -1,8 +1,18 @@
 import React from "react";
+import Toast from "../main_components/Toast";
 
 const StepCards = ({ steps, visibleCard }) => {
+  const [toast, setToast] = useState(null);
+
   return (
     <div className="mt-12 w-full max-w-2xl space-y-6">
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       {steps.map((step, index) => (
         <div
           key={index}
@@ -14,7 +24,7 @@ const StepCards = ({ steps, visibleCard }) => {
           <p className="text-gray-600">{step.description}</p>
           <button
             className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            onClick={() => alert(`Action for ${step.label}`)}
+            onClick={() => setToast({ type: "info", message: `Action for ${step.label}` })}
           >
             Add to Card
           </button>

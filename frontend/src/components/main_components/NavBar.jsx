@@ -10,6 +10,7 @@ import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
 import logo from "../../assets/logo.png";
 import { FaUserCircle } from "react-icons/fa";
+import Toast from "../../components/main_components/Toast";
 
 const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +20,7 @@ const NavBar = ({ restaurantId }) => {
   const { auth, logout } = useAuth();
   const location = useLocation();
   const menuRef = useRef(null);
+  const [toast, setToast] = useState(null);
 
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -62,8 +64,10 @@ const NavBar = ({ restaurantId }) => {
 
           const data = await response.json();
           setCartItemCount(data.totalQuantity);
+          setToast({ type: "success", message: "Cart updated successfully!" });
         } catch (error) {
           console.error("Error fetching cart item count:", error);
+          setToast({ type: "error", message: "Failed to update cart." });
         }
       }
     };
@@ -164,10 +168,12 @@ const NavBar = ({ restaurantId }) => {
 
   const handleCartClick = () => {
     setIsCartOpen(true);
+    setToast({ type: "info", message: "Opening cart..." });
   };
 
   const handleLogoutClick = () => {
     logout();
+    setToast({ type: "info", message: "Logged out successfully!" });
     navigate("/");
   };
   const navigateUserProfile = () => {
@@ -177,6 +183,14 @@ const NavBar = ({ restaurantId }) => {
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       {/* Navigation Bar */}
       <nav
         className={`bg-red-600 bg-opacity- backdrop-blur-md text-white p-2 border-black rounded-b-4xl fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
@@ -331,13 +345,6 @@ const NavBar = ({ restaurantId }) => {
               >
                 <FaUserCircle className="text-xl" />
                 <span className="font-medium">Profile</span>
-              </button>
-              <button
-                className="w-full bg-gray-100 text-black cursor-pointer px-4 py-3 rounded-lg hover:bg-gray-200 shadow-md flex items-center gap-3"
-                onClick={() => navigate("/order-history")}
-              >
-                <FaHistory className="text-xl" />
-                <span className="font-medium">Order History</span>
               </button>
               <button
                 className="w-full bg-red-600 cursor-pointer text-white px-4 py-3 rounded-lg hover:bg-red-700 shadow-md flex items-center gap-3"

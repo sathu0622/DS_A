@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import Toast from '../components/main_components/Toast';
 
 export default function UpdateLocation() {
   const [addressNo, setAddressNo] = useState('');
   const [streetName, setStreetName] = useState('');
   const [city, setCity] = useState('');
+  const [toast, setToast] = useState(null);
 
   const handleUpdate = async () => {
     if (!addressNo || !streetName || !city) {
-      alert('Please fill in all fields');
+      setToast({ type: "error", message: "Please fill in all fields" });
       return;
     }
 
@@ -24,15 +26,26 @@ export default function UpdateLocation() {
       });
 
       const data = await res.json();
-      alert(data.msg);
+      if (!res.ok) {
+        setToast({ type: "error", message: data.msg || "Failed to update location" });
+      } else {
+        setToast({ type: "success", message: data.msg });
+      }
     } catch (err) {
       console.error(err);
-      alert('Error updating location');
+      setToast({ type: "error", message: "Error updating location" });
     }
   };
 
   return (
     <div className="w-full mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       <h2 className="text-xl font-bold text-red-600 mb-4 text-center">Update Location</h2>
       <input
         type="text"
