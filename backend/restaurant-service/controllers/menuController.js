@@ -94,3 +94,20 @@ exports.getMenuById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getMenuNameById = async (req, res) => {
+  try {
+    const { menuId } = req.params;
+
+    // Find the menu item by ID and select only the name field
+    const menuItem = await MenuItem.findById(menuId).select("name");
+
+    if (!menuItem) {
+      return res.status(404).json({ error: "Menu item not found" });
+    }
+
+    res.status(200).json({ name: menuItem.name });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

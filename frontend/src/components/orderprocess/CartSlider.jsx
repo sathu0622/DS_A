@@ -150,7 +150,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
                 Once you add items from a restaurant or store, your cart will appear here.
               </p>
               <button
-                className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
+                className="mt-4 bg-red-500 hover:bg-red-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800"
                 onClick={() => navigate("/loghome")}
               >
                 Start Order Item
@@ -212,7 +212,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
               <span>LKR {calculateSubtotal()}.00</span>
             </div>
             <button
-              className="mt-4 bg-orange-500 hover:bg-orange-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
+              className="mt-4 bg-red-500 hover:bg-red-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-gray-800 w-full"
               onClick={handleCheckout}
             >
               Go to checkout

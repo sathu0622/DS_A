@@ -30,9 +30,9 @@
 
 //     return (
 //         <div className="flex justify-center items-center min-h-screen bg-white">
-//             <div className="p-6 bg-white border-2 border-orange-500 shadow-xl rounded-2xl w-96 text-center">
-//                 <h2 className="text-2xl font-bold text-orange-600 mb-4">Complete Your Payment</h2>
-//                 {loading && <p className="text-orange-500">Loading payment details...</p>}
+//             <div className="p-6 bg-white border-2 border-red-500 shadow-xl rounded-2xl w-96 text-center">
+//                 <h2 className="text-2xl font-bold text-red-600 mb-4">Complete Your Payment</h2>
+//                 {loading && <p className="text-red-500">Loading payment details...</p>}
 //                 {clientSecret && (
 //                     <Elements stripe={stripePromise} options={{ clientSecret }}>
 //                         <PaymentForm totalAmount={1000 / 100} /> {/* converting to dollars */}
@@ -159,9 +159,9 @@ const StripePayment = () => {
 
 
   return (
-    // <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 p-6">
+    // <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-white via-red-50 to-red-100 p-6">
     //   <motion.h2
-    //     className="text-4xl font-bold text-orange-600 mb-8 text-center"
+    //     className="text-4xl font-bold text-red-600 mb-8 text-center"
     //     initial={{ opacity: 0, y: -20 }}
     //     animate={{ opacity: 1, y: 0 }}
     //     transition={{ duration: 0.8 }}
@@ -176,8 +176,8 @@ const StripePayment = () => {
     //     transition={{ duration: 0.5 }}
     //   >
     //     {/* Promo Code Section */}
-    //     <div className="md:w-1/2 w-full bg-white border border-dashed border-orange-300 rounded-xl p-5 shadow-sm">
-    //       <h3 className="text-2xl font-semibold text-orange-600 mb-4 text-center">
+    //     <div className="md:w-1/2 w-full bg-white border border-dashed border-red-300 rounded-xl p-5 shadow-sm">
+    //       <h3 className="text-2xl font-semibold text-red-600 mb-4 text-center">
     //         🎁 Have a Promo Code?
     //       </h3>
     //       <div className="relative mb-3">
@@ -186,7 +186,7 @@ const StripePayment = () => {
     //           value={promoCode}
     //           onChange={(e) => setPromoCode(e.target.value)}
     //           placeholder="Enter your promo code"
-    //           className={`border p-3 rounded w-full focus:outline-none focus:ring-2 ${appliedCode ? "focus:ring-green-400" : "focus:ring-orange-400"
+    //           className={`border p-3 rounded w-full focus:outline-none focus:ring-2 ${appliedCode ? "focus:ring-green-400" : "focus:ring-red-400"
     //             } transition-all`}
     //           disabled={applyingPromo}
     //         />
@@ -198,8 +198,8 @@ const StripePayment = () => {
     //         onClick={handleApplyPromo}
     //         disabled={!promoCode || applyingPromo}
     //         className={`w-full py-2.5 rounded transition ${applyingPromo
-    //           ? "bg-orange-300 cursor-not-allowed"
-    //           : "bg-orange-500 hover:bg-orange-600 text-white"
+    //           ? "bg-red-300 cursor-not-allowed"
+    //           : "bg-red-500 hover:bg-red-600 text-white"
     //           }`}
     //       >
     //         Apply Promo
@@ -231,16 +231,16 @@ const StripePayment = () => {
     //     {/* Payment Section */}
     //     <div className="md:w-1/2 w-full text-center flex flex-col justify-center">
     //       {loading && (
-    //         <p className="text-orange-500 mb-4">Loading payment details...</p>
+    //         <p className="text-red-500 mb-4">Loading payment details...</p>
     //       )}
 
     //       <motion.div
-    //         className="bg-gradient-to-r from-orange-100 to-orange-50 rounded-xl p-5 shadow-md"
+    //         className="bg-gradient-to-r from-red-100 to-red-50 rounded-xl p-5 shadow-md"
     //         initial={{ opacity: 0 }}
     //         animate={{ opacity: 1 }}
     //         transition={{ delay: 0.3 }}
     //       >
-    //         <h4 className="text-lg font-semibold text-orange-600 mb-3">
+    //         <h4 className="text-lg font-semibold text-red-600 mb-3">
     //           🧾 Order Summary
     //         </h4>
     //         <div className="flex justify-between font-bold text-xl">
@@ -262,10 +262,9 @@ const StripePayment = () => {
     //     </div>
     //   </motion.div>
     // </div>
-    <div className="flex flex-col md:flex-row gap-6 min-h-screen bg-gradient-to-br from-white via-orange-50 to-orange-100 p-6">
+    <div className="flex flex-col md:flex-row gap-6 min-h-screen bg-gradient-to-br from-white via-red-50 to-red-100 p-6">
       {/* Left Side - Payment Form */}
       <div className="md:w-2/3 w-full bg-white rounded-2xl shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-orange-600 mb-4">💳 Payment Details</h2>
         {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>
             <PaymentForm
@@ -280,7 +279,7 @@ const StripePayment = () => {
 
       {/* Right Side - Promo Code */}
       <div className="md:w-1/3 w-full bg-white rounded-2xl shadow-lg p-6 flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-orange-600 mb-3 text-center">
+        <h3 className="text-xl font-semibold text-red-600 mb-3 text-center">
           🎁 Apply Promo Code
         </h3>
         <input
@@ -288,7 +287,7 @@ const StripePayment = () => {
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
           placeholder="Enter your promo code"
-          className={`border p-3 rounded w-full focus:outline-none focus:ring-2 ${appliedCode ? "focus:ring-green-400" : "focus:ring-orange-400"
+          className={`border p-3 rounded w-full focus:outline-none focus:ring-2 ${appliedCode ? "focus:ring-green-400" : "focus:ring-red-400"
             } transition-all mb-3`}
           disabled={applyingPromo}
         />
@@ -296,8 +295,8 @@ const StripePayment = () => {
           onClick={handleApplyPromo}
           disabled={!promoCode || applyingPromo}
           className={`w-full py-2.5 rounded transition ${applyingPromo
-              ? "bg-orange-300 cursor-not-allowed"
-              : "bg-orange-500 hover:bg-orange-600 text-white"
+            ? "bg-red-300 cursor-not-allowed"
+            : "bg-red-500 hover:bg-red-600 text-white"
             }`}
         >
           Apply Promo
@@ -327,7 +326,7 @@ const StripePayment = () => {
         </AnimatePresence>
 
         {/* Summary */}
-        <div className="bg-orange-50 mt-5 p-4 rounded-lg shadow-inner">
+        <div className="bg-red-50 mt-5 p-4 rounded-lg shadow-inner">
           <div className="flex justify-between">
             <span>Original Amount:</span>
             <span>RS: {amount}</span>

@@ -1,24 +1,26 @@
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Toast from "../components/main_components/Toast";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [toast, setToast] = useState(null); // State for toast notifications
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSignupClick = () => {
-    navigate('/register');
-  }
+    navigate("/register");
+  };
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
@@ -26,38 +28,49 @@ export default function Login() {
 
       if (data.token) {
         login({ token: data.token, userId: data.userId, role: data.role });
-        alert(`Logged in as ${data.role}`);
+        setToast({ type: "success", message: `Logged in as ${data.role}` }); // Show success toast
 
-        if (data.role === 'restaurant') {
-          window.location.href = '/restaurant/dashboard';
-        } else if (data.role === 'driver') {
-          window.location.href = '/driver/dashboard';
-        } else if (data.role === 'customer') {
-          window.location.href = '/loghome';
-        } else {
-          window.location.href = '/'; // fallback
-        }
+        setTimeout(() => {
+          if (data.role === "restaurant") {
+            navigate("/restaurant/dashboard");
+          } else if (data.role === "driver") {
+            navigate("/driver/dashboard");
+          } else if (data.role === "customer") {
+            navigate("/loghome");
+          } else {
+            navigate("/");
+          }
+        }, 3000);
       } else {
-        alert(data.msg);
+        setToast({ type: "error", message: data.msg || "Login failed!" }); // Show error toast
       }
     } catch (err) {
       console.error(err);
-      alert('Server error');
+      setToast({ type: "error", message: "Server error. Please try again." }); // Show error toast
     }
   };
 
   return (
     <div
-      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 via-yellow-100 to-orange-300"
+      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
           'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="backdrop-blur-md bg-white/30 border border-white/40 shadow-xl rounded-3xl p-10 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-orange-700 mb-6 text-center drop-shadow-lg">
+        <h2 className="text-3xl font-bold text-red-700 mb-6 text-center drop-shadow-lg">
           Welcome Back
         </h2>
         <p className="text-center text-gray-700 mb-8">
@@ -67,7 +80,7 @@ export default function Login() {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full px-4 py-3 mb-4 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none backdrop-blur-sm"
+          className="w-full px-4 py-3 mb-4 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
           value={form.email}
           onChange={handleChange}
         />
@@ -75,19 +88,20 @@ export default function Login() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full px-4 py-3 mb-6 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none backdrop-blur-sm"
+          className="w-full px-4 py-3 mb-6 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
           value={form.password}
           onChange={handleChange}
         />
         <button
           onClick={handleSubmit}
-          className="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
+          className="w-full bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
         >
           Login
         </button>
         <p className="text-center text-sm text-gray-700 mt-4">
-          Don't have an account?{' '}
-          <span className="text-black font-bold cursor-pointer hover:underline"
+          Don't have an account?{" "}
+          <span
+            className="text-black font-bold cursor-pointer hover:underline"
             onClick={handleSignupClick}
           >
             Sign up

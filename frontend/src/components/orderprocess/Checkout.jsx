@@ -289,7 +289,7 @@ const Checkout = () => {
                 <p>LKR {total}.00</p>
               </div>
               <button
-								  className="mt-4 bg-orange-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-orange-600 w-full font-bold"
+                className="mt-4 bg-red-500 text-white py-2 px-4 cursor-pointer rounded hover:bg-red-600 w-full font-bold"
 								  onClick={handlePlaceOrder}
 							  >
                   Place a Order
@@ -301,7 +301,7 @@ const Checkout = () => {
         {/* Loading Spinner */}
         {isLoading && (
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[1px]">
-            <div className="w-16 h-16 border-4 border-t-orange-500 border-gray-300 rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-t-red-500 border-gray-300 rounded-full animate-spin"></div>
           </div>
         )}
 

@@ -3,22 +3,34 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import Pending from "../../assets/lottie/pending.json";
 
 const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
-  const [remainingTime, setRemainingTime] = useState(300); // 
+  const countdownDuration = 100; // 10 minutes in seconds
+  const [remainingTime, setRemainingTime] = useState(countdownDuration);
 
   useEffect(() => {
-    if (remainingTime > 0) {
-      const timer = setInterval(() => {
-        setRemainingTime((prev) => prev - 1);
-      }, 1000);
+    // Retrieve the start time from localStorage or set it if not present
+    const storedStartTime = localStorage.getItem(`order_${orderId}_startTime`);
+    const startTime = storedStartTime ? parseInt(storedStartTime, 10) : Date.now();
 
-      return () => clearInterval(timer);
+    if (!storedStartTime) {
+      localStorage.setItem(`order_${orderId}_startTime`, startTime);
     }
-  }, [remainingTime]);
+
+    const updateRemainingTime = () => {
+      const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      const newRemainingTime = countdownDuration - elapsedTime;
+      setRemainingTime(newRemainingTime > 0 ? newRemainingTime : 0);
+    };
+
+    updateRemainingTime(); // Update immediately
+    const timer = setInterval(updateRemainingTime, 1000);
+
+    return () => clearInterval(timer);
+  }, [orderId]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 5 ? "0" : ""}${secs}`;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   const handleCancelOrder = async () => {
@@ -32,6 +44,7 @@ const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
       }
 
       alert("Order cancelled successfully!");
+      localStorage.removeItem(`order_${orderId}_startTime`); // Clear the start time
       onOrderCancelled(orderId); // Notify parent component
     } catch (error) {
       console.error("Error cancelling order:", error);
@@ -52,10 +65,12 @@ const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
           }`}
       >
         <p className="text-gray-600 text-center font-bold text-lg">Pending Your Order</p>
-        {remainingTime > 0 && (
+        {remainingTime > 0 ? (
           <p className="text-gray-500 text-sm mt-2">
             You can cancel your order within: {formatTime(remainingTime)}
           </p>
+        ) : (
+          <p className="text-gray-500 text-sm mt-2">Waiting for your order.</p>
         )}
         {remainingTime > 0 && (
           <button

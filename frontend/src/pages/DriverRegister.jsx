@@ -39,7 +39,7 @@ export default function Register() {
 
   return (
     <div
-      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 via-yellow-100 to-orange-300"
+      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
           'url("https://img.freepik.com/free-photo/male-courier-mask-holding-file-note-yellow_179666-38469.jpg?t=st=1745704054~exp=1745707654~hmac=edb5a29ba41a47d9e6b263c2a790ad0b10984557b09d40b63c6380d743b7dae6&w=1380")',
@@ -48,7 +48,7 @@ export default function Register() {
       }}
     >
       <div className="backdrop-blur-md bg-white/30 border border-white/40 shadow-2xl rounded-3xl p-10 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center drop-shadow-lg">
+        <h2 className="text-3xl font-bold text-red-600 mb-6 text-center drop-shadow-lg">
           Driver Registration
         </h2>
         <p className="text-center text-gray-700 mb-8 text-lg">
@@ -80,7 +80,7 @@ export default function Register() {
 
         <button
           onClick={handleSubmit}
-          className="w-full mt-6 bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
+          className="w-full mt-6 bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
         >
           Register
         </button>
