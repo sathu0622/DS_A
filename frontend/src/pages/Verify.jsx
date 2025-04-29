@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Toast from '../components/main_components/Toast';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -9,6 +10,7 @@ function useQuery() {
 export default function Verify() {
   const query = useQuery();
   const emailFromUrl = query.get('email'); // Get email from query string
+  const [toast, setToast] = useState();
 
   const [otp, setOtp] = useState('');
   const navigate = useNavigate();
@@ -31,6 +33,13 @@ export default function Verify() {
 
   return (
     <div className="min-h-screen bg-white flex justify-center items-center">
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Verify OTP</h2>
         <p className="text-sm text-gray-600 mb-2 text-center">
