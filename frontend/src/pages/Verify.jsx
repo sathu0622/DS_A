@@ -9,7 +9,7 @@ function useQuery() {
 
 export default function Verify() {
   const query = useQuery();
-  const emailFromUrl = query.get('email'); // Get email from query string
+  const emailFromUrl = query.get('email'); 
   const [toast, setToast] = useState();
 
   const [otp, setOtp] = useState('');
