@@ -91,15 +91,15 @@ const UserProfile = () => {
               <div className="space-y-3 text-gray-700">
                 <div className="flex justify-between">
                   <span className="font-medium">Email:</span>
-                  <span>{userDetails.user.email}</span>
+                  <span>{userDetails.email}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Location:</span>
-                  <span>{userDetails.user.location}</span>
+                  <span>{userDetails.location}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Phone:</span>
-                  <span>{userDetails.user.phone}</span>
+                  <span>{userDetails.phone}</span>
                 </div>
               </div>
             )}
