@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Toast from "../components/main_components/Toast";
 
 const ConfirmOrderPage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [menu, setMenu] = useState([]);
-  
-  const userId = localStorage.getItem('userId');
-  console.log("userId", userId);
+  const [toast, setToast] = useState(null); // State for toast notifications
+
+  const userId = localStorage.getItem("userId");
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get(`http://localhost:8002/api/restaurants/owner/${userId}`);
+      const res = await axios.get(
+        `http://localhost:8002/api/restaurants/owner/${userId}`
+      );
       setRestaurants(res.data);
-      console.log('Fetched restaurants:', res.data);
     } catch (err) {
-      console.error('Error fetching restaurants:', err);
+      console.error("Error fetching restaurants:", err);
+      setToast({ type: "error", message: "Failed to fetch restaurants." }); // Show error toast
     }
   };
 
@@ -23,73 +25,93 @@ const ConfirmOrderPage = () => {
     fetchRestaurants();
   }, []);
 
-  useEffect(() => {
-    console.log('Updated restaurants state:', restaurants);
-  }, [restaurants]);
-
   // Fetch orders along with their menu details
   useEffect(() => {
     const fetchRestaurantOrders = async () => {
       try {
-        console.log('Fetching orders for restaurants:', restaurants);
-
         const orderResults = await Promise.all(
           restaurants.map(async (restaurant) => {
             try {
-              const res = await axios.get(`http://localhost:8000/api/orders/restaurant/${restaurant._id}`);
-              console.log(`Fetched orders for restaurant ${restaurant._id}:`, res.data);
-              
-              // Now for each order, fetch the menu details
+              const res = await axios.get(
+                `http://localhost:8000/api/orders/restaurant/${restaurant._id}`
+              );
+
               const ordersWithMenu = await Promise.all(
                 res.data.map(async (order) => {
                   const menuItems = await Promise.all(
                     order.items.map(async (item) => {
-                      const menuRes = await axios.get(`http://localhost:8002/api/menu/menuId/${item.menuItemId}`);
-                      return menuRes.data; // Assuming menu details are returned here
+                      const menuRes = await axios.get(
+                        `http://localhost:8002/api/menu/menuId/${item.menuItemId}`
+                      );
+                      return menuRes.data;
                     })
                   );
-                  return { ...order, menuItems }; // Add menu items to the order
+                  return { ...order, menuItems };
                 })
               );
 
               return ordersWithMenu;
             } catch (err) {
-              console.error(`Error fetching orders for restaurant ${restaurant._id}:`, err);
-              return []; // If error, return empty array
+              console.error(
+                `Error fetching orders for restaurant ${restaurant._id}:`,
+                err
+              );
+              return [];
             }
           })
         );
 
-        const flattenedOrders = orderResults.flat(); // Flatten the array of orders with menu data
-        console.log('Flattened Orders with Menu:', flattenedOrders);
+        const flattenedOrders = orderResults.flat();
         setOrders(flattenedOrders);
       } catch (err) {
-        console.error('Error fetching restaurant orders:', err);
+        console.error("Error fetching restaurant orders:", err);
+        setToast({ type: "error", message: "Failed to fetch orders." }); // Show error toast
       }
     };
 
     if (restaurants.length > 0) {
       fetchRestaurantOrders();
     }
-  }, [restaurants, orders]);
+  }, [restaurants]);
 
   const handleConfirm = async (orderId) => {
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/orders/processing-orders/${orderId}/status`
-      ); 
+      );
+      setToast({ type: "success", message: "Order confirmed successfully!" }); // Show success toast
     } catch (err) {
-      console.error("Failed to update order status:", err.response?.data || err.message);
+      console.error(
+        "Failed to update order status:",
+        err.response?.data || err.message
+      );
+      setToast({ type: "error", message: "Failed to confirm order." }); // Show error toast
     }
   };
 
-  // Cancel order handler
-  const handleCancel = (orderId) => {
-    alert(`Order ${orderId} canceled.`);
+  const handleCancel = async (orderId) => {
+    try {
+      await axios.delete(
+        `http://localhost:8000/api/orders/processing-orders/${orderId}`
+      );
+      setToast({ type: "success", message: "Order canceled successfully!" }); // Show success toast
+    } catch (err) {
+      console.error("Failed to cancel order:", err.response?.data || err.message);
+      setToast({ type: "error", message: "Failed to cancel order." }); // Show error toast
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Confirm Your Orders</h2>
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../components/main_components/NavBar";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineClose } from "react-icons/ai";
+import Toast from "../components/main_components/Toast";
 
 import CartSlider from "../components/orderprocess/CartSlider";
 
@@ -15,6 +16,7 @@ const Menuitem = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [quantity, setQuantity] = useState(1); 
   const { auth } = useAuth();
+  const [toast, setToast] = useState(null);
 
   const navigate = useNavigate();
 
@@ -109,9 +111,10 @@ const Menuitem = () => {
       // Update the cart state and open the CartSlider
       setCart((prevCart) => [...prevCart, { ...item, quantity, totalAmount }]);
       setIsCartOpen(true);
+      setToast({ type: "success", message: "Item added to cart successfully!" });
     } catch (error) {
       console.error("Error adding to cart:", error);
-      alert("Failed to add item to cart. Please try again.");
+      setToast({ type: "error", message: "Failed to add item to cart. Please try again." });
     }
   };
 
@@ -128,6 +131,13 @@ const Menuitem = () => {
 
   return (
     <div>
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div>
         <NavBar restaurantId={restaurantId} />
       <div className="min-h-screen bg-gray-100 p-8 relative">

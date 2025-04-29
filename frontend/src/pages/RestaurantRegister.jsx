@@ -2,6 +2,7 @@ import { useState } from 'react';
 import InputField from '../components/InputField';
 import { useNavigate } from 'react-router-dom';
 import resbg from '../assets/logbg.jpg';
+import Toast from '../components/main_components/Toast';
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -11,6 +12,7 @@ export default function Register() {
     role: 'restaurant',
   });
   const navigate = useNavigate();
+  const [toast, setToast] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,14 +29,14 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.msg || 'Something went wrong');
+        setToast({ type: "error", message: data.msg || "Something went wrong" });
       } else {
-        alert(data.msg);
+        setToast({ type: "success", message: data.msg });
         navigate(`/verify?email=${encodeURIComponent(form.email)}`);
       }
     } catch (err) {
       console.error(err);
-      alert('Server error');
+      setToast({ type: "error", message: "Server error" });
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/main_components/NavBar";
 import UpdateLocation from "../../pages/UpdateLocation";
+import Toast from "../../components/main_components/Toast";
 
 const Checkout = () => {
   const location = useLocation();
@@ -14,6 +15,7 @@ const Checkout = () => {
 	const [selectedDeliveryOption, setSelectedDeliveryOption] = useState("Standard");
   const [isLoading, setIsLoading] = useState(false); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const [userLocation, setUserLocation] = useState("");
   const [addressParts, setAddressParts] = useState({
@@ -128,7 +130,6 @@ const Checkout = () => {
       const orderId = data.pendingOrder._id;
   
       if (selectedOption === "Cash on Delivery") {
-        // Navigate to the tracking page
         navigate("/tracking", {
           state: {
             orderId,
@@ -138,19 +139,18 @@ const Checkout = () => {
           },
         });
       } else if (selectedOption === "Card Payment") {
-        // Navigate to the payment page
         navigate("/payment", {
           state: {
             orderId,
             userId,
             restaurantId,
-              amount: total, // Pass the total amount to the payment page
+            amount: total,
             },
           });
         }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("please add your location");
+      setToast({ type: "error", message: "Failed to place order. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -159,6 +159,13 @@ const Checkout = () => {
   return (
     <div>
       <NavBar />
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div className="min-h-screen bg-gray-100 p-4 pl-20 pr-20 mt-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Section */}
@@ -308,15 +315,15 @@ const Checkout = () => {
         {isModalOpen && (
           <div
             className="fixed backdrop-blur-[1px] inset-0 flex items-center justify-center z-50"
-            onClick={() => setIsModalOpen(false)} // Close the modal when clicking outside
+            onClick={() => setIsModalOpen(false)} 
           >
             <div
               className="relative bg-white p-6 rounded-lg shadow-lg"
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+              onClick={(e) => e.stopPropagation()} 
             >
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                onClick={() => setIsModalOpen(false)} // Close button inside the modal
+                onClick={() => setIsModalOpen(false)} 
               >
                 ✕
               </button>

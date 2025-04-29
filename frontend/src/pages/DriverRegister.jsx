@@ -2,14 +2,16 @@ import { useState } from 'react';
 import InputField from '../components/InputField';
 import { useNavigate } from 'react-router-dom';
 import dilbg from '../assets/dilbg.jpeg';
+import Toast from "../components/main_components/Toast";
 
 export default function Register() {
   const [form, setForm] = useState({
-    email: '',
-    phone: '',
-    password: '',
-    role: 'driver',
+    email: "",
+    phone: "",
+    password: "",
+    role: "driver",
   });
+  const [toast, setToast] = useState(null); // State for toast notifications
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,23 +20,27 @@ export default function Register() {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.msg || 'Something went wrong');
+        setToast({ type: "error", message: data.msg || "Something went wrong" }); // Show error toast
       } else {
-        alert(data.msg);
-        navigate(`/verify?email=${encodeURIComponent(form.email)}`);
+        setToast({ type: "success", message: data.msg || "Registration successful!" }); // Show success toast
+
+        // Wait for 3 seconds before navigating
+        setTimeout(() => {
+          navigate(`/verify?email=${encodeURIComponent(form.email)}`);
+        }, 3000);
       }
     } catch (err) {
       console.error(err);
-      alert('Server error');
+      setToast({ type: "error", message: "Server error. Please try again." }); // Show error toast
     }
   };
 
@@ -47,6 +53,15 @@ export default function Register() {
         backgroundPosition: 'center',
       }}
     >
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="backdrop-blur-md bg-white/30 border border-white/40 shadow-2xl rounded-3xl p-10 w-full max-w-md">
         <h2 className="text-3xl font-bold text-red-600 mb-6 text-center drop-shadow-lg">
           Driver Registration
@@ -84,12 +99,11 @@ export default function Register() {
         >
           Register
         </button>
-
         <p className="text-center text-sm text-white mt-4">
           Already have an account?{' '}
           <span
             className="text-black font-bold cursor-pointer hover:underline"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
           >
             Login here
           </span>
