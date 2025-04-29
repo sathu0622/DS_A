@@ -87,7 +87,7 @@ const UserProfile = () => {
           {/* Profile Info */}
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
             <h2 className="text-2xl font-semibold text-red-600">Profile Info</h2>
-            {userDetails && (
+            {userDetails && userDetails.user ? (
               <div className="space-y-3 text-gray-700">
                 <div className="flex justify-between">
                   <span className="font-medium">Email:</span>
@@ -102,6 +102,8 @@ const UserProfile = () => {
                   <span>{userDetails.user.phone}</span>
                 </div>
               </div>
+            ) : (
+              <p className="text-gray-500">User details not available.</p>
             )}
           </div>
 

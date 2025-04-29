@@ -333,13 +333,6 @@ const NavBar = ({ restaurantId }) => {
                 <span className="font-medium">Profile</span>
               </button>
               <button
-                className="w-full bg-gray-100 text-black cursor-pointer px-4 py-3 rounded-lg hover:bg-gray-200 shadow-md flex items-center gap-3"
-                onClick={() => navigate("/order-history")}
-              >
-                <FaHistory className="text-xl" />
-                <span className="font-medium">Order History</span>
-              </button>
-              <button
                 className="w-full bg-red-600 cursor-pointer text-white px-4 py-3 rounded-lg hover:bg-red-700 shadow-md flex items-center gap-3"
                 onClick={handleLogoutClick}
               >
