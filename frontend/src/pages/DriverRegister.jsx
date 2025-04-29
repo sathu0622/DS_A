@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import InputField from '../components/InputField';
 import { useNavigate } from 'react-router-dom';
+import dilbg from '../assets/dilbg.jpeg';
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -41,8 +42,7 @@ export default function Register() {
     <div
       className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
-        backgroundImage:
-          'url("https://img.freepik.com/free-photo/male-courier-mask-holding-file-note-yellow_179666-38469.jpg?t=st=1745704054~exp=1745707654~hmac=edb5a29ba41a47d9e6b263c2a790ad0b10984557b09d40b63c6380d743b7dae6&w=1380")',
+        backgroundImage: `url(${dilbg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -51,7 +51,7 @@ export default function Register() {
         <h2 className="text-3xl font-bold text-red-600 mb-6 text-center drop-shadow-lg">
           Driver Registration
         </h2>
-        <p className="text-center text-gray-700 mb-8 text-lg">
+        <p className="text-center text-white mb-8 text-lg">
           Join as a <span className="font-semibold">{form.role}</span> today!
         </p>
 
@@ -85,7 +85,7 @@ export default function Register() {
           Register
         </button>
 
-        <p className="text-center text-sm text-black mt-4">
+        <p className="text-center text-sm text-white mt-4">
           Already have an account?{' '}
           <span
             className="text-black font-bold cursor-pointer hover:underline"
