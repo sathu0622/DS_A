@@ -69,7 +69,7 @@ export default function AddRestaurantForm() {
 
   return (
     <div
-      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 via-yellow-100 to-orange-300"
+      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
           'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
@@ -83,7 +83,7 @@ export default function AddRestaurantForm() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl font-bold text-orange-700 mb-6 text-center drop-shadow-lg">
+        <h2 className="text-3xl font-bold text-red-700 mb-6 text-center drop-shadow-lg">
           🍽️ Add New Restaurant
         </h2>
 
@@ -118,7 +118,7 @@ export default function AddRestaurantForm() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none backdrop-blur-sm"
+            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
           />
           <input
             type="text"
@@ -127,7 +127,7 @@ export default function AddRestaurantForm() {
             value={formData.description}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none backdrop-blur-sm"
+            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
           />
           <input
             type="text"
@@ -136,7 +136,7 @@ export default function AddRestaurantForm() {
             value={formData.location}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none backdrop-blur-sm"
+            className="w-full px-4 py-3 border border-white/60 bg-white/20 text-gray-800 placeholder-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
           />
           <div className="flex items-center mb-2">
             <input
@@ -145,7 +145,7 @@ export default function AddRestaurantForm() {
               id="isAvailable"
               checked={formData.isAvailable}
               onChange={handleChange}
-              className="mr-2 accent-orange-500"
+              className="mr-2 accent-red-500"
             />
             <label htmlFor="isAvailable" className="text-sm text-gray-800">
               Available
@@ -153,7 +153,7 @@ export default function AddRestaurantForm() {
           </div>
 
           {/* File Upload */}
-          <div className="flex flex-col items-center border-2 border-dashed border-orange-300 p-4 rounded-lg bg-white/30 backdrop-blur-sm cursor-pointer">
+          <div className="flex flex-col items-center border-2 border-dashed border-red-300 p-4 rounded-lg bg-white/30 backdrop-blur-sm cursor-pointer">
             <label className="flex flex-col items-center w-full cursor-pointer">
               {preview ? (
                 <img
@@ -162,7 +162,7 @@ export default function AddRestaurantForm() {
                   className="w-32 h-32 object-cover rounded-lg mb-3"
                 />
               ) : (
-                <UploadCloud className="w-12 h-12 text-orange-400 mb-2" />
+                  <UploadCloud className="w-12 h-12 text-red-400 mb-2" />
               )}
               <p className="text-sm text-gray-800">Click to upload an image</p>
               <input
@@ -177,7 +177,7 @@ export default function AddRestaurantForm() {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
+            className="w-full bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
           >
             Add Restaurant
           </button>

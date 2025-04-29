@@ -179,7 +179,7 @@ const NavBar = ({ restaurantId }) => {
     <div>
       {/* Navigation Bar */}
       <nav
-        className={`bg-orange-400 bg-opacity- backdrop-blur-md text-white p-2 border-black rounded-b-4xl fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
+        className={`bg-red-600 bg-opacity- backdrop-blur-md text-white p-2 border-black rounded-b-4xl fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
       >
         <div className="container mx-auto flex justify-between items-center">
@@ -237,7 +237,7 @@ const NavBar = ({ restaurantId }) => {
             {/* Logout Button - Hidden on Mobile */}
             {auth.token ? (
               <button
-                className="hidden md:flex bg-red-600 font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
+                className="hidden md:flex bg-black font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
                 onClick={handleLogoutClick}
               >
                 Logout

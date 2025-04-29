@@ -81,12 +81,12 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-[#FFFAF0] p-6 md:p-12">
       <div className="max-w-6xl mx-auto space-y-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-orange-600"></h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-red-600"></h1>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Profile Info */}
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
-            <h2 className="text-2xl font-semibold text-orange-600">Profile Info</h2>
+            <h2 className="text-2xl font-semibold text-red-600">Profile Info</h2>
             {userDetails && (
               <div className="space-y-3 text-gray-700">
                 <div className="flex justify-between">
@@ -107,19 +107,19 @@ const UserProfile = () => {
 
           {/* Promo Codes */}
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
-            <h2 className="text-2xl font-semibold text-orange-600">Promo Codes</h2>
+            <h2 className="text-2xl font-semibold text-red-600">Promo Codes</h2>
             <div className="space-y-4">
               {paginate(promoCodes, promoPage).length > 0 ? (
                 paginate(promoCodes, promoPage).map((promo) => (
                   <div key={promo.code} className="flex justify-between items-center">
                     <div>
-                      <p className="text-lg font-semibold text-orange-600">{promo.code}</p>
+                      <p className="text-lg font-semibold text-red-600">{promo.code}</p>
                       <p className="text-sm text-gray-500">Expires: {new Date(promo.expiresAt).toLocaleDateString()}</p>
                       <p className="text-sm text-gray-500">Discount: {promo.discountPercentage}%</p>
                     </div>
                     <button
                       onClick={() => handleCopyPromoCode(promo.code)}
-                      className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
                       Copy
                     </button>
@@ -150,12 +150,12 @@ const UserProfile = () => {
         <UpdateLocation />
         {/* Recent Orders */}
         <div className="bg-white rounded-2xl shadow-md p-6 space-y-6">
-          <h2 className="text-2xl font-semibold text-orange-600">Recent Orders</h2>
+          <h2 className="text-2xl font-semibold text-red-600">Recent Orders</h2>
           <div className="space-y-4">
             {paginate(orderHistory, orderPage).map((order) => (
               <div key={order._id} className="flex justify-between items-center border-b pb-3">
                 <div>
-                  <p className="font-semibold text-lg text-orange-600">{getRestaurantName(order.restaurantId)}</p>
+                  <p className="font-semibold text-lg text-red-600">{getRestaurantName(order.restaurantId)}</p>
                   <p className="text-sm text-gray-500">
                     {new Date(order.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -188,12 +188,12 @@ const UserProfile = () => {
 
         {/* Payment History */}
         <div className="bg-white rounded-2xl shadow-md p-6 space-y-6">
-          <h2 className="text-2xl font-semibold text-orange-600">Payment History</h2>
+          <h2 className="text-2xl font-semibold text-red-600">Payment History</h2>
           <div className="space-y-4">
             {paginate(paymentHistory, paymentPage).map((payment) => (
               <div key={payment.id} className="flex justify-between items-center border-b pb-3">
                 <div>
-                  <p className="font-semibold text-lg capitalize text-orange-600">{payment.status}</p>
+                  <p className="font-semibold text-lg capitalize text-red-600">{payment.status}</p>
                   <p className="text-sm text-gray-500">{new Date(payment.createdAt).toLocaleDateString()}</p>
                 </div>
                 <p className="font-bold text-green-600">LKR {payment.amount}</p>

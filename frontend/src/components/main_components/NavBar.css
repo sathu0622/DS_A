@@ -1,10 +1,9 @@
-/* Keyframes for orange color animation */
-@keyframes orangePulse {
+@keyframes redPulse {
   0% {
     color: black;
   }
   50% {
-    color: orange;
+    color: red;
   }
   100% {
     color: black;
@@ -12,6 +11,7 @@
 }
 
 /* Animation class */
-.animate-orange {
-  animation: orangePulse 2s infinite; /* 2 seconds animation, loops infinitely */
+.animate-red {
+  animation: redPulse 2s infinite;
+  /* 2 seconds animation, loops infinitely */
 }

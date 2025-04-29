@@ -81,7 +81,7 @@ const AddMenuItemForm = () => {
   
   return (
     <div
-    className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 via-yellow-100 to-orange-300"
+      className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
           'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
@@ -91,7 +91,7 @@ const AddMenuItemForm = () => {
     >
       
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-orange-600 mb-6 text-center">Add New Menu Item</h2>
+        <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Add New Menu Item</h2>
         {message && <p className="text-center mb-4 text-sm text-green-600">{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -100,7 +100,7 @@ const AddMenuItemForm = () => {
             placeholder="Item Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500"
             required
           />
           <textarea
@@ -108,7 +108,7 @@ const AddMenuItemForm = () => {
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500"
             required
           />
           <input
@@ -117,14 +117,14 @@ const AddMenuItemForm = () => {
             placeholder="Price"
             value={formData.price}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500"
             required
           />
           <select
             name="restaurantId"
             value={formData.restaurantId}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500"
             required
           >
             <option value="">Select a Restaurant</option>
@@ -152,14 +152,14 @@ const AddMenuItemForm = () => {
           />
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white font-semibold py-2 rounded hover:bg-orange-600"
+            className="w-full bg-red-500 text-white font-semibold py-2 rounded hover:bg-red-600"
           >
             Add Item
           </button>
         </form>
         <Link to="/viewMenuItems">
   <button
-    className="mt-6 w-full bg-gray-800 text-white font-semibold py-2 rounded hover:bg-orange-600"
+            className="mt-6 w-full bg-gray-800 text-white font-semibold py-2 rounded hover:bg-red-600"
   >
     View Menu Items
   </button>

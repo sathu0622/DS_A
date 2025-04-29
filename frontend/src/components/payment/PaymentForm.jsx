@@ -111,18 +111,18 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-white px-4 py-8">
         <motion.div
-          className="w-full max-w-lg border-2 border-orange-500 shadow-xl rounded-2xl p-6 bg-white/90 backdrop-blur-md"
+          className="w-full max-w-lg border-2 border-red-500 shadow-xl rounded-2xl p-6 bg-white/90 backdrop-blur-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold text-orange-600 text-center mb-6">
+          <h1 className="text-3xl font-bold text-red-600 text-center mb-6">
             Secure Payment
           </h1>
   
           <div className="text-lg font-semibold text-center text-gray-800 mb-4">
             Total:{" "}
-            <span className="text-orange-500">{totalAmount.toFixed(2)}</span>
+            <span className="text-red-500">{totalAmount.toFixed(2)}</span>
           </div>
   
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -131,7 +131,7 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition"
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition"
               disabled={isLoading || !stripe || !elements}
             >
               {isLoading ? "Processing..." : "Pay Now"}

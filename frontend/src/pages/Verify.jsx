@@ -32,20 +32,20 @@ export default function Verify() {
   return (
     <div className="min-h-screen bg-white flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-orange-600 mb-6 text-center">Verify OTP</h2>
+        <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Verify OTP</h2>
         <p className="text-sm text-gray-600 mb-2 text-center">
           A verification code was sent to <strong>{emailFromUrl}</strong>
         </p>
         <input
           type="text"
           placeholder="Enter OTP"
-          className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-orange-500"
+          className="w-full px-4 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-red-500"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
         />
         <button
           onClick={handleVerify}
-          className="w-full bg-orange-500 text-white font-semibold py-2 rounded hover:bg-orange-600"
+          className="w-full bg-red-500 text-white font-semibold py-2 rounded hover:bg-red-600"
         >
           Verify Email
         </button>
