@@ -11,6 +11,7 @@ import CompleteCard from "../tracking_components/CompleteCard";
 const Tracking = () => {
   const [orders, setOrders] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [menuItems, setMenuItems] = useState({});
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
@@ -43,6 +44,22 @@ const Tracking = () => {
 
   }, [orders]);
 
+  const fetchMenuItemName = async (menuItemId) => {
+    try {
+      if (!menuItems[menuItemId]) {
+        const response = await fetch(`http://localhost:8002/api/menu/menuname/${menuItemId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch menu item name");
+        }
+        const data = await response.json();
+        setMenuItems((prev) => ({ ...prev, [menuItemId]: data.name })); // Store the name in state
+      }
+    } catch (error) {
+      console.error("Error fetching menu item name:", error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -55,6 +72,9 @@ const Tracking = () => {
         // Sort orders by createdAt in descending order
         const sortedOrders = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setOrders(sortedOrders);
+
+        const menuItemIds = [...new Set(data.flatMap((order) => order.items.map((item) => item.menuItemId)))];
+        menuItemIds.forEach((id) => fetchMenuItemName(id));
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -65,6 +85,8 @@ const Tracking = () => {
     return () => clearInterval(interval);
 
   }, [userId]);
+
+
 
   return (
     <div>
@@ -85,8 +107,9 @@ const Tracking = () => {
           return (
             <div key={order._id} className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl mb-8">
               <h3 className="text-md font-semibold mb-2">Order ID: {order._id.slice(-10)}</h3>
-              <div className="bg-gray-100 border border-gray-400 rounded-lg p-4 shadow-md mb-4">
-                <div className="flex flex-col space-y-2">
+              <div className="bg-gray-100 border border-gray-400 rounded-lg p-4 shadow-md mb-4 flex justify-between">
+                {/* Left: Order Details */}
+                <div className="flex flex-col space-y-2 w-1/2">
                   <p className="text-sm text-gray-600">
                     <span className="font-bold text-gray-800">Restaurant:</span> {restaurants[order.restaurantId]?.name || "Unknown Restaurant"}
                   </p>
@@ -100,7 +123,20 @@ const Tracking = () => {
                     <span className="font-bold text-gray-800">Delivery Address:</span> {order.address}
                   </p>
                 </div>
+
+                {/* Right: Order Items */}
+                <div className="flex flex-col w-1/2">
+                  <h4 className="text-lg font-bold mb-2">Order Items:</h4>
+                  <ul className="list-disc list-inside">
+                    {order.items.map((item) => (
+                      <li key={item.menuItemId} className="text-sm text-gray-600">
+                        <span className="font-bold">{menuItems[item.menuItemId] || "Loading..."}</span> - Qty: {item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+
               <ProgressLine steps={steps} currentStep={currentStep} />
               <div className="mt-4">
                 {currentStep === 0 && <PendingCard
@@ -111,7 +147,7 @@ const Tracking = () => {
                   }}
                 />}
                 {currentStep === 1 && <ProcessingCard isVisible={true} />}
-                {currentStep === 2 && <PreparingCard isVisible={true}  orders={orders}/>}
+                {currentStep === 2 && <PreparingCard isVisible={true} orders={orders} />}
                 {currentStep === 3 && <DeliveryCard isVisible={true} orders={orders} />}
                 {currentStep === 4 && <CompleteCard isVisible={true} />}
               </div>

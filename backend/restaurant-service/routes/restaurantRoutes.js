@@ -26,5 +26,6 @@ router.get('/:id', restaurantController.getRestaurantById);
 
 router.get('/owner/:ownerId', restaurantController.getRestaurantsByOwnerId);
 
+router.get('/image/:id', restaurantController.getRestaurantimageById);
 
 module.exports = router;

@@ -158,3 +158,27 @@ exports.getRestaurantsByOwnerId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getRestaurantimageById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the restaurant by ID
+    const restaurant = await Restaurant.findById(id);
+
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    // Construct the image URL if an image exists
+    const imageUrl = restaurant.image ? `${req.protocol}://${req.get("host")}/uploads/${restaurant.image}` : null;
+
+    // Return the image URL
+    res.status(200).json({
+      imageUrl,
+    });
+  } catch (error) {
+    console.error("Error fetching restaurant image by ID:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
