@@ -237,7 +237,7 @@ const NavBar = ({ restaurantId }) => {
             {/* Logout Button - Hidden on Mobile */}
             {auth.token ? (
               <button
-                className="hidden md:flex bg-black font text-white px-4 py-2 rounded-4xl hover:bg-red-600 shadow-lg cursor-pointer"
+                className="hidden md:flex bg-black font text-white px-4 py-2 rounded-4xl hover:bg-gray-700 shadow-lg cursor-pointer"
                 onClick={handleLogoutClick}
               >
                 Logout
