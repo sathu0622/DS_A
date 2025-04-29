@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Toast from "../components/main_components/Toast";
+import logbg from "../assets/logbg.jpg";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -54,8 +55,7 @@ export default function Login() {
     <div
       className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
-        backgroundImage:
-          'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
+        backgroundImage: `url(${logbg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -73,7 +73,7 @@ export default function Login() {
         <h2 className="text-3xl font-bold text-red-700 mb-6 text-center drop-shadow-lg">
           Welcome Back
         </h2>
-        <p className="text-center text-gray-700 mb-8">
+        <p className="text-center text-white mb-8">
           Please login to your account
         </p>
         <input
@@ -98,7 +98,7 @@ export default function Login() {
         >
           Login
         </button>
-        <p className="text-center text-sm text-gray-700 mt-4">
+        <p className="text-center text-sm text-white mt-4">
           Don't have an account?{" "}
           <span
             className="text-black font-bold cursor-pointer hover:underline"
