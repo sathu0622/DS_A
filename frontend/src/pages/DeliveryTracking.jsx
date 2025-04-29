@@ -14,6 +14,7 @@ import { FaUtensils, FaMotorcycle } from "react-icons/fa";
 import { GrRestaurant } from "react-icons/gr";
 import { RiMotorbikeFill } from "react-icons/ri";
 import { renderToStaticMarkup } from "react-dom/server";
+import Toast from "../components/main_components/Toast";
 
 // Remove default marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -71,6 +72,7 @@ const DeliveryTracking = (orders) => {
   const [routeCoords, setRouteCoords] = useState([]);
   const [movingDriverPos, setMovingDriverPos] = useState(null);
   const [status, setStatus] = useState(null);
+  const [toast, setToast] = useState(null); // State for toast notifications
 
   const OPENROUTESERVICE_API_KEY =
     "5b3ce3597851110001cf624869e19a90b2f84160bbbe1d93d78d6d8a";
@@ -82,9 +84,10 @@ const DeliveryTracking = (orders) => {
           `http://localhost:8000/api/orders/order/${orders.orders[0]._id}`
         );
         setStatus(res.data.status);
-        console.log("Status:", res.data.status);
+        setToast({ type: "info", message: `Order status: ${res.data.status}` }); // Show info toast
       } catch (err) {
         console.error("Error fetching order status:", err);
+        setToast({ type: "error", message: "Failed to fetch order status." }); // Show error toast
       }
     };
 
@@ -96,7 +99,6 @@ const DeliveryTracking = (orders) => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        console.log("order :", orders.orders);
         const res = await axios.get(
           "http://localhost:8008/api/deliveryTracking",
           {
@@ -107,13 +109,14 @@ const DeliveryTracking = (orders) => {
           }
         );
         setLocations(res.data);
-        console.log("Locations:", res.data);
+        setToast({ type: "success", message: "Locations fetched successfully!" }); // Show success toast
       } catch (err) {
         console.error("Error fetching locations:", err);
+        setToast({ type: "error", message: "Failed to fetch locations." }); // Show error toast
       }
     };
     fetchLocations();
-  }, []);
+  }, [orders]);
 
   useEffect(() => {
     const geocode = async (address) => {
@@ -253,6 +256,15 @@ const DeliveryTracking = (orders) => {
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <MapContainer
         style={containerStyle}
         center={centerDefault}
@@ -276,7 +288,7 @@ const DeliveryTracking = (orders) => {
             <Popup>Driver is moving</Popup>
           </Marker>
         )}
-        {status !== 'Preparing' && coords?.customer && (
+        {status !== "Preparing" && coords?.customer && (
           <Marker
             position={coords.customer}
             icon={createCustomIcon(<FaUtensils />, "green")}

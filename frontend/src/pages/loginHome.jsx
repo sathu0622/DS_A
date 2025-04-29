@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import NavBar from "../components/main_components/NavBar";
+import Toast from "../components/main_components/Toast";
 
 const loginHome = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [toast, setToast] = useState(null); // State for toast notifications
   const navigate = useNavigate();
 
   const userRole = localStorage.getItem("role");
@@ -26,8 +27,10 @@ const loginHome = () => {
         const data = await response.json();
         setRestaurants(data);
         setFilteredRestaurants(data); // Initialize filtered restaurants
+        setToast({ type: "success", message: "Restaurants loaded successfully!" }); // Show success toast
       } catch (error) {
         console.error("Error fetching restaurants:", error);
+        setToast({ type: "error", message: "Failed to load restaurants." }); // Show error toast
       }
     };
 
@@ -48,6 +51,8 @@ const loginHome = () => {
           ))
     );
     setFilteredRestaurants(filtered);
+
+    setToast({ type: "info", message: `Search updated: "${query}"` }); // Show info toast
   };
 
   // Handle Filter
@@ -65,11 +70,23 @@ const loginHome = () => {
         )
       );
     }
+
+    setToast({ type: "info", message: `Filter applied: "${filter}"` }); // Show info toast
   };
 
   return (
     <div>
       <NavBar />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="min-h-screen bg-gray-100 p-8">
         <h1 className="text-3xl font-bold text-center mb-8">Restaurants</h1>
 
@@ -90,7 +107,10 @@ const loginHome = () => {
             <div
               key={restaurant._id}
               className="bg-white shadow-md rounded-2xl overflow-hidden relative cursor-pointer transition-transform transform hover:scale-105"
-              onClick={() => navigate(`/restaurants/${restaurant._id}`)}
+              onClick={() => {
+                navigate(`/restaurants/${restaurant._id}`);
+                setToast({ type: "success", message: `Navigating to ${restaurant.name}` }); // Show success toast
+              }}
             >
               {/* Offer Tag (If Offer Exists) */}
               {restaurant.offer && (

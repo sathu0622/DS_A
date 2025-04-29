@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DriverMap from "./DriverMap";
+import Toast from "../components/main_components/Toast";
 
 const DriverDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -9,6 +10,7 @@ const DriverDashboard = () => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [selectedOrder, setSelectedOrder] = useState(null); // Store the selected order for the modal
+  const [toast, setToast] = useState(null); // State for toast notifications
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -16,9 +18,11 @@ const DriverDashboard = () => {
         const res = await axios.get("http://localhost:8000/api/orders/order");
         setOrders(res.data);
         setLoading(false);
+        setToast({ type: "success", message: "Orders fetched successfully!" }); // Show success toast
       } catch (err) {
         setError("Error fetching orders");
         setLoading(false);
+        setToast({ type: "error", message: "Failed to fetch orders." }); // Show error toast
         console.error("Error fetching orders:", err);
       }
     };
@@ -49,6 +53,7 @@ const DriverDashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching restaurants:", error);
+        setToast({ type: "error", message: "Failed to fetch restaurants." }); // Show error toast
       }
     };
 
@@ -57,24 +62,29 @@ const DriverDashboard = () => {
 
   const handleStatusUpdate = async (order) => {
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/orders/preparing-orders/${order._id}/status`
       );
       handleAcceptClick(order);
+      setToast({ type: "success", message: "Order status updated!" }); // Show success toast
     } catch (err) {
       console.error("Failed to update order status:", err.response?.data || err.message);
+      setToast({ type: "error", message: "Failed to update order status." }); // Show error toast
     }
   };
 
   const handleStatusComplete = async (order) => {
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/orders/delivery-orders/${order._id}/status`
       );
+      setToast({ type: "success", message: "Order marked as completed!" }); // Show success toast
     } catch (err) {
       console.error("Failed to update order status:", err.response?.data || err.message);
+      setToast({ type: "error", message: "Failed to mark order as completed." }); // Show error toast
     }
   };
+
   const handleAcceptClick = (order) => {
     setSelectedOrder(order);
     setIsModalOpen(true); // Open modal when Accept is clicked
@@ -95,6 +105,15 @@ const DriverDashboard = () => {
 
   return (
     <div className="p-6 max-w-screen-xl mx-auto">
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <h1 className="text-3xl font-semibold mb-6">Driver Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -161,12 +180,10 @@ const DriverDashboard = () => {
       {isModalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-3/4 h-auto max-h-[90vh] flex flex-col">
-            {/* Increased the width to 3/4 and added max height */}
             <h2 className="text-2xl font-semibold mb-4">
               Confirm Order Accept
             </h2>
 
-            {/* Make the DeliveryTracking component take remaining space */}
             <div className="flex-1 overflow-y-auto">
               <DriverMap orders={selectedOrder} />
             </div>

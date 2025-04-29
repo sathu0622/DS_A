@@ -7,6 +7,7 @@ import cartAnimation from "../../assets/lottie/cartanim.json";
 
 const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [toast, setToast] = useState(null);
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantLocation, setRestaurantLocation] = useState("");
   const navigate = useNavigate();

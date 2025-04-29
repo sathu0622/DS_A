@@ -1,45 +1,45 @@
-import React, { useState , useEffect} from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import Toast from "../components/main_components/Toast";
 
 const AddMenuItemForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
+    name: "",
+    description: "",
+    price: "",
     availability: true,
-    restaurantId: '', 
+    restaurantId: "",
   });
   const [image, setImage] = useState(null);
-  const [message, setMessage] = useState('');
+  const [toast, setToast] = useState(null); // State for toast notifications
   const [restaurants, setRestaurants] = useState([]);
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const res = await axios.get('http://localhost:8002/api/restaurants/owner', {
+        const res = await axios.get("http://localhost:8002/api/restaurants/owner", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setRestaurants(res.data);
       } catch (err) {
-        console.error('Failed to fetch restaurants', err);
+        console.error("Failed to fetch restaurants", err);
+        setToast({ type: "error", message: "Failed to fetch restaurants." });
       }
     };
 
     fetchRestaurants();
   }, [token]);
 
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -50,49 +50,54 @@ const AddMenuItemForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token'); 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-    if (image) data.append('image', image);
+    if (image) data.append("image", image);
 
     try {
-      const res = await axios.post('http://localhost:8002/api/menu', data, {
+      const res = await axios.post("http://localhost:8002/api/menu", data, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
-      setMessage('Menu item added successfully!');
+      setToast({ type: "success", message: "Menu item added successfully!" }); // Show success toast
       setFormData({
-        name: '',
-        description: '',
-        price: '',
+        name: "",
+        description: "",
+        price: "",
         availability: true,
-        restaurantId: '',
+        restaurantId: "",
       });
       setImage(null);
     } catch (err) {
       console.error(err);
-      setMessage('Failed to add menu item.');
+      setToast({ type: "error", message: "Failed to add menu item." }); // Show error toast
     }
   };
 
-  
   return (
     <div
       className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
           'url("https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg?t=st=1745704445~exp=1745708045~hmac=413fd340f795a1731be385ce055a5896bae98381ea03b6ef85bc96e86c869286&w=1380")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-red-600 mb-6 text-center">Add New Menu Item</h2>
-        {message && <p className="text-center mb-4 text-sm text-green-600">{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -158,18 +163,15 @@ const AddMenuItemForm = () => {
           </button>
         </form>
         <Link to="/viewMenuItems">
-  <button
+          <button
             className="mt-6 w-full bg-gray-800 text-white font-semibold py-2 rounded hover:bg-red-600"
-  >
-    View Menu Items
-  </button>
-</Link>
-
-
+          >
+            View Menu Items
+          </button>
+        </Link>
       </div>
     </div>
   );
 };
-
 
 export default AddMenuItemForm;

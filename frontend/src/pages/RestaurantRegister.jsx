@@ -42,7 +42,7 @@ export default function Register() {
       className="min-h-screen flex justify-center items-center bg-gradient-to-r from-red-300 via-yellow-100 to-red-300"
       style={{
         backgroundImage:
-          'url("https://img.freepik.com/free-photo/authentic-italian-pasta_24972-892.jpg?t=st=1745727939~exp=1745731539~hmac=30ae503c77f93545441e807ef0b93b2ba4ffe977fe88ee6e7fca1426e0964ed5&w=1380")',
+          'url("https://img.freepik.com/free-photo/front-view-burger-with-french-fries_23-2148234994.jpg?t=st=1745897337~exp=1745900937~hmac=3e4daa3afc38a373af10f3d10bda8e5fdf77ac174eb2686792a1afa9cd625ce5&w=1380")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
