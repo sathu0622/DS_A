@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import Pending from "../../assets/lottie/pending.json";
+import Toast from "../main_components/Toast";
 
 const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
-  const countdownDuration = 100; // 10 minutes in seconds
+  const countdownDuration = 100; // 10 min
   const [remainingTime, setRemainingTime] = useState(countdownDuration);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    // Retrieve the start time from localStorage or set it if not present
     const storedStartTime = localStorage.getItem(`order_${orderId}_startTime`);
     const startTime = storedStartTime ? parseInt(storedStartTime, 10) : Date.now();
 
@@ -21,7 +22,7 @@ const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
       setRemainingTime(newRemainingTime > 0 ? newRemainingTime : 0);
     };
 
-    updateRemainingTime(); // Update immediately
+    updateRemainingTime();
     const timer = setInterval(updateRemainingTime, 1000);
 
     return () => clearInterval(timer);
@@ -43,17 +44,24 @@ const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
         throw new Error("Failed to cancel the order");
       }
 
-      alert("Order cancelled successfully!");
-      localStorage.removeItem(`order_${orderId}_startTime`); // Clear the start time
-      onOrderCancelled(orderId); // Notify parent component
+      setToast({ type: "success", message: "Order cancelled successfully!" });
+      localStorage.removeItem(`order_${orderId}_startTime`);
+      onOrderCancelled(orderId);
     } catch (error) {
       console.error("Error cancelling order:", error);
-      alert("Failed to cancel the order. Please try again.");
+      setToast({ type: "error", message: "Failed to cancel the order. Please try again." });
     }
   };
 
   return (
     <div>
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)} // Clear the toast when closed
+        />
+      )}
       <Player
         autoplay
         loop

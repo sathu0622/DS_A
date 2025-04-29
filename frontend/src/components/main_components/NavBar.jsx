@@ -10,6 +10,7 @@ import CartSlider from "../orderprocess/CartSlider";
 import CartSliderCat from "../orderprocess/CartSliderCat";
 import logo from "../../assets/logo.png";
 import { FaUserCircle } from "react-icons/fa";
+import Toast from "../../components/main_components/Toast";
 
 const NavBar = ({ restaurantId }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

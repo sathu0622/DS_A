@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import UpdateLocation from './UpdateLocation'
+import Toast from "../components/main_components/Toast";
 
 const UserProfile = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -7,7 +8,7 @@ const UserProfile = () => {
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [promoCodes, setPromoCodes] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-
+  const [toast, setToast] = useState(null);
   const [orderPage, setOrderPage] = useState(1);
   const [paymentPage, setPaymentPage] = useState(1);
   const [promoPage, setPromoPage] = useState(1);
@@ -74,7 +75,7 @@ const UserProfile = () => {
 
   const handleCopyPromoCode = (code) => {
     navigator.clipboard.writeText(code).then(() => {
-      alert("Promo code copied to clipboard!");
+      setToast({ type: "success", message: "Promo code copied to clipboard!" });
     });
   };
 

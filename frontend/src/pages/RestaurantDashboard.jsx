@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";  // Make sure to import axios
+import axios from "axios";
+import Toast from "../components/main_components/Toast";
 
 const RestaurantDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -9,20 +10,18 @@ const RestaurantDashboard = () => {
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [totalSales, setTotalSales] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0); // State for total orders
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [toast, setToast] = useState(null);
 
   const [isRegistered, setIsRegistered] = useState(true);
   const navigate = useNavigate();
 
-  // Function to fetch user profile data
   const fetchUserProfile = async (userId) => {
     try {
-      // Fetch restaurants
       const res = await axios.get(`http://localhost:8002/api/restaurants/owner/${userId}`);
       setRestaurants(res.data);
       console.log('Fetched restaurants:', res.data);
 
-      // Fetch orders along with their menu details
       const fetchRestaurantOrders = async () => {
         try {
           console.log('Fetching orders for restaurants:', restaurants);
@@ -32,18 +31,18 @@ const RestaurantDashboard = () => {
               try {
                 const res = await axios.get(`http://localhost:8000/api/orders/restaurant/restaurantDashboard/${restaurant._id}`);
                 console.log(`Fetched orders for restaurant ${restaurant._id}:`, res.data);
-                return res.data;  // return the fetched orders for this restaurant
+                return res.data; 
               } catch (err) {
                 console.error(`Error fetching orders for restaurant ${restaurant._id}:`, err);
-                return []; // If error, return empty array
+                return [];
               }
             })
           );
   
-          const flattenedOrders = orderResults.flat(); // Flatten the array of orders with menu data
+          const flattenedOrders = orderResults.flat(); 
           console.log('Flattened Orders with Menu:', flattenedOrders);
           setTotalOrders(flattenedOrders.length);
-          console.log("setTotalOrders: ", flattenedOrders.length) // Update the total orders
+          console.log("setTotalOrders: ", flattenedOrders.length)
         } catch (err) {
           console.error('Error fetching restaurant orders:', err);
         }
@@ -100,7 +99,8 @@ const RestaurantDashboard = () => {
 
   const handleViewRestaurant = () => {
     navigate("/myRestaurants");
-    alert("Viewing your restaurant!");
+    setToast({ type: "info", message: "Viewing your restaurant!" });
+
   };
 
   const handleAddMenu = () => {
@@ -113,6 +113,13 @@ const RestaurantDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-20">
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
       {/* Header */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <h1 className="text-2xl font-bold text-pink-600">Good Morning!</h1>
