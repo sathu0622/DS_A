@@ -31,12 +31,12 @@ const UserProfile = () => {
       const response2 = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
       if (!response2.ok) throw new Error("Failed to fetch user profile");
       const data2 = await response2.json(); 
-      setOrderHistory(data2);  // ✅ Corrected line
+      setOrderHistory(data2);
 
       const response1 = await fetch(`http://localhost:5000/api/auth/users/all/${userId}`);
       if (!response1.ok) throw new Error("Failed to fetch user profile");
       const data1 = await response1.json(); 
-      setUserDetails(data1);  // ✅ Corrected line
+      setUserDetails(data1);  
 
       const response = await fetch(`http://localhost:8001/api/payments/user/${userId}`);
       if (!response.ok) throw new Error("Failed to fetch payment history");
@@ -87,26 +87,27 @@ const UserProfile = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Profile Info */}
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
-            <h2 className="text-2xl font-semibold text-red-600">Profile Info</h2>
-            {userDetails && userDetails.user ? (
-              <div className="space-y-3 text-gray-700">
-                <div className="flex justify-between">
-                  <span className="font-medium">Email:</span>
-                  <span>{userDetails.email}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Location:</span>
-                  <span>{userDetails.location}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Phone:</span>
-                  <span>{userDetails.phone}</span>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500">User details not available.</p>
-            )}
-          </div>
+  <h2 className="text-2xl font-semibold text-red-600">Profile Info</h2>
+  {userDetails ? (
+    <div className="space-y-3 text-gray-700">
+      <div className="flex justify-between">
+        <span className="font-medium">Email:</span>
+        <span>{userDetails.email}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-medium">Location:</span>
+        <span>{userDetails.location}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-medium">Phone:</span>
+        <span>{userDetails.phone}</span>
+      </div>
+    </div>
+  ) : (
+    <p className="text-gray-500">User details not available.</p>
+  )}
+</div>
+
 
           {/* Promo Codes */}
           <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">

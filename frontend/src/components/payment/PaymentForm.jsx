@@ -3,7 +3,7 @@ import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const PAYMENT_SUCCESS_URL = "http://localhost:5173/tracking"; // Update for production
+const PAYMENT_SUCCESS_URL = "http://localhost:5173/tracking"; 
 
 const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
     const stripe = useStripe();
@@ -28,7 +28,7 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
 
     const updateOrderStatus = async () => {
       try {
-        console.log("Updating orderId:", orderId); // 👈 add this
+        console.log("Updating orderId:", orderId); 
         const response = await axios.patch(
           `http://localhost:8000/api/orders/pending-orders/${orderId}/status`
         );
@@ -50,11 +50,8 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
         setIsLoading(true);
         setMessage(null);
 
-        const name = localStorage.getItem("fullName") || "Customer Name";
-        const email = localStorage.getItem("email") || "customer@example.com";
-        // const userId = localStorage.getItem("userId") || "661e84aaf39c4c04d8f2781b";
-        // const restaurantId = localStorage.getItem("restaurantId") || "661e84aaf39c4c04d8f2781b";
-        // const orderId = localStorage.getItem("orderId") || "661e84aaf39c4c04d8f2781b";
+        const name = localStorage.getItem("fullName") || "Sathushan";
+        const email = localStorage.getItem("email") || "sathushan622@gmail.com";
 
         try {
             const { error: submitError } = await elements.submit();
@@ -97,16 +94,6 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
             setIsLoading(false);
         }
     };
-
-    // const savePaymentDetails = async (paymentData) => {
-    //     try {
-    //         const response = await axios.post("http://localhost:8001/api/payments/save-payment", paymentData);
-    //         console.log("Payment saved successfully:", response.data);
-    //     } catch (err) {
-    //         console.error("Failed to save payment:", err);
-    //         setMessage("Payment successful, but saving details failed.");
-    //     }
-    // };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-white px-4 py-8">
