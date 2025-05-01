@@ -46,16 +46,16 @@ exports.savePaymentDetails = async (req, res) => {
 let user = null;
 try {
   const response = await axios.get(`http://localhost:5000/api/auth/users/all/${userId}`);
-  user = response.data.user; 
+  user = response.data; 
 } catch (error) {
   console.error('Failed to fetch user:', error.message);
 }
 
 if (user) {
-  await sendEmail(user.email, 'Payment Confirmation', `Hi ${user.name}, your payment of ${amount / 100} was successful.`);
+  await sendEmail(user.email, 'Payment Confirmation', `Hi ${user.name}, your payment of ${amount} was successful.`);
 
   // Send SMS confirmation
-  if (user.phone) { // <-- make sure you have a valid phone number
+  if (user.phone) { 
     await sendSMS(user.phone, `Hi ${user.name}, your payment of $${amount / 100} was successful!`);
   } else {
     console.log('⚠️ No phone number found for user, skipping SMS.');
@@ -82,66 +82,6 @@ if (user) {
   }
 };
 
-
-// exports.savePaymentDetails = async (req, res) => {
-//   try {
-//     const {
-//       userId,
-//       restaurantId,
-//       orderId,
-//       stripePaymentId,
-//       stripeCustomerId,
-//       amount,
-//       status,
-//     } = req.body;
-
-//     const payment = new Payment({
-//       userId,
-//       restaurantId,
-//       orderId,
-//       stripePaymentId,
-//       stripeCustomerId,
-//       amount,
-//       status,
-//     });
-
-//     await payment.save();
-
-//     let promoCode = null;
-
-//     if (amount > 5000) {
-//       const code = 'SAVE20-' + crypto.randomBytes(3).toString('hex').toUpperCase();
-//       promoCode = new PromoCode({
-//         code,
-//         discountPercentage: 20,
-//         userId,
-//         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // expires in 30 days
-//       });
-//       await promoCode.save();
-//     }
-
-//     const user = await User.findById(userId);
-//     if (user) {
-//       await sendEmail(user.email, 'Payment Confirmation', `Hi ${user.name}, your payment of ${amount / 100} was successful.`);
-//       if (promoCode) {
-//         await sendEmail(user.email, 'You earned a promo code!', `Congrats ${user.name}, use code ${promoCode.code} to get 20% off on your next order!`);
-//       }
-//     }
-
-//     res.status(201).json({
-//       message: 'Payment saved successfully',
-//       payment,
-//       promoCode: promoCode ? promoCode.code : null,
-//     });
-
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-
-
-// Get all payments (for admin or internal dashboard)
 exports.getAllPayments = async (req, res) => {
     try {
       const payments = await Payment.find().populate('userId', 'name email');

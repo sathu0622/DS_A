@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: food-app.127.0.0.1.nip.io
+    http:
+      paths:
+      - path: /api/auth/
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 5000
+      - path: /api/promo
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-service  # Same service as payments
+            port:
+              number: 8001
+      - path: /api/payments
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-service  # Same service as promo
+            port:
+              number: 8001
+      - path: /api/addtocart
+        pathType: Prefix
+        backend:
+          service:
+            name: order-service  # Same service as payments
+            port:
+              number: 8000
+      - path: /api/orders
+        pathType: Prefix
+        backend:
+          service:
+            name: order-service  # Same service as promo
+            port:
+              number: 8000
+      - path: /api/deliveryTracking
+        pathType: Prefix
+        backend:
+          service:
+            name: delivery-service  # Same service as promo
+            port:
+              number: 8008
+      - path: /api/menu
+        pathType: Prefix
+        backend:
+          service:
+            name: restaurant-service  # Same service as promo
+            port:
+              number: 8002
+      - path: /api/restaurants
+        pathType: Prefix
+        backend:
+          service:
+            name: restaurant-service  # Same service as promo
+            port:
+              number: 8002
+      - path: /uploads
+        pathType: Prefix
+        backend:
+          service:
+            name: restaurant-service  # Same service as promo
+            port:
+              number: 8002
