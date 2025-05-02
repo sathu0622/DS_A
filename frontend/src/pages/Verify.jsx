@@ -10,7 +10,6 @@ function useQuery() {
 export default function Verify() {
   const query = useQuery();
   const emailFromUrl = query.get('email'); 
-  const [toast, setToast] = useState();
 
   const [otp, setOtp] = useState('');
   const navigate = useNavigate();
@@ -22,10 +21,6 @@ export default function Verify() {
     });
     const data = await res.json();
     if (!res.ok) {
-      setToast({ type: "error", message: data.msg || "Something went wrong" });
-      } else {
-      setToast({ type: "success", message: data.msg });
-        // Navigate to verification page and pass email
         navigate(`/login`);
         // window.location.href = `/verify?email=${encodeURIComponent(form.email)}`;
       }

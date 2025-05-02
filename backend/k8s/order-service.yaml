@@ -1,0 +1,36 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: order-service
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: order
+#   template:
+#     metadata:
+#       labels:
+#         app: order
+#     spec:
+#       containers:
+#         - name: order-service
+#           image: sathushan0622/order-service:latest
+#           ports:
+#             - containerPort: 8000 
+#           resources:
+#             limits:
+#               cpu: "500m"
+#               memory: "128Mi"
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order  # Must match Pod labels (check `kubectl describe pod order-service-xxx`)
+  ports:
+    - protocol: TCP
+      port: 8000       # Port exposed by the Service
+      targetPort: 8000 # Must match the Pod's `containerPort`

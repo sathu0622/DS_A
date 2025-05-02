@@ -25,6 +25,18 @@ services:
     networks:
       - app-network
 
+  auth-service:
+      build:
+        context: ./backend/auth-service
+      ports:
+        - "5000:5000"
+      env_file:
+        - ./backend/auth-service/.env
+      depends_on:
+        - mongo
+      networks:
+        - app-network
+    
   mongo:
     image: mongo:6.0
     container_name: mongodb
