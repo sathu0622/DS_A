@@ -150,7 +150,7 @@ const Checkout = () => {
         }
     } catch (error) {
       console.error("Error placing order:", error);
-      setToast({ type: "error", message: "Failed to place order. Please try again." });
+      setToast({ type: "error", message: "Please enter the address" });
     } finally {
       setIsLoading(false);
     }
