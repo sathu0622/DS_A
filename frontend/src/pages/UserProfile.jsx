@@ -23,22 +23,22 @@ const UserProfile = () => {
     try {
       const userId = localStorage.getItem("userId");
 
-      const response3 = await fetch("http://localhost:8002/api/restaurants"); // Or your correct restaurant endpoint
+      const response3 = await fetch("http://food-app.127.0.0.1.nip.io/api/restaurants"); // Or your correct restaurant endpoint
       if (!response3.ok) throw new Error("Failed to fetch restaurants");
       const data3 = await response3.json();
       setRestaurants(data3);
 
-      const response2 = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
+      const response2 = await fetch(`http://food-app.127.0.0.1.nip.io/api/orders/user-orders/${userId}`);
       if (!response2.ok) throw new Error("Failed to fetch user profile");
       const data2 = await response2.json(); 
       setOrderHistory(data2);
 
-      const response1 = await fetch(`http://localhost:5000/api/auth/users/all/${userId}`);
+      const response1 = await fetch(`http://food-app.127.0.0.1.nip.io/api/auth/users/all/${userId}`);
       if (!response1.ok) throw new Error("Failed to fetch user profile");
       const data1 = await response1.json(); 
       setUserDetails(data1);  
 
-      const response = await fetch(`http://localhost:8001/api/payments/user/${userId}`);
+      const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/payments/user/${userId}`);
       if (!response.ok) throw new Error("Failed to fetch payment history");
       const data = await response.json();
       setPaymentHistory(data);
@@ -55,7 +55,7 @@ const UserProfile = () => {
   const fetchPromoCodes = async () => {
     try {
       const userId = localStorage.getItem("userId");
-      const response = await fetch(`http://localhost:8001/api/promo/promo-codes/${userId}`);
+      const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/promo/promo-codes/${userId}`);
       if (!response.ok) throw new Error("Failed to fetch promo codes");
       const data = await response.json();
       setPromoCodes((data.promoCodes || []).filter((promo) => !promo.used));

@@ -12,7 +12,7 @@ const ConfirmOrderPage = () => {
   const fetchRestaurants = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8002/api/restaurants/owner/${userId}`
+        `http://food-app.127.0.0.1.nip.io/api/restaurants/owner/${userId}`
       );
       setRestaurants(res.data);
     } catch (err) {
@@ -33,7 +33,7 @@ const ConfirmOrderPage = () => {
           restaurants.map(async (restaurant) => {
             try {
               const res = await axios.get(
-                `http://localhost:8000/api/orders/restaurant/${restaurant._id}`
+                `http://food-app.127.0.0.1.nip.io/api/orders/restaurant/${restaurant._id}`
               );
 
               const ordersWithMenu = await Promise.all(
@@ -41,7 +41,7 @@ const ConfirmOrderPage = () => {
                   const menuItems = await Promise.all(
                     order.items.map(async (item) => {
                       const menuRes = await axios.get(
-                        `http://localhost:8002/api/menu/menuId/${item.menuItemId}`
+                        `http://food-app.127.0.0.1.nip.io/api/menu/menuId/${item.menuItemId}`
                       );
                       return menuRes.data;
                     })
@@ -77,7 +77,7 @@ const ConfirmOrderPage = () => {
   const handleConfirm = async (orderId) => {
     try {
       await axios.patch(
-        `http://localhost:8000/api/orders/processing-orders/${orderId}/status`
+        `http://food-app.127.0.0.1.nip.io/api/orders/processing-orders/${orderId}/status`
       );
       setToast({ type: "success", message: "Order confirmed successfully!" }); // Show success toast
     } catch (err) {
@@ -92,7 +92,7 @@ const ConfirmOrderPage = () => {
   const handleCancel = async (orderId) => {
     try {
       await axios.delete(
-        `http://localhost:8000/api/orders/processing-orders/${orderId}`
+        `http://food-app.127.0.0.1.nip.io/api/orders/processing-orders/${orderId}`
       );
       setToast({ type: "success", message: "Order canceled successfully!" }); // Show success toast
     } catch (err) {

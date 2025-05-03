@@ -15,7 +15,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
     const fetchCartData = async () => {
       if (userId) {
         try {
-          const response = await fetch(`http://localhost:8000/api/addtocart/${userId}/details`);
+          const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/addtocart/${userId}/details`);
           if (!response.ok) {
             throw new Error("Failed to fetch cart data");
           }
@@ -45,7 +45,7 @@ const CartSliderCat = ({ isOpen, userId, currentPage, onClose }) => {
               const updatedGrouped = await Promise.all(
                 Object.values(grouped).map(async (group) => {
                   try {
-                    const imageResponse = await fetch(`http://localhost:8002/api/restaurants/image/${group.restaurantId}`);
+                    const imageResponse = await fetch(`http://food-app.127.0.0.1.nip.io/api/restaurants/image/${group.restaurantId}`);
                     if (imageResponse.ok) {
                       const imageData = await imageResponse.json();
                       group.imageUrl = imageData.imageUrl;

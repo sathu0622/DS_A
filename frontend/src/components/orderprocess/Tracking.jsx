@@ -24,7 +24,7 @@ const Tracking = () => {
           const fetchedRestaurants = {};
 
           for (const id of restaurantIds) {
-            const response = await fetch(`http://localhost:8002/api/restaurants/${id}`);
+            const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/restaurants/${id}`);
             if (!response.ok) throw new Error("Failed to fetch restaurant " + id);
             const data = await response.json();
             fetchedRestaurants[id] = data;
@@ -47,7 +47,7 @@ const Tracking = () => {
   const fetchMenuItemName = async (menuItemId) => {
     try {
       if (!menuItems[menuItemId]) {
-        const response = await fetch(`http://localhost:8002/api/menu/menuname/${menuItemId}`);
+        const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/menu/menuname/${menuItemId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch menu item name");
         }
@@ -63,7 +63,7 @@ const Tracking = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
+        const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/orders/user-orders/${userId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
         }

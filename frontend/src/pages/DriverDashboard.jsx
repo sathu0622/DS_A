@@ -15,7 +15,7 @@ const DriverDashboard = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/orders/order");
+        const res = await axios.get("http://food-app.127.0.0.1.nip.io/api/orders/order");
         setOrders(res.data);
         setLoading(false);
         setToast({ type: "success", message: "Orders fetched successfully!" }); // Show success toast
@@ -41,7 +41,7 @@ const DriverDashboard = () => {
 
           for (const id of restaurantIds) {
             const response = await fetch(
-              `http://localhost:8002/api/restaurants/${id}`
+              `http://food-app.127.0.0.1.nip.io/api/restaurants/${id}`
             );
             if (!response.ok)
               throw new Error("Failed to fetch restaurant " + id);
@@ -63,7 +63,7 @@ const DriverDashboard = () => {
   const handleStatusUpdate = async (order) => {
     try {
       await axios.patch(
-        `http://localhost:8000/api/orders/preparing-orders/${order._id}/status`
+        `http://food-app.127.0.0.1.nip.io/api/orders/preparing-orders/${order._id}/status`
       );
       handleAcceptClick(order);
       setToast({ type: "success", message: "Order status updated!" }); // Show success toast
@@ -76,7 +76,7 @@ const DriverDashboard = () => {
   const handleStatusComplete = async (order) => {
     try {
       await axios.patch(
-        `http://localhost:8000/api/orders/delivery-orders/${order._id}/status`
+        `http://food-app.127.0.0.1.nip.io/api/orders/delivery-orders/${order._id}/status`
       );
       setToast({ type: "success", message: "Order marked as completed!" }); // Show success toast
     } catch (err) {

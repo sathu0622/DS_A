@@ -20,7 +20,7 @@ const AddMenuItemForm = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const res = await axios.get("http://localhost:8002/api/restaurants/owner", {
+        const res = await axios.get("http://food-app.127.0.0.1.nip.io/api/restaurants/owner", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +55,7 @@ const AddMenuItemForm = () => {
     if (image) data.append("image", image);
 
     try {
-      const res = await axios.post("http://localhost:8002/api/menu", data, {
+      const res = await axios.post("http://food-app.127.0.0.1.nip.io/api/menu", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

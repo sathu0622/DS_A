@@ -19,7 +19,7 @@ export default function UpdateLocation() {
     try {
       const userId = localStorage.getItem("userId");
 
-      const res = await fetch(`http://localhost:5000/api/auth/users/${userId}/location`, {
+      const res = await fetch(`http://food-app.127.0.0.1.nip.io/api/auth/users/${userId}/location`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ location }),

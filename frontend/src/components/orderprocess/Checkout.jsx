@@ -31,7 +31,7 @@ const Checkout = () => {
     const fetchUserLocation = async () => {
       try {
         const userId = localStorage.getItem("userId");
-        const response = await fetch(`http://localhost:5000/api/auth/users/${userId}`);
+        const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/auth/users/${userId}`);
         const data = await response.json();
 
         if (response.ok && data.location) {
@@ -114,7 +114,7 @@ const Checkout = () => {
         status: selectedOption === "Cash on Delivery" ? "Pending" : "Pending",
       };
 
-      const response = await fetch("http://localhost:8000/api/orders/pending-order", {
+      const response = await fetch("http://food-app.127.0.0.1.nip.io/api/orders/pending-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -263,7 +263,7 @@ const Checkout = () => {
                 {cartItems.map((item) => (
                   <li key={item._id} className="rounded-lg shadow flex items-center p-2">
                     <img
-                      src={`http://localhost:8002/uploads/${item.image}`}
+                      src={`http://food-app.127.0.0.1.nip.io/uploads/${item.image}`}
                       alt={item.image}
                       className="w-12 h-12 object-cover rounded-full mr-2"
                     />

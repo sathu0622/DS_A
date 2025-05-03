@@ -10,14 +10,31 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 app.use(express.json());
 connectToDatabase();
 
+// const corsOptions = {
+//     origin: "*", 
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true, 
+//   };
+  
+// app.use(cors(corsOptions));
+
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3000",  "http://food-app.127.0.0.1.nip.io"];
+
 const corsOptions = {
-    origin: "*", 
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true, 
-  };
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+  credentials: true,
+};
+
   
 app.use(cors(corsOptions));
-
 
 const paymentRoutes = require('./routes/paymentRoutes');
 const promoRoutes = require('./routes/promoRoutes');
@@ -49,6 +66,7 @@ const calculateTotalOrderAmount = (items) => {
 app.use('/api/promo', promoRoutes);
 app.use('/api/payments', paymentRoutes);
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  // app.listen(PORT, () => {
+  //   console.log(`Server is running on port ${PORT}`);
+  // });
+  app.listen(PORT, '0.0.0.0', () => console.log("Server running"));

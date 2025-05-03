@@ -13,7 +13,7 @@ export default function Verify() {
   const [otp, setOtp] = useState('');
   const navigate = useNavigate();
   const handleVerify = async () => {
-    const res = await fetch('http://localhost:5000/api/auth/verify-otp', {
+    const res = await fetch('http://food-app.127.0.0.1.nip.io/api/auth/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: emailFromUrl, otp }),

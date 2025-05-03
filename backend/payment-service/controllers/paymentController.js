@@ -45,7 +45,7 @@ exports.savePaymentDetails = async (req, res) => {
 
 let user = null;
 try {
-  const response = await axios.get(`http://localhost:5000/api/auth/users/all/${userId}`);
+  const response = await axios.get(`http://food-app.127.0.0.1.nip.io/api/auth/users/all/${userId}`);
   user = response.data; 
 } catch (error) {
   console.error('Failed to fetch user:', error.message);
