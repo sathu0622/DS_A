@@ -18,7 +18,7 @@ const RestaurantDashboard = () => {
 
   const fetchUserProfile = async (userId) => {
     try {
-      const res = await axios.get(`http://localhost:8002/api/restaurants/owner/${userId}`);
+      const res = await axios.get(`http://food-app.127.0.0.1.nip.io/api/restaurants/owner/${userId}`);
       setRestaurants(res.data);
       console.log('Fetched restaurants:', res.data);
 
@@ -29,7 +29,7 @@ const RestaurantDashboard = () => {
           const orderResults = await Promise.all(
             restaurants.map(async (restaurant) => {
               try {
-                const res = await axios.get(`http://localhost:8000/api/orders/restaurant/restaurantDashboard/${restaurant._id}`);
+                const res = await axios.get(`http://food-app.127.0.0.1.nip.io/api/orders/restaurant/restaurantDashboard/${restaurant._id}`);
                 console.log(`Fetched orders for restaurant ${restaurant._id}:`, res.data);
                 return res.data; 
               } catch (err) {
@@ -53,12 +53,12 @@ const RestaurantDashboard = () => {
       }
 
       // Fetch user order history and payment history
-      const response2 = await fetch(`http://localhost:8000/api/orders/user-orders/${userId}`);
+      const response2 = await fetch(`http://food-app.127.0.0.1.nip.io/api/orders/user-orders/${userId}`);
       if (!response2.ok) throw new Error("Failed to fetch user profile");
       const data2 = await response2.json(); 
       setOrderHistory(data2);
 
-      const response1 = await fetch(`http://localhost:5000/api/auth/users/all/${userId}`);
+      const response1 = await fetch(`http://food-app.127.0.0.1.nip.io/api/auth/users/all/${userId}`);
       if (!response1.ok) throw new Error("Failed to fetch user profile");
       const data1 = await response1.json(); 
       setUserDetails(data1);

@@ -8,7 +8,7 @@ const ViewMenuItems = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const res = await axios.get('http://localhost:8002/api/menu/owner-items', {
+      const res = await axios.get('http://food-app.127.0.0.1.nip.io/api/menu/owner-items', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMenuItems(res.data);
@@ -23,7 +23,7 @@ const ViewMenuItems = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8002/api/menu/${id}`, {
+      await axios.delete(`http://food-app.127.0.0.1.nip.io/api/menu/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMenuItems(menuItems.filter((item) => item._id !== id));
@@ -35,7 +35,7 @@ const ViewMenuItems = () => {
   const toggleAvailability = async (id, currentStatus) => {
     try {
       await axios.put(
-        `http://localhost:8002/api/menu/${id}`,
+        `http://food-app.127.0.0.1.nip.io/api/menu/${id}`,
         { availability: !currentStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -61,7 +61,7 @@ const ViewMenuItems = () => {
     try {
       const { _id, name, price, description } = editingItem;
       await axios.put(
-        `http://localhost:8002/api/menu/${_id}`,
+        `http://food-app.127.0.0.1.nip.io/api/menu/${_id}`,
         { name, price, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -84,7 +84,7 @@ const ViewMenuItems = () => {
         >
           {item.image && (
             <img
-              src={`http://localhost:8002/uploads/${item.image}`}
+              src={`http://food-app.127.0.0.1.nip.io/uploads/${item.image}`}
               alt={item.image}
               className="w-full h-48 object-cover"
             />

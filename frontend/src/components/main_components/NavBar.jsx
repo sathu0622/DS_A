@@ -50,7 +50,7 @@ const NavBar = ({ restaurantId }) => {
       if (auth.token && auth.userId && restaurantId) {
         try {
           const response = await fetch(
-            `http://localhost:8000/api/addtocart/${auth.userId}/count?restaurantId=${restaurantId}`,
+            `http://food-app.127.0.0.1.nip.io/api/addtocart/${auth.userId}/count?restaurantId=${restaurantId}`,
             {
               headers: {
                 Authorization: `Bearer ${auth.token}`,
@@ -89,7 +89,7 @@ const NavBar = ({ restaurantId }) => {
           if (isNewTempPage) return; 
 
           const response = await fetch(
-            `http://localhost:8000/api/addtocart/${auth.userId}/count`,
+            `http://food-app.127.0.0.1.nip.io/api/addtocart/${auth.userId}/count`,
             {
               headers: {
                 Authorization: `Bearer ${auth.token}`,

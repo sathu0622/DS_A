@@ -25,7 +25,7 @@ const StripePayment = () => {
   const fetchClientSecret = async (amountToUse) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8001/api/create-payment-intent", {
+      const response = await axios.post("http://food-app.127.0.0.1.nip.io/api/create-payment-intent", {
         items: [{ id: orderId, name: "Order Payment", amount: amountToUse }],
       });
       setClientSecret(response.data.clientSecret);
@@ -46,7 +46,7 @@ const StripePayment = () => {
     setApplyingPromo(true);
     try {
       const userId = localStorage.getItem("userId");
-      const res = await axios.post("http://localhost:8001/api/promo/apply-promo", {
+      const res = await axios.post("http://food-app.127.0.0.1.nip.io/api/promo/apply-promo", {
         userId,
         promoCode,
       });

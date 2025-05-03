@@ -19,7 +19,7 @@ export default function Login() {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("http://food-app.127.0.0.1.nip.io/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',  

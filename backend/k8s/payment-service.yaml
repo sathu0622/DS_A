@@ -23,14 +23,38 @@
 #               memory: "128Mi"
 
 
-apiVersion: v1
-kind: Service
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: payment-service
+# spec:
+#   selector:
+#     app: payment  # Must match the Pod's label (check with `kubectl describe pod payment-service-xxxx`)
+#   ports:
+#     - protocol: TCP
+#       port: 8001       # Port exposed by the Service
+#       targetPort: 8001 # Must match the Pod's containerPort
+
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: payment-service
 spec:
+  replicas: 1
   selector:
-    app: payment  # Must match the Pod's label (check with `kubectl describe pod payment-service-xxxx`)
-  ports:
-    - protocol: TCP
-      port: 8001       # Port exposed by the Service
-      targetPort: 8001 # Must match the Pod's containerPort
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment-service
+          image: sathushan0622/payment-service:latest
+          ports:
+            - containerPort: 8001 
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "128Mi"

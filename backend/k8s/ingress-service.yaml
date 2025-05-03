@@ -29,6 +29,13 @@ spec:
             name: payment-service  # Same service as promo
             port:
               number: 8001
+      - path: /api/create-payment-intent
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-service  # Same service as promo
+            port:
+              number: 8001
       - path: /api/addtocart
         pathType: Prefix
         backend:

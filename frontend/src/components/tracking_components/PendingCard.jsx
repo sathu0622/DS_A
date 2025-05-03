@@ -36,7 +36,7 @@ const PendingCard = ({ isVisible, orderId, onOrderCancelled }) => {
 
   const handleCancelOrder = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/orders/pending-orders/${orderId}`, {
+      const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/orders/pending-orders/${orderId}`, {
         method: "DELETE",
       });
 

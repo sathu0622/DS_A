@@ -11,6 +11,31 @@
 #       port: 8002       # Port exposed by the Service
 #       targetPort: 8002 # Must match the Pod's containerPort
 
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: restaurant-service
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: restaurant
+#   template:
+#     metadata:
+#       labels:
+#         app: restaurant
+#     spec:
+#       containers:
+#         - name: restaurant-service
+#           image: sathushan0622/restaurant-service:latest
+#           ports:
+#             - containerPort: 8000 
+#           resources:
+#             limits:
+#               cpu: "500m"
+#               memory: "128Mi"
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,9 +52,14 @@ spec:
     spec:
       containers:
         - name: restaurant-service
-          image: sathushan0622/restaurant-service:latest
+          image: sathushan0622/restaurant-service:latest  
+
+             
           ports:
-            - containerPort: 8000 
+            - containerPort: 8002 # This should match your Service & Ingress
+          env:
+            - name: MONGODB_URI
+              value: "mongodb+srv://sathushan622:aR21BXgeiy4Gp18l@cluster0.xggor3h.mongodb.net/"  # <-- Replace with your Mongo service name and DB name
           resources:
             limits:
               cpu: "500m"

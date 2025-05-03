@@ -14,7 +14,7 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
 
     const savePaymentDetails = async (paymentData) => {
       try {
-        const response = await axios.post("http://localhost:8001/api/payments/save-payment", {
+        const response = await axios.post("http://food-app.127.0.0.1.nip.io/api/payments/save-payment", {
           ...paymentData,
           orderId,
           userId,
@@ -30,7 +30,7 @@ const PaymentForm = ({ totalAmount, orderId, userId, restaurantId}) => {
       try {
         console.log("Updating orderId:", orderId); 
         const response = await axios.patch(
-          `http://localhost:8000/api/orders/pending-orders/${orderId}/status`
+          `http://food-app.127.0.0.1.nip.io/api/orders/pending-orders/${orderId}/status`
         );
         console.log("Order status updated:", response.data);
       } catch (err) {

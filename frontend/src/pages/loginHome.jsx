@@ -22,7 +22,7 @@ const loginHome = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch("http://localhost:8002/api/restaurants");
+        const response = await fetch("http://food-app.127.0.0.1.nip.io/api/restaurants");
         if (!response.ok) throw new Error("Failed to fetch restaurants");
         const data = await response.json();
         setRestaurants(data);
@@ -121,7 +121,7 @@ const loginHome = () => {
 
               {/* Restaurant Image */}
               <img
-                src={`http://localhost:8002/uploads/${restaurant.image}`}
+                src={`http://food-app.127.0.0.1.nip.io/uploads/${restaurant.image}`}
                 alt={restaurant.image}
                 className="w-full h-40 object-cover"
               />

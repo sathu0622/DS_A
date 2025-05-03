@@ -44,7 +44,7 @@ export default function AddRestaurantForm() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:8002/api/restaurants', data, {
+      await axios.post('http://food-app.127.0.0.1.nip.io/api/restaurants', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

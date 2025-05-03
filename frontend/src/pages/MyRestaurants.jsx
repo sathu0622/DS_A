@@ -9,7 +9,7 @@ const MyRestaurants = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get('http://localhost:8002/api/restaurants/owner', {
+      const res = await axios.get('http://food-app.127.0.0.1.nip.io/api/restaurants/owner', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRestaurants(res.data);
@@ -25,7 +25,7 @@ const MyRestaurants = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8002/api/restaurants/${id}`, {
+      await axios.delete(`http://food-app.127.0.0.1.nip.io/api/restaurants/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchRestaurants();
@@ -36,7 +36,7 @@ const MyRestaurants = () => {
 
   const toggleAvailability = async (id) => {
     try {
-      await axios.patch(`http://localhost:8002/api/restaurants/${id}/availability`, {}, {
+      await axios.patch(`http://food-app.127.0.0.1.nip.io/api/restaurants/${id}/availability`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchRestaurants();
@@ -57,7 +57,7 @@ const MyRestaurants = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8002/api/restaurants/${editing}`, form, {
+      await axios.put(`http://food-app.127.0.0.1.nip.io/api/restaurants/${editing}`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEditing(null);
@@ -78,7 +78,7 @@ const MyRestaurants = () => {
     >
       {/* Restaurant Image */}
       <img
-        src={`http://localhost:8002/uploads/${r.image}`} // Assuming 'logo' field in restaurant has the image filename
+        src={`http://food-app.127.0.0.1.nip.io/uploads/${r.image}`} // Assuming 'logo' field in restaurant has the image filename
         alt={r.name}
         className="w-full h-40 object-cover"
       />

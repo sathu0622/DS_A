@@ -36,7 +36,7 @@ const Menuitem = () => {
     const fetchCartItemCount = async () => {
       if (auth.token && auth.userId) {
         try {
-          const response = await fetch(`http://localhost:8000/api/addtocart/${auth.userId}/count`, {
+          const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/addtocart/${auth.userId}/count`, {
             headers: {
               Authorization: `Bearer ${auth.token}`,
             },
@@ -66,7 +66,7 @@ const Menuitem = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8002/api/menu?restaurantId=${restaurantId}`
+          `http://food-app.127.0.0.1.nip.io/api/menu?restaurantId=${restaurantId}`
         );
         if (!response.ok) throw new Error("Failed to fetch menu items");
         const data = await response.json();
@@ -86,7 +86,7 @@ const Menuitem = () => {
     const image = item.image;
 
     try {
-      const response = await fetch("http://localhost:8000/api/addtocart", {
+      const response = await fetch("http://food-app.127.0.0.1.nip.io/api/addtocart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ const Menuitem = () => {
               >
                 {/* Image */}
                 <img
-                  src={`http://localhost:8002/uploads/${item.image}`}
+                  src={`http://food-app.127.0.0.1.nip.io/uploads/${item.image}`}
                   alt={item.name}
                   className="w-full h-40 object-cover"
                 />
@@ -206,7 +206,7 @@ const Menuitem = () => {
                 <AiOutlineClose />
             </button>
             <img
-                src={`http://localhost:8002/uploads/${selectedItem.image}`}
+                src={`http://food-app.127.0.0.1.nip.io/uploads/${selectedItem.image}`}
                 alt={selectedItem.image}
                 className="w-full h-48 object-cover"
             />

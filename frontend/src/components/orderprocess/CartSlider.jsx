@@ -22,7 +22,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
       if (userId && restaurantId) {
         try {
           const response = await fetch(
-            `http://localhost:8000/api/addtocart/${userId}/details?restaurantId=${restaurantId}`
+            `http://food-app.127.0.0.1.nip.io/api/addtocart/${userId}/details?restaurantId=${restaurantId}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch cart data");
@@ -70,7 +70,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
     const item = cartItems.find((item) => item._id === itemId);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/addtocart/${itemId}/quantity`, {
+      const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/addtocart/${itemId}/quantity`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
 
   const handleDeleteItem = async (itemId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/addtocart/${itemId}`, {
+      const response = await fetch(`http://food-app.127.0.0.1.nip.io/api/addtocart/${itemId}`, {
         method: "DELETE",
       });
 
@@ -164,7 +164,7 @@ const CartSlider = ({ isOpen, userId, onClose, restaurantId }) => {
                   <div className="flex items-center justify-between">
                     {/* Item Image */}
                     <img
-                      src={`http://localhost:8002/uploads/${item.image}`}
+                      src={`http://food-app.127.0.0.1.nip.io/uploads/${item.image}`}
                       alt={item.menuItemName.image}
                       className="w-16 h-16 object-cover rounded-lg"
                     />

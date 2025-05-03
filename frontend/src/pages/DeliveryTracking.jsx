@@ -81,7 +81,7 @@ const DeliveryTracking = (orders) => {
     const fetchStatus = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/orders/order/${orders.orders[0]._id}`
+          `http://food-app.127.0.0.1.nip.io/api/orders/order/${orders.orders[0]._id}`
         );
         setStatus(res.data.status);
         setToast({ type: "info", message: `Order status: ${res.data.status}` }); // Show info toast
@@ -100,7 +100,7 @@ const DeliveryTracking = (orders) => {
     const fetchLocations = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8008/api/deliveryTracking",
+          "http://food-app.127.0.0.1.nip.io/api/deliveryTracking",
           {
             params: {
               restaurantId: orders.orders[0].restaurantId,
